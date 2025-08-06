@@ -20,7 +20,7 @@
       --voltage-color: #e67e22;
       --current-color: #1abc9c;
       --power-color: #3498db;
-      --background-image: url('https://images.unsplash.com/photo-1518770660439-4636190af475?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+      --background-image: url('ai-generated-7945689.jpg');
       --card-bg: rgba(44, 62, 80, 0.8);
       --text-color: #ecf0f1;
       --nav-bg: rgba(44, 62, 80, 0.8);
@@ -321,7 +321,7 @@
     
     .dashboard-header {
       display: flex;
-      justify-content: space-between;
+      flex-direction: column;
       align-items: center;
       margin-bottom: 2rem;
       padding-bottom: 1rem;
@@ -329,30 +329,59 @@
       position: relative;
     }
     
+    /* নতুন লোগো স্টাইল - মূল অ্যাপের জন্য */
+    .app-logo-container {
+      position: relative;
+      width: 100px;
+      height: 100px;
+      margin-bottom: 15px;
+      perspective: 1000px;
+    }
+    
+    .app-logo {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      animation: rotate 20s linear infinite, pulse 4s ease-in-out infinite;
+      filter: drop-shadow(0 0 15px rgba(52, 152, 219, 0.7));
+    }
+    
+    .app-logo-ring {
+      position: absolute;
+      top: -5px;
+      left: -5px;
+      right: -5px;
+      bottom: -5px;
+      border: 3px solid transparent;
+      border-top-color: var(--secondary-color);
+      border-radius: 50%;
+      animation: spin 3s linear infinite;
+      z-index: -1;
+    }
+    
+    .app-logo-ring:nth-child(2) {
+      border-top-color: var(--accent-color);
+      animation-duration: 4s;
+      animation-direction: reverse;
+    }
+    
+    .app-logo-ring:nth-child(3) {
+      border-top-color: var(--success-color);
+      animation-duration: 5s;
+    }
+
     .dashboard-title {
       font-size: 1.8rem;
       font-weight: 500;
       color: var(--text-color);
-    }
-
-    .header-logo {
-      width: 58px;
-      height: 70px;
-      position: absolute;
-      right: 0;
-      top: 0;
-      object-fit: contain;
-      background: rgba(0, 0, 0, 0);
-      border-radius: 50%;
-      padding: 5px;
+      text-align: center;
     }
 
     .header-controls {
       display: flex;
       gap: 15px;
       align-items: center;
-      margin-left: auto;
-      padding-right: 60px;
+      margin-top: 15px;
     }
     
     .logout-btn {
@@ -1025,11 +1054,6 @@
         padding-right: 0;
       }
 
-      .header-logo {
-        position: static;
-        margin-left: auto;
-      }
-
       .metric-selection {
         grid-template-columns: 1fr 1fr;
       }
@@ -1099,8 +1123,16 @@
 <!-- মূল অ্যাপ্লিকেশন -->
 <div id="app">
   <div class="dashboard-header">
+    <!-- নতুন লোগো কন্টেইনার - মাঝখানে অবস্থিত -->
+    <div class="app-logo-container">
+      <img src="Bisnu.png" class="app-logo" alt="BISNU IoT Logo">
+      <div class="app-logo-ring"></div>
+      <div class="app-logo-ring"></div>
+      <div class="app-logo-ring"></div>
+    </div>
+    
     <h1 class="dashboard-title">IoT ডিভাইস মনিটরিং সিস্টেম</h1>
-    <img src="Bisnu.png" class="header-logo" alt="BISNU IoT Logo">
+    
     <div class="header-controls">
       <label class="theme-toggle">
         <input type="checkbox" id="theme-toggle">
@@ -1120,9 +1152,10 @@
     <div class="nav-tab" onclick="showPage(5)">এনার্জি মনিটর</div>
     <div class="nav-tab" onclick="showPage(6)">এডভান্সড গ্রাফ</div>
     <div class="nav-tab" onclick="showPage(7)">Diagram Note File</div>
+     
   </div>
 
-<!-- ডিভাইস ১ পেইজ -->
+  <!-- ডিভাইস ১ পেইজ -->
   <div id="page1" class="device-page active">
     <div class="device-status-summary" id="device1-summary">
       <div class="status-item">
@@ -2054,6 +2087,7 @@
     </div>
   </div>
 
+
   <!-- এনার্জি মনিটরিং পেইজ -->
   <div id="page5" class="device-page">
     <div class="energy-metrics">
@@ -2141,7 +2175,6 @@
       </div>
     </div>
   </div>
-
   <!-- এডভান্সড এনার্জি মনিটরিং পেইজ -->
   <div id="page6" class="device-page">
     <div class="time-selection">
@@ -2201,8 +2234,6 @@
       </div>
     </div>
   </div>
-</div>
->
 
   <!-- পেইজ ৭: Diagram Note File -->
   <div id="page7" class="device-page">
@@ -2220,17 +2251,13 @@
         </div>
       </div>
       
-    
-
-
-  <div class="note-images">
-        <div class="note-image" onclick="openImageModal('electrical-single-line-diagram-4.jpg', 'প্রকল্পের সার্কিট ডায়াগ্রাম')">
+      <div class="note-images">
+        <div class="note-image" onclick="openImageModal('https://i.ibb.co/5KJZ0Lm/system-architecture.jpg', 'প্রকল্পের সার্কিট ডায়াগ্রাম')">
           <img src="electrical-single-line-diagram-4.jpg" alt="সার্কিট ডায়াগ্রাম">
           <div class="note-image-caption">প্রকল্পের সার্কিট ডায়াগ্রাম</div>
         </div>
 
-
-        <div class="note-image" onclick="openImageModal('6005990.jpg', 'সিস্টেম ফ্লো চার্ট')">
+        <div class="note-image" onclick="openImageModal('https://i.ibb.co/5KJZ0Lm/system-architecture.jpg', 'সিস্টেম ফ্লো চার্ট')">
           <img src="6005990.jpg" alt="ফ্লো চার্ট">
           <div class="note-image-caption">সিস্টেম ফ্লো চার্ট</div>
         </div>
@@ -2287,11 +2314,10 @@
 <div id="imageModal" class="image-modal">
   <span class="close-modal" onclick="closeImageModal()">&times;</span>
   <div class="modal-content">
-    <img id="modalImage" class="modal-image" src="electrical-single-line-diagram-SLD.jpg" alt="">
+    <img id="modalImage" class="modal-image" src="" alt="">
     <div id="modalCaption" class="modal-caption"></div>
   </div>
 </div>
-
 
 
 <!-- Firebase SDK -->
@@ -2323,7 +2349,7 @@
   let energyCharts = {};
   let advancedEnergyChart = null;
   let selectedMetric = 'voltage';
-  let selectedTimeRange = 30; // minutes
+  let selectedTimeRange = 30; // মিনিট
   let historicalData = {};
   
   // ইমেজ মোডাল ফাংশন
@@ -2711,12 +2737,12 @@
       energyCharts.energyChart.update();
     }
 
-    // Store historical data
+    // হিস্টোরিকাল ডাটা স্টোর করুন
     const timestamp = new Date().getTime();
     if(!historicalData[timestamp]) {
       historicalData[timestamp] = data;
       
-      // Keep only data within the selected time range
+      // শুধুমাত্র নির্বাচিত সময় রেঞ্জের ডাটা রাখুন
       const cutoffTime = timestamp - (selectedTimeRange * 60 * 1000);
       Object.keys(historicalData).forEach(key => {
         if(parseInt(key) < cutoffTime) {
@@ -2870,17 +2896,17 @@
   function changeTimeRange(minutes) {
     selectedTimeRange = minutes;
     
-    // Update active button
+    // সক্রিয় বাটন আপডেট করুন
     document.querySelectorAll('.time-btn').forEach(btn => {
       btn.classList.remove('active');
     });
     event.target.classList.add('active');
     
-    // Update chart title
+    // চার্ট টাইটেল আপডেট করুন
     document.getElementById('advanced-graph-title').textContent = 
       `${getMetricName(selectedMetric)} ট্রেন্ড (${getTimeRangeText(minutes)})`;
     
-    // Filter historical data
+    // হিস্টোরিকাল ডাটা ফিল্টার করুন
     const cutoffTime = new Date().getTime() - (minutes * 60 * 1000);
     Object.keys(historicalData).forEach(key => {
       if(parseInt(key) < cutoffTime) {
@@ -2895,13 +2921,13 @@
   function selectMetric(metric) {
     selectedMetric = metric;
     
-    // Update selected card
+    // নির্বাচিত কার্ড আপডেট করুন
     document.querySelectorAll('.metric-card').forEach(card => {
       card.classList.remove('selected');
     });
     event.target.closest('.metric-card').classList.add('selected');
     
-    // Update chart title
+    // চার্ট টাইটেল আপডেট করুন
     document.getElementById('advanced-graph-title').textContent = 
       `${getMetricName(metric)} ট্রেন্ড (${getTimeRangeText(selectedTimeRange)})`;
     
@@ -2949,7 +2975,7 @@
     advancedEnergyChart.data.datasets[0].label = `${getMetricName(selectedMetric)} (${getUnit(selectedMetric)})`;
     advancedEnergyChart.update();
     
-    // Show/hide no data message
+    // কোন ডাটা নেই মেসেজ দেখান/লুকান
     document.getElementById('no-data-message').style.display = 
       data.length === 0 ? 'block' : 'none';
   }
@@ -2985,10 +3011,10 @@
     const timestamps = Object.keys(historicalData).sort();
     let csvContent = "data:text/csv;charset=utf-8,";
     
-    // Header
+    // হেডার
     csvContent += "সময়,ভোল্টেজ (V),কারেন্ট (A),পাওয়ার (W),এনার্জি (kWh),ফ্রিকোয়েন্সি (Hz),পাওয়ার ফ্যাক্টর,অ্যাক্টিভ পাওয়ার (W),রিঅ্যাক্টিভ পাওয়ার (VAR)\n";
     
-    // Data
+    // ডাটা
     timestamps.forEach(timestamp => {
       const date = new Date(parseInt(timestamp));
       const row = [
@@ -3051,5 +3077,4 @@
   };
 </script>
 </body>
-
 </html>
