@@ -2772,7 +2772,7 @@ const firebaseConfig = {
 
   // Firebase থেকে এনার্জি ডাটা লোড
   function loadEnergyData() {
-    database.ref('energyMonitoring').on('value', (snapshot) => {
+    database.ref('energymonitoring').on('value', (snapshot) => {
       const data = snapshot.val();
       if(data) {
         updateEnergyData(data);
@@ -3078,6 +3078,7 @@ const firebaseConfig = {
 </script>
 </body>
 </html>
+
 
 
 
