@@ -3253,7 +3253,7 @@ const firebaseConfig = {
 
   //   এনার্জি মনিটরের নাম এখান থেকে পরিবর্তন করা সম্ভব
   function loadEnergyData() {
-    database.ref('energyMonitoring').on('value', (snapshot) => {
+    database.ref('energymonitoring').on('value', (snapshot) => {
       const data = snapshot.val();
       if(data) updateEnergyData(data);
     });
@@ -3626,4 +3626,5 @@ const firebaseConfig = {
 </script>
 </body>
 </html>
+
 ```
