@@ -1,12 +1,3 @@
-<!-- অবশ্যই! আমি আপনার সমস্যার সমাধান করেছি। মূল সমস্যাটি ছিল জাভাস্ক্রিপ্ট কোডের মধ্যে, যেখানে টাইমার সেট করার পর সঠিক বোতাম বা স্ট্যাটাস টেক্সট খুঁজে পাওয়া যাচ্ছিল না। কোডের একটি ছোট অংশে ভুল ID ব্যবহারের কারণে এই সমস্যাটি হচ্ছিল।
-
-আমি সেই ভুলগুলো সংশোধন করেছি এবং এখন টাইমার সেট করা, বাকি সময় দেখা, টাইমার বাতিল করা এবং সময় শেষ হলে স্বয়ংক্রিয়ভাবে রিলে চালু বা বন্ধ হওয়ার সম্পূর্ণ প্রক্রিয়াটি সঠিকভাবে কাজ করবে।
-
-আপনাকে কোনো কোডিং করতে হবে না। শুধু নিচের সম্পূর্ণ কোডটি কপি করে আপনার `index.html` ফাইলে পেস্ট করে দিন।
-
-### সম্পূর্ণ সংশোধিত HTML কোড
-
-```html -->
 <!DOCTYPE html>
 <html lang="bn">
 <head>
@@ -49,7 +40,7 @@
       --voltage-color: #d35400;
       --current-color: #16a085;
       --power-color: #2980b9;
-      --background-image: url('mars-67522.jpg');
+      --background-image: url('https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1352&q=80');
       --card-bg: rgba(255, 255, 255, 0.9);
       --text-color: #2c3e50;
       --nav-bg: rgba(255, 255, 255, 0.9);
@@ -1053,8 +1044,8 @@
     
     .toggle-switch-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); /* টাইমারের জন্য জায়গা বাড়াতে minmax পরিবর্তন করা হয়েছে */
-        gap: 25px;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 25px; /* গ্যাপ বাড়ানো হয়েছে */
     }
 
     .toggle-switch-container {
@@ -1063,10 +1054,9 @@
         justify-content: space-between;
         background: rgba(0,0,0,0.2);
         padding: 15px;
-        border-radius: 10px;
-        border-left: 5px solid var(--primary-color);
+        border-radius: 10px; /* রেডিয়াস বাড়ানো হয়েছে */
+        border-left: 5px solid var(--primary-color); /* বর্ডার মোটা করা হয়েছে */
         transition: all 0.3s ease;
-        gap: 15px; /* আইটেমগুলোর মধ্যে গ্যাপ */
     }
 
     .toggle-switch-container:hover {
@@ -1078,16 +1068,14 @@
         font-size: 1rem;
         font-weight: 500;
         color: var(--text-color);
-        flex-shrink: 0; /* লেবেল যেন ছোট না হয়ে যায় */
     }
 
     /* --- ৩ডি টগল সুইচের জন্য নতুন এবং উন্নত স্টাইল --- */
     .toggle-switch {
         position: relative;
         display: inline-block;
-        width: 70px;
+        width: 70px; /* সাইজ সামান্য বড় করা হয়েছে */
         height: 38px;
-        flex-shrink: 0; /* সুইচ যেন ছোট না হয়ে যায় */
     }
 
     .toggle-switch input { 
@@ -1103,25 +1091,29 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background-color: #333;
+        background-color: #333; /* অফ অবস্থায় গাঢ় ব্যাকগ্রাউন্ড */
         transition: .4s;
         border-radius: 38px;
+        /* ভেতরের শ্যাডো দিয়ে একটি গভীরতার অনুভূতি তৈরি করা হয়েছে */
         box-shadow: inset 0 3px 5px rgba(0,0,0,0.5), 0 1px 1px rgba(255,255,255,0.1);
     }
 
     .slider:before {
         position: absolute;
         content: "";
-        height: 30px;
+        height: 30px; /* নব এর সাইজ বড় করা হয়েছে */
         width: 30px;
         left: 4px;
         bottom: 4px;
+        /* নব এর জন্য উজ্জ্বল গ্রেডিয়েন্ট এবং মাল্টিপল শ্যাডো */
         background: linear-gradient(to bottom, #fdfdfd, #c1c1c1);
-        transition: .4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+        transition: .4s cubic-bezier(0.68, -0.55, 0.27, 1.55); /* বাউন্স অ্যানিমেশন */
         border-radius: 50%;
+        /* বাইরের দিকে শ্যাডো এবং ভেতরের দিকে হাইলাইট দিয়ে নবটিকে ভাসমান এবং গোলাকার দেখানো */
         box-shadow: 0 5px 10px rgba(0,0,0,0.4), inset 0 1px 1px rgba(255,255,255,0.7);
     }
     
+    /* সুইচের ভেতরে ON/OFF লেখা দেখানোর জন্য */
     .slider:after {
       content: 'OFF';
       color: #aaa;
@@ -1135,16 +1127,17 @@
     }
 
     input:checked + .slider {
+        /* অন অবস্থায় উজ্জ্বল সবুজ গ্রেডিয়েন্ট */
         background: linear-gradient(to right, #28a745, #2ecc71);
         box-shadow: inset 0 3px 5px rgba(0,0,0,0.3);
     }
 
     input:focus + .slider {
-        box-shadow: 0 0 2px var(--success-color);
+        box-shadow: 0 0 2px var(--success-color); /* ফোকাস করলে একটি গ্লো আসবে */
     }
 
     input:checked + .slider:before {
-        transform: translateX(32px);
+        transform: translateX(32px); /* নব সরানোর দূরত্ব আপডেট করা হয়েছে */
     }
     
     input:checked + .slider:after {
@@ -1154,6 +1147,7 @@
       right: auto;
     }
     
+    /* ক্লিক করার সময় নব-কে ছোট করে একটি প্রেসড এফেক্ট দেওয়া */
     input:active + .slider:before {
       transform: scale(0.9);
     }
@@ -1162,40 +1156,6 @@
       transform: translateX(32px) scale(0.9);
     }
     /* --- ৩ডি টগল সুইচের স্টাইল শেষ --- */
-
-    /* --- নতুন: টাইমার কন্ট্রোল স্টাইল --- */
-    .timer-controls {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-    .timer-btn {
-        padding: 6px 12px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-weight: 500;
-        transition: all 0.3s ease;
-        font-size: 12px;
-        color: white;
-        background: var(--info-color);
-        white-space: nowrap; /* বাটন টেক্সট যেন ভেঙ্গে না যায় */
-    }
-    .timer-btn:hover {
-        transform: translateY(-1px);
-        opacity: 0.9;
-    }
-    .timer-btn.cancel-timer-btn {
-        background: var(--accent-color);
-    }
-    .timer-status {
-        font-size: 12px;
-        color: var(--secondary-color);
-        font-weight: 500;
-        min-width: 80px; /* স্ট্যাটাসের জন্য নির্দিষ্ট জায়গা */
-        text-align: left;
-    }
-    /* --- টাইমার কন্ট্রোল স্টাইল শেষ --- */
 
     /* --- নতুন: রিলে পাসওয়ার্ড মোডাল স্টাইল --- */
     .password-modal-container {
@@ -1307,76 +1267,6 @@
     }
     /* --- রিলে পাসওয়ার্ড মোডাল স্টাইল শেষ --- */
 
-    /* --- নতুন: টাইমার মোডাল স্টাইল --- */
-    .timer-modal-container {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.7);
-      backdrop-filter: blur(8px);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 3001; /* পাসওয়ার্ড মোডালের উপরে */
-      animation: fadeIn 0.3s ease-in-out;
-    }
-    .timer-modal-box {
-      background: var(--card-bg);
-      padding: 30px 40px;
-      border-radius: 20px;
-      width: 450px;
-      box-shadow: 0 15px 40px rgba(0,0,0,0.5);
-      text-align: center;
-      border-top: 5px solid var(--info-color);
-    }
-    .timer-modal-box h3 {
-      color: var(--text-color);
-      font-size: 1.6rem;
-      margin-top: 0;
-      margin-bottom: 20px;
-    }
-    .timer-modal-box p {
-      color: var(--text-color);
-      opacity: 0.8;
-      margin-bottom: 15px;
-      font-size: 0.9rem;
-    }
-    .timer-input-grid {
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-      margin-bottom: 20px;
-    }
-    .timer-input-group {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    .timer-input-group label {
-      font-size: 0.9rem;
-      opacity: 0.8;
-      margin-bottom: 5px;
-    }
-    .timer-input-group input {
-      width: 70px;
-      padding: 10px;
-      border-radius: 8px;
-      border: 1px solid rgba(255,255,255,0.2);
-      background: rgba(0,0,0,0.3);
-      color: var(--text-color);
-      font-size: 1.2rem;
-      text-align: center;
-      transition: all 0.3s ease;
-    }
-    .timer-input-group input:focus {
-      outline: none;
-      border-color: var(--info-color);
-      box-shadow: 0 0 15px rgba(26, 188, 156, 0.5);
-    }
-    /* --- টাইমার মোডাল স্টাইল শেষ --- */
-
     @media (max-width: 1024px) {
       .analytics-section {
         grid-template-columns: 1fr;
@@ -1427,17 +1317,9 @@
         grid-template-columns: 1fr 1fr;
       }
       
-      .password-modal-box, .timer-modal-box {
+      .password-modal-box {
         width: 90%;
         padding: 20px;
-      }
-      
-      .toggle-switch-grid {
-        grid-template-columns: 1fr; /* ছোট স্ক্রিনে একটি কলাম */
-      }
-      
-      .toggle-switch-container {
-        flex-wrap: wrap; /* ছোট স্ক্রিনে আইটেমগুলো নিচে নিচে আসতে পারে */
       }
 
       /* পেইজ ৭ রেস্পন্সিভ */
@@ -2704,10 +2586,6 @@
             <input type="checkbox" id="d1-relay1-toggle" onchange="promptForRelayPassword('device1', 'relay1', this)">
             <span class="slider"></span>
           </label>
-           <div class="timer-controls">
-                <button class="timer-btn" id="d1-relay1-timer-btn" onclick="openTimerModal('device1', 'relay1')">টাইমার সেট</button>
-                <span class="timer-status" id="d1-relay1-timer-status"></span>
-           </div>
         </div>
         <!-- রিলে ২ -->
         <div class="toggle-switch-container">
@@ -2716,10 +2594,6 @@
             <input type="checkbox" id="d1-relay2-toggle" onchange="promptForRelayPassword('device1', 'relay2', this)">
             <span class="slider"></span>
           </label>
-          <div class="timer-controls">
-            <button class="timer-btn" id="d1-relay2-timer-btn" onclick="openTimerModal('device1', 'relay2')">টাইমার সেট</button>
-            <span class="timer-status" id="d1-relay2-timer-status"></span>
-          </div>
         </div>
         <!-- রিলে ৩ -->
         <div class="toggle-switch-container">
@@ -2728,10 +2602,6 @@
             <input type="checkbox" id="d1-relay3-toggle" onchange="promptForRelayPassword('device1', 'relay3', this)">
             <span class="slider"></span>
           </label>
-          <div class="timer-controls">
-            <button class="timer-btn" id="d1-relay3-timer-btn" onclick="openTimerModal('device1', 'relay3')">টাইমার সেট</button>
-            <span class="timer-status" id="d1-relay3-timer-status"></span>
-          </div>
         </div>
         <!-- রিলে ৪ -->
         <div class="toggle-switch-container">
@@ -2740,10 +2610,6 @@
             <input type="checkbox" id="d1-relay4-toggle" onchange="promptForRelayPassword('device1', 'relay4', this)">
             <span class="slider"></span>
           </label>
-          <div class="timer-controls">
-            <button class="timer-btn" id="d1-relay4-timer-btn" onclick="openTimerModal('device1', 'relay4')">টাইমার সেট</button>
-            <span class="timer-status" id="d1-relay4-timer-status"></span>
-          </div>
         </div>
         <!-- রিলে ৫ -->
         <div class="toggle-switch-container">
@@ -2752,10 +2618,6 @@
             <input type="checkbox" id="d1-relay5-toggle" onchange="promptForRelayPassword('device1', 'relay5', this)">
             <span class="slider"></span>
           </label>
-          <div class="timer-controls">
-            <button class="timer-btn" id="d1-relay5-timer-btn" onclick="openTimerModal('device1', 'relay5')">টাইমার সেট</button>
-            <span class="timer-status" id="d1-relay5-timer-status"></span>
-          </div>
         </div>
         <!-- রিলে ৬ -->
         <div class="toggle-switch-container">
@@ -2764,10 +2626,6 @@
             <input type="checkbox" id="d1-relay6-toggle" onchange="promptForRelayPassword('device1', 'relay6', this)">
             <span class="slider"></span>
           </label>
-          <div class="timer-controls">
-            <button class="timer-btn" id="d1-relay6-timer-btn" onclick="openTimerModal('device1', 'relay6')">টাইমার সেট</button>
-            <span class="timer-status" id="d1-relay6-timer-status"></span>
-          </div>
         </div>
         <!-- রিলে ৭ -->
         <div class="toggle-switch-container">
@@ -2776,10 +2634,6 @@
             <input type="checkbox" id="d1-relay7-toggle" onchange="promptForRelayPassword('device1', 'relay7', this)">
             <span class="slider"></span>
           </label>
-          <div class="timer-controls">
-            <button class="timer-btn" id="d1-relay7-timer-btn" onclick="openTimerModal('device1', 'relay7')">টাইমার সেট</button>
-            <span class="timer-status" id="d1-relay7-timer-status"></span>
-          </div>
         </div>
         <!-- রিলে ৮ -->
         <div class="toggle-switch-container">
@@ -2788,10 +2642,6 @@
             <input type="checkbox" id="d1-relay8-toggle" onchange="promptForRelayPassword('device1', 'relay8', this)">
             <span class="slider"></span>
           </label>
-          <div class="timer-controls">
-            <button class="timer-btn" id="d1-relay8-timer-btn" onclick="openTimerModal('device1', 'relay8')">টাইমার সেট</button>
-            <span class="timer-status" id="d1-relay8-timer-status"></span>
-          </div>
         </div>
       </div>
     </div>
@@ -2806,10 +2656,6 @@
             <input type="checkbox" id="d2-relay1-toggle" onchange="promptForRelayPassword('device2', 'relay1', this)">
             <span class="slider"></span>
           </label>
-          <div class="timer-controls">
-            <button class="timer-btn" id="d2-relay1-timer-btn" onclick="openTimerModal('device2', 'relay1')">টাইমার সেট</button>
-            <span class="timer-status" id="d2-relay1-timer-status"></span>
-          </div>
         </div>
         <!-- রিলে ২ -->
         <div class="toggle-switch-container">
@@ -2818,10 +2664,6 @@
             <input type="checkbox" id="d2-relay2-toggle" onchange="promptForRelayPassword('device2', 'relay2', this)">
             <span class="slider"></span>
           </label>
-          <div class="timer-controls">
-            <button class="timer-btn" id="d2-relay2-timer-btn" onclick="openTimerModal('device2', 'relay2')">টাইমার সেট</button>
-            <span class="timer-status" id="d2-relay2-timer-status"></span>
-          </div>
         </div>
         <!-- রিলে ৩ -->
         <div class="toggle-switch-container">
@@ -2830,10 +2672,6 @@
             <input type="checkbox" id="d2-relay3-toggle" onchange="promptForRelayPassword('device2', 'relay3', this)">
             <span class="slider"></span>
           </label>
-          <div class="timer-controls">
-            <button class="timer-btn" id="d2-relay3-timer-btn" onclick="openTimerModal('device2', 'relay3')">টাইমার সেট</button>
-            <span class="timer-status" id="d2-relay3-timer-status"></span>
-          </div>
         </div>
         <!-- রিলে ৪ -->
         <div class="toggle-switch-container">
@@ -2842,10 +2680,6 @@
             <input type="checkbox" id="d2-relay4-toggle" onchange="promptForRelayPassword('device2', 'relay4', this)">
             <span class="slider"></span>
           </label>
-          <div class="timer-controls">
-            <button class="timer-btn" id="d2-relay4-timer-btn" onclick="openTimerModal('device2', 'relay4')">টাইমার সেট</button>
-            <span class="timer-status" id="d2-relay4-timer-status"></span>
-          </div>
         </div>
         <!-- রিলে ৫ -->
         <div class="toggle-switch-container">
@@ -2854,10 +2688,6 @@
             <input type="checkbox" id="d2-relay5-toggle" onchange="promptForRelayPassword('device2', 'relay5', this)">
             <span class="slider"></span>
           </label>
-          <div class="timer-controls">
-            <button class="timer-btn" id="d2-relay5-timer-btn" onclick="openTimerModal('device2', 'relay5')">টাইমার সেট</button>
-            <span class="timer-status" id="d2-relay5-timer-status"></span>
-          </div>
         </div>
       </div>
     </div>
@@ -2872,10 +2702,6 @@
             <input type="checkbox" id="d3-relay1-toggle" onchange="promptForRelayPassword('device3', 'relay1', this)">
             <span class="slider"></span>
           </label>
-          <div class="timer-controls">
-            <button class="timer-btn" id="d3-relay1-timer-btn" onclick="openTimerModal('device3', 'relay1')">টাইমার সেট</button>
-            <span class="timer-status" id="d3-relay1-timer-status"></span>
-          </div>
         </div>
       </div>
     </div>
@@ -2907,44 +2733,13 @@
   </div>
 </div>
 
-<!-- নতুন: রিলে টাইমার সেট করার মোডাল -->
-<div id="relayTimerModal" class="timer-modal-container">
-    <div class="timer-modal-box">
-      <h3 id="timer-modal-title">রিলে টাইমার সেট করুন</h3>
-      <div class="timer-input-grid">
-        <div class="timer-input-group">
-          <label for="timerHours">ঘন্টা</label>
-          <input type="number" id="timerHours" min="0" max="23" placeholder="0">
-        </div>
-        <div class="timer-input-group">
-          <label for="timerMinutes">মিনিট</label>
-          <input type="number" id="timerMinutes" min="0" max="59" placeholder="0">
-        </div>
-        <div class="timer-input-group">
-          <label for="timerSeconds">সেকেন্ড</label>
-          <input type="number" id="timerSeconds" min="0" max="59" placeholder="10">
-        </div>
-      </div>
-      <p>টাইমার সেট করতে অপারেটিং পাসওয়ার্ড দিন।</p>
-      <div class="password-input-group">
-        <input type="password" id="timerPasswordInput" placeholder="অপারেটিং পাসওয়ার্ড" autocomplete="off">
-      </div>
-      <div class="password-error-message" id="timerPasswordError"></div>
-      <div class="password-modal-buttons">
-        <button class="modal-btn cancel-btn" onclick="closeTimerModal()">বাতিল</button>
-        <button class="modal-btn confirm-btn" style="background-color: var(--info-color);" onclick="setTimer()">টাইমার সেট করুন</button>
-      </div>
-    </div>
-  </div>
-
 <!-- Firebase SDK -->
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
 
-
-
 <script>
-  // Firebase কনফিগারেশন
+
+// Firebase কনফিগারেশন
 const firebaseConfig = {
   apiKey: "AIzaSyATDfnefdyPAzBNKZY4VM5ja8K2-63PC-U",
   authDomain: "home-server-346b6.firebaseapp.com",
@@ -2957,12 +2752,13 @@ const firebaseConfig = {
 };
 
 
+
   // Firebase ইনিশিয়ালাইজ করুন
   firebase.initializeApp(firebaseConfig);
   const database = firebase.database();
 
   // সঠিক পাসওয়ার্ড
-  const correctPassword = "#u n*S*ibg u@";
+  const correctPassword = "123";
   // নতুন: অপারেটিং পাসওয়ার্ড
   const correctOperatingPassword = "123";
 
@@ -2974,10 +2770,8 @@ const firebaseConfig = {
   let selectedTimeRange = 30; // মিনিট
   let historicalData = {};
   
-  // নতুন: রিলে অপারেশন এবং টাইমার কনটেক্সট সংরক্ষণের জন্য ভেরিয়েবল
+  // নতুন: রিলে অপারেশন কনটেক্সট সংরক্ষণের জন্য ভেরিয়েবল
   let relayOperationContext = null;
-  let timerOperationContext = null; // টাইমার মোডালের জন্য
-  let activeTimers = {}; // সমস্ত সক্রিয় টাইমার এখানে থাকবে
 
   // ইমেজ মোডাল ফাংশন
   function openImageModal(imageSrc, caption) {
@@ -3065,11 +2859,6 @@ const firebaseConfig = {
 
   // লগআউট ফাংশন
   function logout() {
-    // লগআউট করার আগে সমস্ত রানিং টাইমার বন্ধ করে দিন
-    Object.keys(activeTimers).forEach(timerKey => {
-        clearTimerState(timerKey);
-    });
-
     document.getElementById("app").style.animation = "fadeOut 0.5s ease forwards";
     setTimeout(() => {
       document.getElementById("app").style.display = "none";
@@ -3100,18 +2889,18 @@ const firebaseConfig = {
     }
   }
   
-  // রিলে কন্ট্রোল ফাংশন (পাসওয়ার্ড ভেরিফিকেশনের পর এবং টাইমার শেষে কল হবে)
+  // রিলে কন্ট্রোল ফাংশন (পাসওয়ার্ড ভেরিফিকেশনের পর কল হবে)
   function controlRelay(device, relay, element) {
     const state = element.checked;
     console.log(`Controlling ${device}/${relay} to ${state}`);
     database.ref('devices/' + device).update({
         [relay]: state
     });
-    const logMessage = `${getDeviceName(device)} এর ${getRelayName(relay)} ${state ? 'চালু' : 'বন্ধ'} করা হয়েছে`;
+    const logMessage = `${device} এর ${relay} ${state ? 'চালু' : 'বন্ধ'} করা হয়েছে`;
     addLogEntry(device, logMessage, state ? 'success' : 'error');
   }
 
-  // ডিভাইস কন্ট্রোল ফাংশন (pages 1-4 এর জন্য)
+  // ডিভাইস কন্ট্রোল ফাংশন (for pages 1-4)
   function controlDevice(device, load, state) {
     const timestamp = new Date().toISOString();
     const logMessage = `${device} এর ${load} ${state === 1 ? 'চালু' : state === 2 ? 'সতর্কতা মোডে' : 'বন্ধ'} করা হয়েছে`;
@@ -3317,10 +3106,8 @@ const firebaseConfig = {
     chart.update();
   }
 
-
-   //   এনার্জি মনিটরিং নাম পরিবর্তন করতে পারবেন এইখান থেকে
   function loadEnergyData() {
-    database.ref('energymonitoring').on('value', (snapshot) => {    
+    database.ref('energymonitoring').on('value', (snapshot) => {
       const data = snapshot.val();
       if(data) updateEnergyData(data);
     });
@@ -3470,186 +3257,6 @@ const firebaseConfig = {
   }
   // --- পাসওয়ার্ড ফাংশন শেষ ---
 
-  // --- নতুন এবং সংশোধিত: টাইমার ফাংশন ---
-    
-  // ডিভাইস ও রিলের নাম সুন্দরভাবে দেখানোর জন্য হেল্পার ফাংশন
-  function getDeviceName(device) { return `ডিভাইস ${device.replace('device', '')}`; }
-  function getRelayName(relay) { return `রিলে ${relay.replace('relay', '')}`; }
-
-  // টাইমার মোডাল খোলার ফাংশন
-  function openTimerModal(device, relay) {
-    // কোন রিলেতে টাইমার সেট করা হচ্ছে তা সংরক্ষণ করুন
-    timerOperationContext = { device, relay };
-    
-    // মোডালের শিরোনাম সেট করুন
-    const modalTitle = document.getElementById('timer-modal-title');
-    modalTitle.innerText = `${getDeviceName(device)} এর ${getRelayName(relay)} এর জন্য টাইমার`;
-    
-    // ইনপুট ফিল্ড এবং এরর মেসেজ রিসেট করুন
-    document.getElementById('timerHours').value = '';
-    document.getElementById('timerMinutes').value = '';
-    document.getElementById('timerSeconds').value = '';
-    document.getElementById('timerPasswordInput').value = '';
-    document.getElementById('timerPasswordError').innerText = '';
-    
-    // মোডালটি দেখান
-    document.getElementById('relayTimerModal').style.display = 'flex';
-    document.getElementById('timerHours').focus();
-  }
-  
-  // টাইমার মোডাল বন্ধ করার ফাংশন
-  function closeTimerModal() {
-    document.getElementById('relayTimerModal').style.display = 'none';
-    timerOperationContext = null; // কনটেক্সট রিসেট করুন
-  }
-
-  // "টাইমার সেট করুন" বাটনে ক্লিক করলে এই ফাংশন কল হবে
-  function setTimer() {
-    if (!timerOperationContext) return;
-    
-    // মোডাল থেকে ডেটা সংগ্রহ করুন
-    const { device, relay } = timerOperationContext;
-    const hours = parseInt(document.getElementById('timerHours').value) || 0;
-    const minutes = parseInt(document.getElementById('timerMinutes').value) || 0;
-    const seconds = parseInt(document.getElementById('timerSeconds').value) || 0;
-    const password = document.getElementById('timerPasswordInput').value;
-    const errorEl = document.getElementById('timerPasswordError');
-    
-    // পাসওয়ার্ড যাচাই করুন
-    if (password !== correctOperatingPassword) {
-      errorEl.innerText = '❌ ভুল অপারেটিং পাসওয়ার্ড!';
-      return;
-    }
-    
-    const totalSeconds = (hours * 3600) + (minutes * 60) + seconds;
-    
-    // মোট সময় ০ এর বেশি কিনা তা পরীক্ষা করুন
-    if (totalSeconds <= 0) {
-      errorEl.innerText = 'দয়া করে ০ সেকেন্ডের বেশি সময় দিন।';
-      return;
-    }
-    
-    const timerKey = `${device}-${relay}`;
-    
-    // যদি এই রিলের জন্য আগে থেকেই কোনো টাইমার চালু থাকে, তবে সেটি বন্ধ করুন
-    if (activeTimers[timerKey]) {
-      clearInterval(activeTimers[timerKey].intervalId);
-    }
-    
-    const endTime = new Date().getTime() + totalSeconds * 1000;
-    
-    // প্রতি সেকেন্ডে টাইমার আপডেট করার জন্য setInterval শুরু করুন
-    const intervalId = setInterval(() => updateTimerDisplay(timerKey), 1000);
-    
-    // সক্রিয় টাইমারের তথ্য সংরক্ষণ করুন
-    activeTimers[timerKey] = { intervalId, endTime, device, relay };
-    
-    // UI আপডেট করুন (বোতাম এবং স্ট্যাটাস)
-    updateTimerUI(timerKey);
-    
-    // মোডাল বন্ধ করুন
-    closeTimerModal();
-  }
-
-  // প্রতি সেকেন্ডে টাইমারের বাকি সময় দেখানোর জন্য এই ফাংশন কাজ করবে
-  function updateTimerDisplay(timerKey) {
-    if (!activeTimers[timerKey]) return;
-
-    const { endTime } = activeTimers[timerKey];
-    const remainingMs = endTime - new Date().getTime();
-    
-    if (remainingMs <= 0) {
-        // সময় শেষ হলে
-        const { device, relay } = activeTimers[timerKey];
-        
-        // **সংশোধন:** সঠিক ID দিয়ে টগল সুইচ খুঁজে বের করা
-        const toggle = document.getElementById(`d${device.replace('device','')}-${relay}-toggle`);
-        
-        if (toggle) {
-            // রিলের বর্তমান অবস্থা পাল্টে দিন
-            toggle.checked = !toggle.checked;
-            controlRelay(device, relay, toggle);
-            
-            // লগ তৈরি করুন
-            addLogEntry(device, `${getRelayName(relay)} এর টাইমার শেষ এবং অবস্থা পরিবর্তিত হয়েছে।`, 'info');
-        } else {
-            console.error(`টাইমার শেষ: ${timerKey} এর জন্য টগল সুইচ খুঁজে পাওয়া যায়নি।`);
-        }
-        
-        // টাইমারের অবস্থা পরিষ্কার করুন
-        clearTimerState(timerKey);
-    } else {
-        // সময় বাকি থাকলে UI তে দেখান
-        updateTimerUI(timerKey);
-    }
-  }
-
-  // টাইমারের বোতাম এবং স্ট্যাটাস টেক্সট আপডেট করার ফাংশন
-  function updateTimerUI(timerKey) {
-    if (!activeTimers[timerKey]) return;
-    
-    const { device, relay, endTime } = activeTimers[timerKey];
-
-    // **সংশোধন:** সঠিক ID ব্যবহার করে বোতাম এবং স্ট্যাটাস খুঁজে বের করা
-    const deviceNum = device.replace('device', '');
-    const btn = document.getElementById(`d${deviceNum}-${relay}-timer-btn`);
-    const statusEl = document.getElementById(`d${deviceNum}-${relay}-timer-status`);
-
-    if (!btn || !statusEl) {
-        // যদি এলিমেন্ট খুঁজে না পাওয়া যায়, তাহলে আর এগোনো হবে না
-        return;
-    }
-
-    const remainingMs = endTime - new Date().getTime();
-    const remainingSeconds = Math.round(remainingMs / 1000);
-    
-    // বোতামটিকে "টাইমার বাতিল" বোতামে পরিণত করুন
-    btn.innerText = 'টাইমার বাতিল';
-    btn.className = 'timer-btn cancel-timer-btn';
-    btn.onclick = () => cancelTimer(device, relay);
-    
-    // বাকি সময় ফরম্যাট করে দেখান (e.g., 1h 5m 10s)
-    const h = Math.floor(remainingSeconds / 3600);
-    const m = Math.floor((remainingSeconds % 3600) / 60);
-    const s = remainingSeconds % 60;
-    statusEl.innerText = `${h > 0 ? h + 'ঘ:' : ''} ${m > 0 ? m + 'মি:' : ''} ${s}সে.`;
-  }
-  
-  // একটি সক্রিয় টাইমার বাতিল করার ফাংশন
-  function cancelTimer(device, relay) {
-      if (confirm(`আপনি কি ${getDeviceName(device)} এর ${getRelayName(relay)} এর টাইমারটি বাতিল করতে চান?`)) {
-          const timerKey = `${device}-${relay}`;
-          clearTimerState(timerKey);
-          addLogEntry(device, `${getRelayName(relay)} এর টাইমার বাতিল করা হয়েছে।`, 'warning');
-      }
-  }
-
-  // একটি টাইমারের সমস্ত ডেটা এবং UI পরিষ্কার করার ফাংশন
-  function clearTimerState(timerKey) {
-    if (!activeTimers[timerKey]) return;
-    
-    const { intervalId, device, relay } = activeTimers[timerKey];
-    
-    // setInterval বন্ধ করুন
-    clearInterval(intervalId);
-    
-    // সক্রিয় টাইমারের তালিকা থেকে সরিয়ে দিন
-    delete activeTimers[timerKey];
-    
-    // **সংশোধন:** সঠিক ID ব্যবহার করে UI কে তার আগের অবস্থায় ফিরিয়ে আনা
-    const deviceNum = device.replace('device', '');
-    const btn = document.getElementById(`d${deviceNum}-${relay}-timer-btn`);
-    const statusEl = document.getElementById(`d${deviceNum}-${relay}-timer-status`);
-    
-    if (btn && statusEl) {
-        btn.innerText = 'টাইমার সেট';
-        btn.className = 'timer-btn';
-        btn.onclick = () => openTimerModal(device, relay);
-        statusEl.innerText = '';
-    }
-  }
-  
-  // --- টাইমার ফাংশন শেষ ---
 
   function initAdvancedEnergyChart() {
     const ctx = document.getElementById('advanced-energy-chart').getContext('2d');
@@ -3761,13 +3368,6 @@ const firebaseConfig = {
   document.getElementById("relayPasswordInput").addEventListener("keypress", function(event) {
     if (event.key === "Enter") {
       verifyAndOperateRelay();
-    }
-  });
-
-  // নতুন: এন্টার কী প্রেস করে টাইমার পাসওয়ার্ড সাবমিট করার সুবিধা
-  document.getElementById("timerPasswordInput").addEventListener("keypress", function(event) {
-    if (event.key === "Enter") {
-        setTimer();
     }
   });
 
