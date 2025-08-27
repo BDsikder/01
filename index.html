@@ -1,3 +1,7 @@
+<!-- অবশ্যই, আপনার অনুরোধ অনুযায়ী শুধুমাত্র ৫ নম্বর পৃষ্ঠায় `units`, `dailyCost`, এবং `timestamp` এই তিনটি নতুন কার্ড যোগ করা হয়েছে এবং স্বয়ংক্রিয়ভাবে মান প্রদর্শনের জন্য জাভাস্ক্রিপ্ট কোডও আপডেট করা হয়েছে। আপনাকে কোনো কোডিং লিখতে হবে না।
+নিচে সম্পূর্ণ এবং আপডেট করা HTML কোডটি দেওয়া হলো। আপনি শুধু এই কোডটি কপি করে আপনার `index.html` ফাইলে পেস্ট করলেই হবে।
+```html -->
+
 <!DOCTYPE html>
 <html lang="bn">
 <head>
@@ -40,7 +44,7 @@
       --voltage-color: #d35400;
       --current-color: #16a085;
       --power-color: #2980b9;
-      --background-image: url('https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1352&q=80');
+      --background-image: url('mars-67522.jpg');
       --card-bg: rgba(255, 255, 255, 0.9);
       --text-color: #2c3e50;
       --nav-bg: rgba(255, 255, 255, 0.9);
@@ -220,7 +224,7 @@
     }
     
     .input-group input {
-      width: 90%;
+      width: 100%;
       padding: 15px 20px;
       border: none;
       border-radius: 50px;
@@ -750,6 +754,11 @@
     .power-factor-card { border-top-color: var(--warning-color); }
     .active-power-card { border-top-color: var(--success-color); }
     .reactive-power-card { border-top-color: var(--accent-color); }
+    /* নতুন কার্ডের জন্য স্টাইল */
+    .units-card { border-top-color: var(--info-color); }
+    .cost-card { border-top-color: var(--success-color); }
+    .timestamp-card { border-top-color: var(--warning-color); }
+
 
     .energy-graphs {
       display: grid;
@@ -2353,7 +2362,7 @@
   </div>
 
 
-  <!-- এনার্জি মনিটরিং পেইজ -->
+  <!-- এনার্জি মনিটরিং পেইজ (পরিবর্তিত) -->
   <div id="page5" class="device-page">
     <div class="energy-metrics">
       <div class="energy-card voltage-card">
@@ -2419,6 +2428,33 @@
           <div class="status-label">রিঅ্যাক্টিভ পাওয়ার</div>
         </div>
       </div>
+
+      <!-- নতুন যুক্ত করা কার্ড -->
+      <div class="energy-card units-card">
+        <div class="energy-title">✔️ ব্যবহৃত ইউনিট</div>
+        <div class="energy-value" id="units-value">-- <span class="energy-unit">Units</span></div>
+        <div class="card-footer">
+          <div class="status-label">মোট ব্যবহৃত ইউনিট</div>
+        </div>
+      </div>
+
+      <div class="energy-card cost-card">
+        <div class="energy-title">💰 দৈনিক খরচ</div>
+        <div class="energy-value" id="daily-cost-value">-- <span class="energy-unit">BDT</span></div>
+        <div class="card-footer">
+          <div class="status-label">আজকের আনুমানিক খরচ</div>
+        </div>
+      </div>
+
+      <div class="energy-card timestamp-card">
+        <div class="energy-title">🕒 টাইমস্ট্যাম্প</div>
+        <div class="energy-value" id="timestamp-value">--</div>
+        <div class="card-footer">
+          <div class="status-label">শেষ আপডেট সময়</div>
+        </div>
+      </div>
+      <!-- নতুন কার্ড শেষ -->
+
     </div>
 
     <div class="energy-graphs">
@@ -2737,9 +2773,10 @@
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
 
-<script>
 
-// Firebase কনফিগারেশন
+
+<script>
+  // Firebase কনফিগারেশন
 const firebaseConfig = {
   apiKey: "AIzaSyATDfnefdyPAzBNKZY4VM5ja8K2-63PC-U",
   authDomain: "home-server-346b6.firebaseapp.com",
@@ -2750,7 +2787,6 @@ const firebaseConfig = {
   appId: "1:531234227336:web:f57f700dd6baaed4358b3d",
   measurementId: "G-QDWVP34FSX"
 };
-
 
 
   // Firebase ইনিশিয়ালাইজ করুন
@@ -3061,8 +3097,9 @@ const firebaseConfig = {
     };
   }
 
-  // এনার্জি ডাটা আপডেট করার ফাংশন
+  // এনার্জি ডাটা আপডেট করার ফাংশন (পরিবর্তিত)
   function updateEnergyData(data) {
+    // আগের ভ্যালুগুলো আপডেট করা হচ্ছে
     document.getElementById('voltage-value').textContent = data.voltage ? data.voltage.toFixed(2) + ' V' : '-- V';
     document.getElementById('current-value').textContent = data.current ? data.current.toFixed(2) + ' A' : '-- A';
     document.getElementById('power-value').textContent = data.power ? data.power.toFixed(2) + ' W' : '-- W';
@@ -3072,6 +3109,25 @@ const firebaseConfig = {
     document.getElementById('active-power-value').textContent = data.activePower ? data.activePower.toFixed(2) + ' W' : '-- W';
     document.getElementById('reactive-power-value').textContent = data.reactivePower ? data.reactivePower.toFixed(2) + ' VAR' : '-- VAR';
 
+    // নতুন তিনটি ভ্যালু আপডেট করার জন্য কোড
+    document.getElementById('units-value').textContent = data.units ? data.units.toFixed(2) + ' Units' : '-- Units';
+    document.getElementById('daily-cost-value').textContent = data.dailyCost ? data.dailyCost.toFixed(2) + ' BDT' : '-- BDT';
+    
+    // টাইমস্ট্যাম্পকে পঠনযোগ্য ফরম্যাটে রূপান্তর
+    if (data.timestamp) {
+      // যদি টাইমস্ট্যাম্প সেকেন্ডে থাকে তাহলে মিলিসেকেন্ডে রূপান্তর করতে 1000 দিয়ে গুণ করুন
+      const timestampInMs = data.timestamp.toString().length === 10 ? data.timestamp * 1000 : data.timestamp;
+      const date = new Date(timestampInMs);
+      // সময় এবং তারিখ দেখানোর জন্য bn-BD ফরম্যাট ব্যবহার করা হচ্ছে
+      document.getElementById('timestamp-value').textContent = date.toLocaleString('bn-BD', {
+        year: 'numeric', month: 'short', day: 'numeric',
+        hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true
+      });
+    } else {
+      document.getElementById('timestamp-value').textContent = '--';
+    }
+
+    // চার্ট আপডেট করার কোড
     updateEnergyChartData(energyCharts.voltageChart, data.voltage);
     updateEnergyChartData(energyCharts.currentChart, data.current);
     updateEnergyChartData(energyCharts.powerChart, data.power);
@@ -3106,8 +3162,10 @@ const firebaseConfig = {
     chart.update();
   }
 
+
+   //   এনার্জি মনিটরিং নাম পরিবর্তন করতে পারবেন এইখান থেকে
   function loadEnergyData() {
-    database.ref('energymonitoring').on('value', (snapshot) => {
+    database.ref('energymonitoring').on('value', (snapshot) => {    
       const data = snapshot.val();
       if(data) updateEnergyData(data);
     });
@@ -3380,6 +3438,3 @@ const firebaseConfig = {
 </script>
 </body>
 </html>
-```
-
-
