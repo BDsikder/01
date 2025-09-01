@@ -348,7 +348,7 @@
       width: 100%;
       height: 100%;
       object-fit: contain;
-      animation: 20000ms linear -221.503ms infinite normal none running rotate, 0s ease-in-out infinite normal none running pulse;
+      animation: rotate 20s linear infinite, pulse 4s ease-in-out infinite;
       filter: drop-shadow(0 0 15px rgba(52, 152, 219, 0.7));
     }
     
@@ -489,25 +489,27 @@
     .nav-tabs::-webkit-scrollbar {
         display: none;
     }
+    /* --- .nav-tabs ডিজাইন শেষ --- */
+    
     .nav-tab {
-    flex: 1 0 auto;
-    text-align: center;
-    padding: 12px 20px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-weight: 600;
-    border-radius: 10px;
-    color: var(--text-color);
-    white-space: nowrap;
-    border: 2px solid transparent;
+      flex: 1 0 auto;
+      text-align: center;
+      padding: 15px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 500;
+      border-bottom: 3px solid transparent;
+      color: var(--text-color);
+      white-space: nowrap;
     }
     
     .nav-tab:hover {
       background: rgba(255, 255, 255, 0.1);
     }
+    
     .nav-tab.active {
-    background: rgb(13 134 193 / 81%);
-    border-bottom: 3px solid #ed0000;
+      background: rgba(52, 152, 219, 0.2);
+      border-bottom: 3px solid var(--secondary-color);
     }
     
     .device-page {
@@ -4164,4 +4166,3 @@ const firebaseConfig = {
 </body>
 </html>
 ```
-
