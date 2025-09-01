@@ -464,7 +464,31 @@
 
     .moon-icon {
       right: 7px;
-   }
+    }
+    
+    /* --- .nav-tabs এর জন্য নতুন ৩ডি ডিজাইন --- */
+    .nav-tabs {
+      display: flex;
+      background: var(--nav-bg);
+      border-radius: 12px; /* বর্ডার রেডিয়াস বাড়ানো হয়েছে */
+      overflow-x: auto;
+      margin-bottom: 2rem;
+      /* একাধিক শ্যাডো ব্যবহার করে ৩ডি এফেক্ট তৈরি করা হয়েছে */
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.1); /* হালকা বর্ডার যোগ করা হয়েছে */
+      transition: all 0.4s ease-in-out; /* স্মুথ ট্রানজিশন */
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    .nav-tabs:hover {
+      transform: translateY(-3px); /* হোভার করলে কিছুটা উপরে উঠবে */
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+    }
+
+    .nav-tabs::-webkit-scrollbar {
+        display: none;
+    }
     .nav-tab {
     flex: 1 0 auto;
     text-align: center;
@@ -477,38 +501,15 @@
     white-space: nowrap;
     border: 2px solid transparent;
     }
-
-    .nav-tabs:hover {
-      transform: translateY(-3px); /* হোভার করলে কিছুটা উপরে উঠবে */
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.1);
-    }
-
-    .nav-tabs::-webkit-scrollbar {
-        display: none;
-    }
-    /* --- .nav-tabs ডিজাইন শেষ --- */
-    
-    .nav-tab {
-      flex: 1 0 auto;
-      text-align: center;
-      padding: 15px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      font-weight: 500;
-      border-bottom: 3px solid transparent;
-      color: var(--text-color);
-      white-space: nowrap;
-    }
     
     .nav-tab:hover {
       background: rgba(255, 255, 255, 0.1);
-}
-.nav-tab.active {
-    background: #3c98d5;
-    box-shadow: 0 0 15px rgba(52, 152, 219, 0.5);
-    color: white;
-    transform: scale(1.05);
-}
+    }
+    
+    .nav-tab.active {
+      background: rgba(52, 152, 219, 0.2);
+      border-bottom: 3px solid var(--secondary-color);
+    }
     
     .device-page {
       display: none;
@@ -3384,7 +3385,7 @@ const firebaseConfig = {
 
   // সঠিক পাসওয়ার্ড
   const correctPassword = "#u n*S*ibg u@";
-  const correctOperatingPassword = "#u n*S*ibg u@";
+  const correctOperatingPassword = "123";
 
   // চার্ট ইনস্ট্যান্স স্টোর করার অবজেক্ট
   const deviceCharts = {};
@@ -4164,6 +4165,3 @@ const firebaseConfig = {
 </body>
 </html>
 ```
-
-
-
