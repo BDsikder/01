@@ -1,15 +1,16 @@
+<!-- {{{{{{{v15.6.3 index.html}}}}}}}
+ 
 
-<!-- {{{{{{{v15.6.2 index.html}}}}}}}
 
+অবশ্যই, আমি আপনার অনুরোধটি বুঝতে পেরেছি। লগইন বক্সে পাসওয়ার্ড ভুল হলে যে ভাইব্রেশন বা শেক (shake) অ্যানিমেশনটি হয়, সেটি একটি গুরুত্বপূর্ণ ভিজ্যুয়াল ফিডব্যাক এবং এটিকে অবশ্যই রাখতে হবে।
 
-অবশ্যই, আপনার অনুরোধটি আমি বুঝতে পেরেছি। আমি আপনার বিদ্যমান প্রজেক্টে ১০টি ভিন্ন ব্যাকগ্রাউন্ড ইমেজ যোগ করার ব্যবস্থা করছি এবং একটি বাটন দিচ্ছি যার মাধ্যমে আপনি সহজেই ব্যাকগ্রাউন্ড পরিবর্তন করতে পারবেন। আপনার পছন্দ মনে রাখার জন্য এটি ব্রাউজারে সেভও হয়ে থাকবে।
+আমি নিশ্চিত করছি যে চূড়ান্ত কোডে এই অ্যানিমেশনটি সঠিকভাবে কাজ করবে। যখনই কোনো ব্যবহারকারী ভুল পাসওয়ার্ড দেবে, লগইন বক্সটি কেঁপে উঠবে এবং একটি ত্রুটি বার্তা দেখাবে।
 
-আপনাকে কোনো কোডিং করতে হবে না। শুধু নিচের সম্পূর্ণ কোডটি কপি করে আপনার `index.html` ফাইলে পেস্ট করলেই আপনার প্রকল্পটি নতুন এই বৈশিষ্ট্যসহ সম্পূর্ণরূপে কাজ করবে।
+আপনাকে কোনো কোডিং করতে হবে না। শুধু নিচের সম্পূর্ণ কোডটি কপি করে আপনার `index.html` ফাইলে পেস্ট করলেই আপনার প্রকল্পটি এই বৈশিষ্ট্যসহ সম্পূর্ণরূপে কাজ করবে।
 
 ### আপনার প্রকল্পের জন্য চূড়ান্ত এবং পরিবর্তিত HTML কোড:
 
 ```html -->
-
 
 
 <!DOCTYPE html>
@@ -63,7 +64,7 @@
       --login-bg: rgba(255, 255, 255, 0.85);
     }
     
-    /* --- পরিবর্তিত: বেসিক বডি স্টাইল এবং ডাইনামিক ব্যাকগ্রাউন্ড --- */
+    /* --- বেসিক বডি স্টাইল এবং ডাইনামিক ব্যাকগ্রাউন্ড --- */
     body {
       font-family: 'Titillium Web', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       margin: 0;
@@ -73,7 +74,7 @@
       overflow-x: hidden; /* সাইড স্ক্রলিং প্রতিরোধ */
     }
 
-    /* ব্যাকগ্রাউন্ডের জন্য একটি আলাদা লেয়ার তৈরি করা হয়েছে */
+    /* অ্যাপ্লিকেশনের মূল ব্যাকগ্রাউন্ডের জন্য একটি আলাদা লেয়ার তৈরি করা হয়েছে */
     body::before {
       content: '';
       position: fixed;
@@ -97,18 +98,18 @@
     
     /* ডিফল্ট অ্যানিমেটেড ব্যাকগ্রাউন্ড */
     body.bg-0::before {
-      background-image: none; /* ইমেজ লোড হবে না */
-      background-color: transparent; /* ফলব্যাক রঙ থাকবে না */
+      background-image: none;
+      background-color: transparent;
       background: linear-gradient(135deg, #1f2937, #111827, #374151, #4f46e5, #7c3aed);
       background-size: 500% 500%;
       animation: colorfulBackground 25s ease infinite;
     }
 
     /* ১০টি ভিন্ন ব্যাকগ্রাউন্ড ইমেজের জন্য ক্লাস */
-    body.bg-1::before { background-image: url('mars-67522 (1).jpg'); }
-    body.bg-2::before { background-image: url('ai-generated-7945689.jpg'); }
-    body.bg-3::before { background-image: url('boat-1014711.jpg'); }
-    body.bg-4::before { background-image: url('fog-4666170.jpg'); }
+    body.bg-1::before { background-image: url('ai-generated-7945689.jpg'); }
+    body.bg-2::before { background-image: url('dark-laptop-mountaintop-view-c5xvh55o47yp0axu.jpg'); }
+    body.bg-3::before { background-image: url('mars-67522.jpg'); }
+    body.bg-4::before { background-image: url('20250729_170502.jpg'); }
     body.bg-5::before { background-image: url('pier-7831868.jpg'); }
     body.bg-6::before { background-image: url('keyboard-7913431.jpg'); }
     body.bg-7::before { background-image: url('power-lines-1868352.jpg'); }
@@ -116,7 +117,7 @@
     body.bg-9::before { background-image: url('sunrise-1959227.jpg'); }
     body.bg-10::before { background-image: url('trees-407256.jpg'); }
     
-    /* --- লক স্ক্রিন স্টাইল --- */
+    /* --- লগইন স্ক্রিনের স্টাইল --- */
     .login-container {
       position: fixed;
       top: 0;
@@ -126,10 +127,25 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      backdrop-filter: blur(10px); /* ব্যাকগ্রাউন্ড ব্লার করা হয়েছে */
       z-index: 1000;
       flex-direction: column;
       overflow: hidden;
+      background-color: #111827;
+    }
+    
+    /* লগইন স্ক্রিনের জন্য একটি নির্দিষ্ট ব্যাকগ্রাউন্ড ইমেজ লেয়ার */
+    .login-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('green-smooth-wooden-textured-background.jpg');
+      background-size: cover;
+      background-position: center;
+      filter: blur(5px) brightness(0.6);
+      z-index: -1;
     }
     
     .login-particles {
@@ -151,7 +167,7 @@
       100% { transform: translateY(-1000px) rotate(720deg); opacity: 0; }
     }
     
-    /* --- অপরিবর্তিত: লোগো কন্টেইনার স্টাইল --- */
+    /* --- লোগো কন্টেইনার স্টাইল --- */
     .login-logo-container {
       position: relative;
       width: 180px;
@@ -160,11 +176,11 @@
       perspective: 1000px;
     }
     .login-logo {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    animation: 20000ms linear -221.503ms infinite normal none running rotate, 0s ease-in-out infinite normal none running pulse;
-    filter: drop-shadow(0 0 15px rgba(52, 152, 219, 0.7));
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      animation: 20000ms linear -221.503ms infinite normal none running rotate, 0s ease-in-out infinite normal none running pulse;
+      filter: drop-shadow(0 0 15px rgba(52, 152, 219, 0.7));
     }
     
     /* লোগোর চারপাশের রিং অ্যানিমেশন */
@@ -192,42 +208,42 @@
     @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
     @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
 
-    /* --- পরিবর্তিত: RGB বর্ডারসহ লগইন বক্স --- */
+    /* --- RGB বর্ডারসহ লগইন বক্স --- */
     .login-box {
-    FONT-WEIGHT: 200;
-    position: relative;
-    width: 520px;
-    padding: 4px;
-    border-radius: 22px;
-    box-shadow: 4px 7px 20px 1px rgb(0 0 0);
-    animation: fadeIn 0.8s ease-in-out, slideUp 0.8s ease-in-out;
-    overflow: hidden;
-    background: #00000000;
-    backdrop-filter: blur(15px);
-   }
+      font-weight: 200;
+      position: relative;
+      width: 520px;
+      padding: 4px;
+      border-radius: 22px;
+      box-shadow: 4px 7px 20px 1px rgb(0 0 0);
+      animation: fadeIn 0.8s ease-in-out, slideUp 0.8s ease-in-out;
+      overflow: hidden;
+      background: #00000000;
+      backdrop-filter: blur(15px);
+    }
 
-    /* --- পরিবর্তিত: লগইন বক্সের RGB বর্ডার অ্যানিমেশন --- */
-  .login-box::before {
-    content: '';
-    position: absolute;
-    top: -60%;
-    left: -50%;
-    width: 200%;
-    height: 260%;
-    z-index: 1;
-    background: conic-gradient(from 180deg at 50% 50%, #ff00d4, #0000ff, #00ffff, #00ff00, #ffff00, #ff8c00, #ff0000, #ff00d4);
-    animation: rotate-rgb 3s linear infinite;
-   }
+    /* লগইন বক্সের RGB বর্ডার অ্যানিমেশন */
+    .login-box::before {
+      content: '';
+      position: absolute;
+      top: -60%;
+      left: -50%;
+      width: 200%;
+      height: 260%;
+      z-index: 1;
+      background: conic-gradient(from 180deg at 50% 50%, #ff00d4, #0000ff, #00ffff, #00ff00, #ffff00, #ff8c00, #ff0000, #ff00d4);
+      animation: rotate-rgb 3s linear infinite;
+    }
 
-    /* --- পরিবর্তিত: বক্সের ভেতরের কন্টেন্টকে RGB বর্ডার থেকে আলাদা করার জন্য একটি স্তর --- */
+    /* বক্সের ভেতরের কন্টেন্টকে RGB বর্ডার থেকে আলাদা করার জন্য একটি স্তর */
     .login-box-inner {
-    background: rgb(0 0 0);
-    border-radius: 18px;
-    padding: 2.5rem;
-    position: relative;
-    z-index: 2;
-    text-align: center;
-   }
+      background: rgb(0 0 0);
+      border-radius: 18px;
+      padding: 2.5rem;
+      position: relative;
+      z-index: 2;
+      text-align: center;
+    }
     
     /* বিভিন্ন অ্যানিমেশন */
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
@@ -245,8 +261,8 @@
     }
     
     .input-group {
-        margin-bottom: 1.5rem;
-        position: relative;
+      margin-bottom: 1.5rem;
+      position: relative;
     }
     
     .input-group input {
@@ -260,10 +276,10 @@
       transition: all 0.3s ease;
     }
     .input-group input:focus {
-    outline: none;
-    background: rgba(255, 255, 255, 0.15);
-    border-left: 3px solid #ff0000;
-    box-shadow: 3px 3px 10px rgb(255 0 0 / 88%);
+      outline: none;
+      background: rgba(255, 255, 255, 0.15);
+      border-left: 3px solid #ff0000;
+      box-shadow: 3px 3px 10px rgb(255 0 0 / 88%);
     }
     
     /* লগইন বাটনের উন্নত ডিজাইন */
@@ -283,7 +299,6 @@
       overflow: hidden;
     }
 
-
     .login-btn:hover {
       transform: translateY(-5px) scale(1.02);
       box-shadow: 0 10px 25px rgba(223, 0, 0, 0.6);
@@ -300,10 +315,17 @@
       text-shadow: 0 0 5px var(--accent-color);
     }
     
+    /* --- ★★★ লগইন বক্সের ভাইব্রেশন অ্যানিমেশন ★★★ --- */
+    /* ভুল পাসওয়ার্ড দিলে এই কীফ্রেমটি ব্যবহৃত হবে */
     @keyframes shake {
       0%, 100% { transform: translateX(0); }
       20%, 60% { transform: translateX(-5px); }
       40%, 80% { transform: translateX(5px); }
+    }
+    
+    /* জাভাস্ক্রিপ্ট থেকে এই ক্লাসটি যোগ করা হবে */
+    .shake-animation {
+        animation: shake 0.5s ease-in-out;
     }
     
     /* --- মূল অ্যাপ্লিকেশন স্টাইল --- */
@@ -335,11 +357,11 @@
       margin-bottom: 15px;
     }
     .app-logo {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    animation: 20000ms linear -221.503ms infinite normal none running rotate, 0s ease-in-out infinite normal none running pulse;
-    filter: drop-shadow(0 0 15px rgba(52, 152, 219, 0.7));
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      animation: 20000ms linear -221.503ms infinite normal none running rotate, 0s ease-in-out infinite normal none running pulse;
+      filter: drop-shadow(0 0 15px rgba(52, 152, 219, 0.7));
     }
     .app-logo-ring {
       position: absolute;
@@ -391,7 +413,7 @@
 
     /* বিভিন্ন বাটনের জন্য রঙ */
     .logout-btn { background: linear-gradient(135deg, #e74c3c, #c0392b); }
-    .background-btn { background: linear-gradient(135deg, var(--background-btn-color), #6c3483); } /* নতুন বাটন স্টাইল */
+    .background-btn { background: linear-gradient(135deg, var(--background-btn-color), #6c3483); }
     .btn-on { background: linear-gradient(135deg, #2ecc71, #27ae60); }
     .btn-off { background: linear-gradient(135deg, #e74c3c, #c0392b); }
     .btn-warning { background: linear-gradient(135deg, #f39c12, #e67e22); }
@@ -663,13 +685,13 @@
       .analytics-section, .energy-graphs { grid-template-columns: 1fr; }
     }
     @media (max-width: 768px) {
-      .login-box { width: 90%; padding: 4px; } /* প্যাডিং ঠিক করা হয়েছে */
+      .login-box { width: 90%; padding: 4px; }
       .login-box-inner { padding: 1.5rem; }
       .nav-tabs { flex-direction: row; }
       .device-cards, .energy-metrics { grid-template-columns: 1fr 1fr; }
       .device-status-summary { grid-template-columns: 1fr 1fr; gap: 20px; }
       .dashboard-header { flex-direction: column; gap: 15px; align-items: center; }
-      .header-controls { width: auto; flex-wrap: wrap; justify-content: center; } /* হেডার কন্ট্রোল রেসপনসিভ করা হলো */
+      .header-controls { width: auto; flex-wrap: wrap; justify-content: center; }
       .password-modal-box, .timer-modal-box { 
         width: 70%; 
         padding: 17px; }
@@ -1253,7 +1275,6 @@ input:checked:active+.slider:before {
         <span class="theme-icon sun-icon">☀️</span>
         <span class="theme-icon moon-icon">🌙</span>
       </label>
-      <!-- নতুন: ব্যাকগ্রাউন্ড পরিবর্তনের জন্য বাটন -->
       <button class="pro-btn background-btn" onclick="changeBackground()">🖼️ ব্যাকগ্রাউন্ড</button>
       <button class="pro-btn logout-btn" onclick="logout()">লগআউট</button>
     </div>
@@ -2787,9 +2808,6 @@ input:checked:active+.slider:before {
 </section>
 
 <!-- ////////////////////////////////////////////////// -->
-
-
-
 </main>
 </div>
 
@@ -2900,11 +2918,11 @@ const firebaseConfig = {
   
   // রিলে অপারেশন কনটেক্সট সংরক্ষণের জন্য ভেরিয়েবল
   let relayOperationContext = null;
-  // নতুন: টাইমার অপারেশন কনটেক্সট এবং ডেটা সংরক্ষণের জন্য ভেরিয়েবল
+  // টাইমার অপারেশন কনটেক্সট এবং ডেটা সংরক্ষণের জন্য ভেরিয়েবল
   let timerOperationContext = null;
   let allTimersData = {};
   
-  // নতুন: ব্যাকগ্রাউন্ড ম্যানেজমেন্টের জন্য ভেরিয়েবল
+  // ব্যাকগ্রাউন্ড ম্যানেজমেন্টের জন্য ভেরিয়েবল
   let currentBackgroundIndex = 0;
   const totalBackgrounds = 11; // ১০টি ইমেজ + ১টি অ্যানিমেটেড গ্রেডিয়েন্ট
 
@@ -2980,7 +2998,7 @@ const firebaseConfig = {
         loadDataRealtime();
         initializeCharts();
         loadThemePreference();
-        loadBackgroundPreference(); // নতুন: ব্যাকগ্রাউন্ড লোড করা
+        loadBackgroundPreference();
         initEnergyCharts();
         loadEnergyData();
         initAdvancedEnergyChart();
@@ -2988,12 +3006,14 @@ const firebaseConfig = {
         loadRelayStates();
         loadDateTimeData();
         loadTimersData();
-        setInterval(updateAllTimerDisplays, 1000); // প্রতি সেকেন্ডে টাইমার আপডেট
+        setInterval(updateAllTimerDisplays, 1000);
       }, 500);
     } else {
       document.getElementById("error").innerText = "❌ ভুল পাসওয়ার্ড! দয়া করে আবার চেষ্টা করুন";
       const loginBox = document.querySelector(".login-box");
+      // ★★★ ভাইব্রেশন অ্যানিমেশন ক্লাস যোগ করা হচ্ছে ★★★
       loginBox.classList.add('shake-animation');
+      // অ্যানিমেশন শেষ হলে ক্লাসটি সরিয়ে ফেলা হচ্ছে
       setTimeout(() => {
         loginBox.classList.remove('shake-animation');
       }, 500);
@@ -3161,7 +3181,7 @@ const firebaseConfig = {
     themeToggle.addEventListener('change', toggleTheme);
   }
   
-  // --- নতুন: ব্যাকগ্রাউন্ড ম্যানেজমেন্ট ফাংশন ---
+  // --- ব্যাকগ্রাউন্ড ম্যানেজমেন্ট ফাংশন ---
 
   // ব্যাকগ্রাউন্ড পরিবর্তন করার ফাংশন
   function changeBackground() {
@@ -3173,19 +3193,17 @@ const firebaseConfig = {
   // নির্বাচিত ব্যাকগ্রাউন্ড প্রয়োগ করার ফাংশন
   function applyBackground(index) {
     const body = document.body;
-    // আগের সব bg-* ক্লাস মুছে ফেলা হচ্ছে
     for (let i = 0; i < totalBackgrounds; i++) {
       body.classList.remove(`bg-${i}`);
     }
-    // নতুন ক্লাস যোগ করা হচ্ছে
     body.classList.add(`bg-${index}`);
-    currentBackgroundIndex = index; // ইনডেক্স সিঙ্ক করা
+    currentBackgroundIndex = index;
   }
 
   // ব্যাকগ্রাউন্ড প্রিফারেন্স লোড করার ফাংশন
   function loadBackgroundPreference() {
     const savedIndex = localStorage.getItem('backgroundIndex');
-    const indexToApply = savedIndex ? parseInt(savedIndex, 10) : 0; // ডিফল্ট 0 (অ্যানিমেটেড)
+    const indexToApply = savedIndex ? parseInt(savedIndex, 10) : 0;
     applyBackground(indexToApply);
   }
 
@@ -3407,7 +3425,7 @@ const firebaseConfig = {
     relayOperationContext = null;
   }
   
-  // --- নতুন: টাইমার ফাংশন ---
+  // --- টাইমার ফাংশন ---
   
   // ফায়ারবেস থেকে তারিখ ও সময় লোড করে UI তে দেখানোর ফাংশন
   function loadDateTimeData() {
@@ -3663,12 +3681,6 @@ const firebaseConfig = {
 
   window.onload = function() {
     createParticles();
-    const style = document.createElement('style');
-    style.textContent = `
-      @keyframes fadeOut { from { opacity: 1; transform: scale(1); } to { opacity: 0; transform: scale(0.95); } }
-      .shake-animation { animation: shake 0.5s ease-in-out; }
-    `;
-    document.head.appendChild(style);
   };
 </script>
 </body>
