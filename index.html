@@ -622,18 +622,18 @@
       z-index: 3000;
       animation: fadeIn 0.4s ease-in-out;
     }
-    .password-modal-box, .timer-modal-box {
-      background: var(--card-bg);
-      backdrop-filter: blur(15px);
-      padding: 30px 40px;
-      border-radius: 20px;
-      width: 450px;
-      box-shadow: 0 15px 40px rgba(0,0,0,0.5);
-      border: 1px solid rgba(255,255,255,0.2);
-      text-align: center;
-      border-top: 5px solid var(--secondary-color);
-      animation: slideUp 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
-      }
+   .password-modal-box, .timer-modal-box {
+     background: rgb(30 28 28 / 58%);
+     backdrop-filter: blur(15px);
+     padding: 30px 40px;
+     border-radius: 20px;
+     width: 450px;
+     box-shadow: 0px 0 16px 2px rgb(219 19 255);
+     border: 3px solid rgb(169 20 20);
+     text-align: center;
+     border-top: 5px solid #3a2e70;
+    animation: slideUp 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
     .timer-modal-box {
       border-top-color: #b90000;
       width: 480px;
@@ -670,7 +670,9 @@
       .device-status-summary { grid-template-columns: 1fr 1fr; gap: 20px; }
       .dashboard-header { flex-direction: column; gap: 15px; align-items: center; }
       .header-controls { width: auto; flex-wrap: wrap; justify-content: center; } /* হেডার কন্ট্রোল রেসপনসিভ করা হলো */
-      .password-modal-box, .timer-modal-box { width: 90%; padding: 20px; }
+      .password-modal-box, .timer-modal-box { 
+        width: 70%; 
+        padding: 17px; }
     }
     @media (max-width: 480px) {
       .device-cards, .energy-metrics, .toggle-switch-grid, .device-status-summary { grid-template-columns: 1fr; }
