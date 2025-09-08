@@ -89,9 +89,10 @@ body.bg-0::before {
 }
 
 /* ১০টি ভিন্ন ব্যাকগ্রাউন্ড ইমেজের জন্য ক্লাস */
-body.bg-1::before { background-image: url('trees-407256.jpg'); }
+body.bg-1::before { background-image: url('dark-laptop-mountaintop-view-c5xvh55o47yp0axu.jpg'); }
 
-body.bg-2::before { background-image: url('pier-7831868.jpg'); }
+body.bg-2::before { background-image: url('ai-generated-7945689.jpg'); }
+
 body.bg-3::before { background-image: url('boat-1014711.jpg'); }
 body.bg-4::before { background-image: url('fog-4666170.jpg'); }
 body.bg-5::before { background-image: url('pier-7831868.jpg'); }
@@ -1208,5 +1209,6 @@ input:checked:active+.slider:before {
     transition: all 0.3s ease;
     box-shadow: 5px 4px 6px 4px rgba(0, 0, 0, 0.3);
 }
+
 
 
