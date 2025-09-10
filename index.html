@@ -1,81 +1,34 @@
-<!-- {{{{{{{{ v17.0.4 index.html }}}}}}}}
+<!-- {{{{{{{{{{ v17.0.5 index.html }}}}}}}}}}
  
-অবশ্যই! আপনার অনুরোধ অনুযায়ী, আমি আপনার প্রকল্পে একটি পূর্ণাঙ্গ নোটিফিকেশন এবং অ্যালার্ট সিস্টেম যুক্ত করেছি। Firebase Cloud Messaging (FCM) ব্যবহার করে এখন ওয়েব ব্রাউজারে রিয়েল-টাইম পুশ নোটিফিকেশন এবং কাস্টম অ্যালার্ট সেট করা যাবে।
+অবশ্যই! আপনার অনুরোধ অনুযায়ী, আমি আপনার প্রকল্পে একটি পূর্ণাঙ্গ **অডিট লগ (Audit Log)** সিস্টেম যুক্ত করেছি। এখন থেকে কোনো ব্যবহারকারী কখন, কোন ডিভাইস বা রিলে চালু বা বন্ধ করেছেন, তার একটি বিস্তারিত লগ স্বয়ংক্রিয়ভাবে সংরক্ষিত হবে।
 
-প্রকল্পের সম্পূর্ণ এবং পরিবর্তিত `index.html` ফাইলটি নিচে দেওয়া হলো। এই কোডটি আপনার ফাইলে পেস্ট করলেই কাজ করবে।
+প্রকল্পের সম্পূর্ণ এবং পরিবর্তিত `index.html` ফাইলটি নিচে দেওয়া হলো। এই কোডটি আপনার ফাইলে পেস্ট করলেই নতুন বৈশিষ্ট্যসহ সম্পূর্ণ প্রকল্পটি কাজ করবে।
 
 ### প্রধান নতুন বৈশিষ্ট্য এবং পরিবর্তনগুলো:
 
-1.  **পুশ নোটিফিকেশন (Push Notifications):**
-    *   হেডার অংশে একটি "🔔 নোটিফিকেশন চালু করুন" বাটন যুক্ত করা হয়েছে। এই বাটনে ক্লিক করলে ব্যবহারকারী ব্রাউজারে নোটিফিকেশন পাঠানোর অনুমতি দিতে পারবেন।
-    *   Firebase Cloud Messaging (FCM) ব্যবহার করে রিয়েল-টাইম অ্যালার্ট পাঠানোর ব্যবস্থা করা হয়েছে।
+1.  **নতুন "অডিট লগ" ট্যাব:**
+    *   নেভিগেশন বারে একটি নতুন ট্যাব **"📜 অডিট লগ"** যুক্ত করা হয়েছে।
+    *   এই ট্যাবে ক্লিক করলে একটি নতুন পেইজ আসবে, যেখানে সকল ব্যবহারকারীর কার্যকলাপের লগ দেখা যাবে।
 
-2.  **কাস্টম অ্যালার্ট (Custom Alerts):**
-    *   **"অটোমেশন"** ট্যাবের নাম পরিবর্তন করে **"অটোমেশন ও অ্যালার্ট"** করা হয়েছে।
-    *   এখন একটি অটোমেশন রুল তৈরি করার সময়, ডিভাইস কন্ট্রোল করার পাশাপাশি একটি কাস্টম নোটিফিকেশন পাঠানোর অপশনও যুক্ত করা হয়েছে। ব্যবহারকারী নিজের পছন্দমতো নোটিফিকেশন বার্তা লিখতে পারবেন।
+2.  ** কার্যকলাপ রেকর্ডিং:**
+    *   **কে (User):** কোন ব্যবহারকারী (তার ইমেল দিয়ে) কাজটি করেছেন। সিস্টেম দ্বারা স্বয়ংক্রিয়ভাবে সম্পাদিত কাজের জন্য "সিস্টেম অটোমেশন" হিসেবে লগ থাকবে।
+    *   **কী (Action):** নির্দিষ্ট কোন ডিভাইস বা রিলে চালু/বন্ধ করা হয়েছে, টাইমার সেট করা হয়েছে, বা অটোমেশন রুল পরিবর্তন করা হয়েছে—তার বিস্তারিত বিবরণ।
+    *   **কখন (Timestamp):** কাজটি করার সঠিক সময় সার্ভার থেকে সংরক্ষিত হবে।
 
-3.  **অন-স্ক্রিন অ্যালার্ট (Toast Notifications):**
-    *   গুরুত্বপূর্ণ ঘটনার জন্য (যেমন: কোনো রুল কার্যকর হলে) স্ক্রিনের কোণায় সুন্দর ডিজাইনের পপ-আপ অ্যালার্ট দেখা যাবে।
+3.  **স্বয়ংক্রিয় লগ জেনারেশন:**
+    *   ডিভাইস কন্ট্রোল (ON/OFF/WARN), রিলে টগল, টাইমার সেটিংস পরিবর্তন, এবং অটোমেশন রুল তৈরি বা পরিবর্তন করার মতো সমস্ত গুরুত্বপূর্ণ কাজের জন্য এখন স্বয়ংক্রিয়ভাবে লগ তৈরি হবে।
 
 4.  **কোড এবং লজিক আপডেট:**
-    *   Firebase Messaging SDK যোগ করা হয়েছে।
-    *   নোটিফিকেশনের অনুমতি নেওয়া, টোকেন সংরক্ষণ করা, এবং অ্যালার্ট দেখানোর জন্য নতুন জাভাস্ক্রিপ্ট ফাংশন (`requestNotificationPermission`, `showToast`, `displayNotification`) লেখা হয়েছে।
-    *   `saveAutomationRule` এবং `checkAutomationRules` ফাংশনগুলোকে অ্যালার্ট পাঠানোর লজিক দিয়ে আপডেট করা হয়েছে।
-
----
-
-### ⚠️ **গুরুত্বপূর্ণ নির্দেশাবলী:**
-
-পুশ নোটিফিকেশন সঠিকভাবে কাজ করার জন্য, আপনাকে আপনার প্রকল্পের রুট ফোল্ডারে (যেখানে `index.html` ফাইলটি আছে) `firebase-messaging-sw.js` নামে একটি নতুন ফাইল তৈরি করতে হবে এবং নিচের কোডটুকু ওই ফাইলে পেস্ট করতে হবে। **এটি ছাড়া ব্যাকগ্রাউন্ড নোটিফিকেশন কাজ করবে না।**
-
-**`firebase-messaging-sw.js` ফাইলের কোড:**
-
-```javascript
-// Firebase SDK ইম্পোর্ট করা হচ্ছে
-importScripts("https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js");
-importScripts("https://www.gstatic.com/firebasejs/9.22.2/firebase-messaging-compat.js");
-
-// আপনার Firebase প্রকল্পের কনফিগারেশন
-const firebaseConfig = {
-  apiKey: "AIzaSyATDfnefdyPAzBNKZY4VM5ja8K2-63PC-U",
-  authDomain: "home-server-346b6.firebaseapp.com",
-  databaseURL: "https://home-server-346b6-default-rtdb.firebaseio.com",
-  projectId: "home-server-346b6",
-  storageBucket: "home-server-346b6.firebasestorage.app",
-  messagingSenderId: "531234227336",
-  appId: "1:531234227336:web:f57f700dd6baaed4358b3d",
-  measurementId: "G-QDWVP34FSX"
-};
-
-// Firebase অ্যাপ ইনিশিয়ালাইজ করা হচ্ছে
-firebase.initializeApp(firebaseConfig);
-
-// Messaging সার্ভিস অ্যাক্সেস করা হচ্ছে
-const messaging = firebase.messaging();
-
-// ব্যাকগ্রাউন্ডে নোটিফিকেশন হ্যান্ডেল করার জন্য
-messaging.onBackgroundMessage((payload) => {
-  console.log(
-    "[firebase-messaging-sw.js] Received background message ",
-    payload
-  );
-  
-  const notificationTitle = payload.notification.title;
-  const notificationOptions = {
-    body: payload.notification.body,
-    icon: "/Bisnu.png", // আপনার লোগোর পাথ
-  };
-
-  self.registration.showNotification(notificationTitle, notificationOptions);
-});
-```
+    *   Firebase Realtime Database-এ `auditLog` নামে একটি নতুন শাখা তৈরি করে সেখানে সমস্ত লগ সংরক্ষণ করার ব্যবস্থা করা হয়েছে।
+    *   `logAuditEvent()` নামে একটি নতুন ফাংশন তৈরি করা হয়েছে, যা ব্যবহারকারীর কার্যকলাপ লগ করার জন্য ব্যবহৃত হবে।
+    *   `controlDevice`, `controlRelay`, `saveTimerSettings`, `saveAutomationRule` ইত্যাদি ফাংশনগুলোকে আপডেট করে লগ তৈরির কোড যুক্ত করা হয়েছে।
+    *   `loadAuditLog()` নামে নতুন ফাংশন লেখা হয়েছে যা অডিট লগ পেইজে সমস্ত লগ দেখানোর কাজ করবে।
 
 ---
 
 ### আপনার প্রকল্পের জন্য চূড়ান্ত এবং পরিবর্তিত HTML কোড:
 
 ```html -->
-
 
 <!DOCTYPE html>
 <html lang="bn">
@@ -914,7 +867,61 @@ messaging.onBackgroundMessage((payload) => {
         transform: translateX(100%);
       }
     }
+    
+    /* ★★★ নতুন: অডিট লগ পেইজের স্টাইল ★★★ */
+    .audit-log-container {
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+    }
 
+    .audit-log-list {
+        max-height: 70vh;
+        overflow-y: auto;
+        padding-right: 15px;
+    }
+
+    .audit-log-item {
+        background: rgba(0, 0, 0, 0.25);
+        border-radius: 10px;
+        padding: 15px;
+        margin-bottom: 12px;
+        border-left: 5px solid var(--info-color);
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .audit-log-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .audit-log-user {
+        font-weight: 600;
+        color: var(--secondary-color);
+        font-size: 1.1rem;
+    }
+    
+    .audit-log-user-system {
+        color: var(--warning-color);
+    }
+
+    .audit-log-timestamp {
+        font-size: 0.9rem;
+        opacity: 0.8;
+    }
+
+    .audit-log-action {
+        font-size: 1rem;
+        line-height: 1.5;
+    }
 
     /* মিডিয়া কোয়েরি */
     @media (max-width: 1024px) {
@@ -1521,6 +1528,7 @@ messaging.onBackgroundMessage((payload) => {
     </div>
   </header>
   
+  <!-- ★★★ পরিবর্তিত: নেভিগেশন বারে অডিট লগ ট্যাব যুক্ত করা হয়েছে ★★★ -->
   <nav class="nav-tabs">
     <div class="nav-tab active" onclick="showPage(1)">ডিভাইস ১</div>
     <div class="nav-tab" onclick="showPage(2)">ডিভাইস ২</div>
@@ -1530,8 +1538,8 @@ messaging.onBackgroundMessage((payload) => {
     <div class="nav-tab" onclick="showPage(6)">এডভান্সড গ্রাফ</div>
     <div class="nav-tab" onclick="showPage(7)">Diagram Note File</div>
     <div class="nav-tab" onclick="showPage(8)">কন্ট্রোল প্যানেল</div>
-    <!-- ★★★ পরিবর্তিত ট্যাব ★★★ -->
     <div class="nav-tab" onclick="showPage(9)">অটোমেশন ও অ্যালার্ট</div>
+    <div class="nav-tab" onclick="showPage(10)">📜 অডিট লগ</div>
   </nav>
 
   <!-- ডিভাইস ১ পেইজ -->
@@ -3060,7 +3068,7 @@ messaging.onBackgroundMessage((payload) => {
 <!-- ////////////////////////////////////////////////// -->
 </main>
 
-<!-- ★★★ পরিবর্তিত: অটোমেশন ও অ্যালার্ট পেইজ ★★★ -->
+<!-- অটোমেশন ও অ্যালার্ট পেইজ -->
 <main id="page9" class="device-page">
     <div class="automation-grid">
       <div class="automation-container">
@@ -3113,7 +3121,7 @@ messaging.onBackgroundMessage((payload) => {
                     <option value="false">OFF করুন</option>
                 </select>
             </div>
-            <!-- ★★★ নতুন: নোটিফিকেশন অপশন ★★★ -->
+            <!-- নোটিফিকেশন অপশন -->
             <div class="notification-toggle-group">
                 <input type="checkbox" id="send-notification-checkbox" style="width: auto;">
                 <label for="send-notification-checkbox">এর সাথে একটি নোটিফিকেশন পাঠান</label>
@@ -3136,10 +3144,21 @@ messaging.onBackgroundMessage((payload) => {
     </div>
 </main>
 
+<!-- ★★★ নতুন: অডিট লগ পেইজ ★★★ -->
+<main id="page10" class="device-page">
+    <section class="audit-log-container">
+        <h2 class="section-title">ব্যবহারকারী কার্যকলাপের লগ</h2>
+        <div class="audit-log-list" id="audit-log-list">
+            <!-- অডিট লগ আইটেমগুলো এখানে জাভাস্ক্রিপ্ট দিয়ে যোগ হবে -->
+            <p>কোনো কার্যকলাপের লগ পাওয়া যায়নি...</p>
+        </div>
+    </section>
+</main>
+
 
 </div>
 
-<!-- ★★★ নতুন: টোস্ট নোটিফিকেশন কন্টেইনার ★★★ -->
+<!-- টোস্ট নোটিফিকেশন কন্টেইনার -->
 <div class="toast-container" id="toast-container"></div>
 
 
@@ -3216,7 +3235,6 @@ messaging.onBackgroundMessage((payload) => {
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
-<!-- ★★★ নতুন: Firebase Messaging SDK যোগ করা হয়েছে ★★★ -->
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-messaging-compat.js"></script>
 
 
@@ -3237,12 +3255,31 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const database = firebase.database();
 const auth = firebase.auth();
-// ★★★ নতুন: Firebase Messaging ইনিশিয়ালাইজ করা হচ্ছে ★★★
 const messaging = firebase.messaging();
 
 
 // রিলে অপারেশনের জন্য পাসওয়ার্ড (লগইনের জন্য ব্যবহৃত হবে না)
 const correctOperatingPassword = "123";
+
+// ★★★ নতুন: অডিট লগ ইভেন্ট তৈরি করার ফাংশন ★★★
+// actor প্যারামিটারটি সিস্টেম জেনারেটেড লগের জন্য ব্যবহার করা হবে
+function logAuditEvent(action, actor = null) {
+    const user = auth.currentUser;
+    // ব্যবহারকারী যদি লগইন করা থাকে অথবা actor যদি সিস্টেম হয়, তবেই লগ তৈরি হবে
+    if (user || actor) {
+        const userEmail = actor ? actor : user.email; // যদি actor থাকে, সেটি ব্যবহার করবে, নাহলে ব্যবহারকারীর ইমেল
+        
+        const logEntry = {
+            user: userEmail,
+            action: action,
+            timestamp: firebase.database.ServerValue.TIMESTAMP // সার্ভারের সঠিক সময় ব্যবহার করা হচ্ছে
+        };
+        
+        // 'auditLog' নোডে নতুন লগ পুশ করা হচ্ছে
+        database.ref('auditLog').push(logEntry);
+    }
+}
+
 
 // Firebase ব্যবহার করে সুরক্ষিত লগইন ফাংশন
 function loginWithFirebase() {
@@ -3251,7 +3288,6 @@ function loginWithFirebase() {
     const errorDiv = document.getElementById("error");
     const loginBox = document.querySelector(".login-box");
 
-    // খালি ইনপুট চেক
     if (!email || !password) {
         errorDiv.innerText = "❌ দয়া করে ইমেল এবং পাসওয়ার্ড দিন।";
         loginBox.classList.add('shake-animation');
@@ -3261,13 +3297,15 @@ function loginWithFirebase() {
         return;
     }
     
-    errorDiv.innerText = ""; // আগের error মুছে ফেলা হলো
+    errorDiv.innerText = "";
 
     auth.signInWithEmailAndPassword(email, password)
         .then((userCredential) => {
-            // লগইন সফল হলে...
             console.log("লগইন সফল:", userCredential.user.email);
             
+            // ★★★ পরিবর্তিত: লগইন সফল হলে অডিট লগে এন্ট্রি যোগ করা হচ্ছে ★★★
+            logAuditEvent("সিস্টেমে সফলভাবে লগইন করেছেন।");
+
             const loginContainer = document.getElementById("login");
             const appContainer = document.getElementById("app");
 
@@ -3276,6 +3314,7 @@ function loginWithFirebase() {
                 loginContainer.style.display = "none";
                 appContainer.style.display = "block";
                 appContainer.style.animation = "fadeIn 0.5s ease forwards";
+                
                 // সফল লগইনের পর প্রয়োজনীয় সব ফাংশন কল করা হচ্ছে
                 loadDataRealtime();
                 initializeCharts();
@@ -3291,12 +3330,12 @@ function loginWithFirebase() {
                 setInterval(updateAllTimerDisplays, 1000);
                 updateTriggerOptions(); 
                 loadAutomationRules();
-                // ★★★ নতুন: লগইন করার পর নোটিফিকেশন সিস্টেম চালু করা হচ্ছে ★★★
                 initializeNotifications();
+                // ★★★ নতুন: অডিট লগ লোড করার ফাংশন কল করা হচ্ছে ★★★
+                loadAuditLog(); 
             }, 500);
         })
         .catch((error) => {
-            // লগইন ব্যর্থ হলে...
             console.error("লগইন ত্রুটি:", error.message);
             errorDiv.innerText = "❌ ইমেল বা পাসওয়ার্ড সঠিক নয়।";
             loginBox.classList.add('shake-animation');
@@ -3308,13 +3347,15 @@ function loginWithFirebase() {
 
 // Firebase ব্যবহার করে সুরক্ষিত লগআউট ফাংশন
 function logout() {
+    // ★★★ পরিবর্তিত: লগআউট করার আগে অডিট লগে এন্ট্রি যোগ করা হচ্ছে ★★★
+    logAuditEvent("সিস্টেম থেকে লগআউট করেছেন।");
+    
     auth.signOut().then(() => {
         const appContainer = document.getElementById("app");
         const loginContainer = document.getElementById("login");
 
         appContainer.style.animation = "fadeOut 0.5s ease forwards";
         setTimeout(() => {
-            // পেজ রিলোড করা হচ্ছে যাতে সকল ডেটা লিসেনার এবং চলমান প্রক্রিয়া বন্ধ হয়ে যায়
             window.location.reload(); 
         }, 500);
     }).catch((error) => {
@@ -3423,7 +3464,7 @@ function logout() {
     }
   }
   
-  // রিলে কন্ট্রোল ফাংশন (এখন সরাসরি boolean ভ্যালু পাঠাবে)
+  // ★★★ পরিবর্তিত: রিলে কন্ট্রোল ফাংশনে অডিট লগ যুক্ত করা হয়েছে ★★★
   function controlRelay(device, relay, element) {
     const state = element.checked;
     console.log(`Controlling ${device}/${relay} to ${state}`);
@@ -3434,13 +3475,17 @@ function logout() {
 
     const logMessage = `${device} এর ${relay} ${state ? 'চালু' : 'বন্ধ'} করা হয়েছে`;
     addLogEntry(device, logMessage, state ? 'success' : 'error');
+
+    // অডিট লগের জন্য টেক্সট তৈরি
+    const auditActionText = `ডিভাইস ${device.replace('device', '')}-এর '${relay}' ${state ? 'চালু' : 'বন্ধ'} করেছেন।`;
+    logAuditEvent(auditActionText);
   }
 
 
-  // ডিভাইস কন্ট্রোল ফাংশন (for pages 1-4)
+  // ★★★ পরিবর্তিত: ডিভাইস কন্ট্রোল ফাংশনে অডিট লগ যুক্ত করা হয়েছে ★★★
   function controlDevice(device, load, state) {
-    const timestamp = new Date().toISOString();
-    const logMessage = `${device} এর ${load} ${state === 1 ? 'চালু' : state === 2 ? 'সতর্কতা মোডে' : 'বন্ধ'} করা হয়েছে`;
+    const stateText = state === 1 ? 'চালু' : (state === 2 ? 'সতর্কতা মোডে' : 'বন্ধ');
+    const logMessage = `${device} এর ${load} ${stateText} করা হয়েছে`;
     
     database.ref('devices/' + device).update({
       [load]: state
@@ -3448,6 +3493,10 @@ function logout() {
     
     addLogEntry(device, logMessage, state === 1 ? 'success' : state === 2 ? 'warning' : 'error');
     updateChart(device);
+    
+    // অডিট লগের জন্য টেক্সট
+    const auditActionText = `ডিভাইস ${device.replace('device', '')}-এর '${load}' ${stateText} সেট করেছেন।`;
+    logAuditEvent(auditActionText);
   }
 
   // লগ এন্ট্রি যোগ করার ফাংশন
@@ -3917,7 +3966,8 @@ function logout() {
       document.getElementById('timerPasswordError').textContent = '';
       timerOperationContext = null;
   }
-
+  
+  // ★★★ পরিবর্তিত: টাইমার সেটিংসে অডিট লগ যুক্ত করা হয়েছে ★★★
   function saveTimerSettings() {
       const password = document.getElementById('timerPasswordInput').value;
       if (password !== correctOperatingPassword) {
@@ -3930,16 +3980,26 @@ function logout() {
       }
       
       if (timerOperationContext) {
+          const isEnabled = document.getElementById('timer-enabled-btn').classList.contains('enabled');
+          const onlineTime = document.getElementById('timer-online-time').value;
+          const offlineTime = document.getElementById('timer-offline-time').value;
+          const targetRelay = document.getElementById('timer-relay-select').value;
+          
           const updates = {
-              enabled: document.getElementById('timer-enabled-btn').classList.contains('enabled'),
-              online: document.getElementById('timer-online-time').value,
-              offline: document.getElementById('timer-offline-time').value,
-              relay: document.getElementById('timer-relay-select').value
+              enabled: isEnabled,
+              online: onlineTime,
+              offline: offlineTime,
+              relay: targetRelay
           };
           
           database.ref('timers/' + timerOperationContext).update(updates)
               .then(() => {
                   console.log('Timer settings saved successfully!');
+                  
+                  // অডিট লগ তৈরি
+                  const auditActionText = `'${timerOperationContext}' এর জন্য টাইমার সেটিংস পরিবর্তন করেছেন। স্ট্যাটাস: ${isEnabled ? 'সক্রিয়' : 'নিষ্ক্রিয়'}, অন-টাইম: ${onlineTime}, অফ-টাইম: ${offlineTime}।`;
+                  logAuditEvent(auditActionText);
+                  
                   closeTimerModal();
               })
               .catch(error => {
@@ -4047,7 +4107,7 @@ function logout() {
 
   // --- ★★★ নতুন এবং পরিবর্তিত: নোটিফিকেশন, অটোমেশন এবং ইন্টেলিজেন্স ফাংশন ★★★ ---
   
-  // ★★★ নতুন: অন-স্ক্রিন টোস্ট নোটিফিকেশন দেখানোর ফাংশন ★★★
+  // অন-স্ক্রিন টোস্ট নোটিফিকেশন দেখানোর ফাংশন
   function showToast(message, type = 'info') {
     const container = document.getElementById('toast-container');
     const toast = document.createElement('div');
@@ -4060,48 +4120,40 @@ function logout() {
     toast.innerHTML = `${icon} ${message}`;
     container.appendChild(toast);
     
-    // ৫ সেকেন্ড পর টোস্টটি মুছে ফেলা হবে
     setTimeout(() => {
       toast.remove();
     }, 5000);
   }
 
-  // ★★★ নতুন: ব্রাউজার নোটিফিকেশন দেখানোর ফাংশন ★★★
+  // ব্রাউজার নোটিফিকেশন দেখানোর ফাংশন
   function displayNotification(title, body) {
       if ('Notification' in window && Notification.permission === 'granted') {
           navigator.serviceWorker.ready.then(registration => {
               registration.showNotification(title, {
                   body: body,
-                  icon: 'Bisnu.png', // আপনার লোগোর পাথ
-                  badge: 'Bisnu.png' // ছোট আইকন
+                  icon: 'Bisnu.png',
+                  badge: 'Bisnu.png'
               });
           });
       }
   }
 
-
-  // ★★★ নতুন: নোটিফিকেশন সিস্টেম চালু এবং অনুমতি চাওয়ার ফাংশন ★★★
+  // নোটিফিকেশন সিস্টেম চালু এবং অনুমতি চাওয়ার ফাংশন
   function initializeNotifications() {
-      // অ্যাপ ফোরগ্রাউন্ডে থাকাকালীন মেসেজ শোনার জন্য
       messaging.onMessage((payload) => {
           console.log('Message received. ', payload);
           showToast(payload.notification.body, 'info');
-          // এখানে ব্রাউজার নোটিফিকেশন দেখানোর প্রয়োজন নেই কারণ ব্যবহারকারী অ্যাপ দেখছেন
       });
   }
 
   async function requestNotificationPermission() {
       const notificationBtn = document.getElementById('notification-btn');
       try {
-          // ব্যবহারকারীর কাছে অনুমতি চাওয়া হচ্ছে
           await messaging.requestPermission();
           console.log('নোটিফিকেশনের অনুমতি দেওয়া হয়েছে।');
-          
-          // FCM টোকেন জেনারেট করা হচ্ছে
           const token = await messaging.getToken();
           console.log('FCM Token:', token);
           
-          // টোকেনটি ডাটাবেজে সংরক্ষণ করা হচ্ছে
           const user = auth.currentUser;
           if (user) {
               database.ref(`fcmTokens/${user.uid}`).set({ token: token });
@@ -4123,7 +4175,6 @@ function logout() {
     if (power > powerThreshold) {
       const message = `অস্বাভাবিকভাবে উচ্চ পাওয়ার (${power.toFixed(0)} W) ব্যবহার শনাক্ত হয়েছে।`;
       alertDiv.innerHTML = `<div class="alert-message"><strong>সতর্কতা!</strong> ${message}</div>`;
-      // একটি অ্যালার্ট ট্রিগার করা
       triggerNotification("উচ্চ পাওয়ার ব্যবহার!", message);
     } else {
       alertDiv.innerHTML = `<p>সিস্টেম স্বাভাবিকভাবে চলছে। কোনো অস্বাভাবিকতা শনাক্ত হয়নি।</p>`;
@@ -4195,13 +4246,13 @@ function logout() {
     container.innerHTML = html;
   }
   
-  // ★★★ নতুন: নোটিফিকেশন বার্তা বক্স দেখানো/লুকানোর জন্য ইভেন্ট লিসেনার ★★★
+  // নোটিফিকেশন বার্তা বক্স দেখানো/লুকানোর জন্য ইভেন্ট লিসেনার
   document.getElementById('send-notification-checkbox').addEventListener('change', function() {
     document.getElementById('notification-message-group').style.display = this.checked ? 'flex' : 'none';
   });
 
 
-  // ★★★ পরিবর্তিত: নতুন অটোমেশন রুল Firebase-এ সংরক্ষণ ★★★
+  // ★★★ পরিবর্তিত: অটোমেশন রুলে অডিট লগ যুক্ত করা হয়েছে ★★★
   function saveAutomationRule(event) {
     event.preventDefault();
     const sendNotification = document.getElementById('send-notification-checkbox').checked;
@@ -4233,6 +4284,8 @@ function logout() {
     database.ref('automationRules').push(rule)
       .then(() => {
         showToast('অটোমেশন রুল সফলভাবে সংরক্ষিত হয়েছে!', 'success');
+        // অডিট লগ
+        logAuditEvent(`নতুন অটোমেশন রুল '${rule.name}' তৈরি করেছেন।`);
         document.querySelector('.rule-builder-form').reset();
         document.getElementById('notification-message-group').style.display = 'none';
       })
@@ -4287,24 +4340,26 @@ function logout() {
 
   // রুল সক্রিয় বা নিষ্ক্রিয় করা
   function toggleRule(ruleId) {
-    const currentState = automationRules[ruleId].isEnabled;
-    database.ref(`automationRules/${ruleId}/isEnabled`).set(!currentState);
+    const rule = automationRules[ruleId];
+    const newState = !rule.isEnabled;
+    database.ref(`automationRules/${ruleId}/isEnabled`).set(newState).then(() => {
+        logAuditEvent(`'${rule.name}' রুলটি ${newState ? 'সক্রিয়' : 'নিষ্ক্রিয়'} করেছেন।`);
+    });
   }
 
   // রুল ডিলিট করা
   function deleteRule(ruleId) {
     if (confirm('আপনি কি সত্যিই এই রুলটি মুছে ফেলতে চান?')) {
-      database.ref(`automationRules/${ruleId}`).remove();
+      const ruleName = automationRules[ruleId].name;
+      database.ref(`automationRules/${ruleId}`).remove().then(() => {
+          logAuditEvent(`'${ruleName}' রুলটি মুছে ফেলেছেন।`);
+      });
     }
   }
   
-  // ★★★ নতুন: একটি নোটিফিকেশন ট্রিগার করার ফাংশন ★★★
-  // এই ফাংশনটি ব্রাউজার নোটিফিকেশন এবং অন-স্ক্রিন টোস্ট উভয়ই দেখাবে।
+  // একটি নোটিফিকেশন ট্রিগার করার ফাংশন
   function triggerNotification(title, body) {
-      // অন-স্ক্রিন অ্যালার্ট দেখানো হচ্ছে
       showToast(body, 'info');
-      
-      // ব্রাউজার পুশ নোটিফিকেশন পাঠানো হচ্ছে
       displayNotification(title, body);
   }
 
@@ -4319,12 +4374,10 @@ function logout() {
       const rule = automationRules[ruleId];
       if (!rule.isEnabled) continue;
 
-      // একটি রুল ফায়ার করার পর ৩০ সেকেন্ডের কুলডাউন পিরিয়ড
       if (nowTimestamp - (rule.lastFired || 0) < 30000) continue;
 
       let triggerMet = false;
 
-      // 1. এনার্জি-ভিত্তিক ট্রিগার চেক
       if (source === 'energy' && rule.triggerSource === 'energy') {
         const value = data[rule.triggerMetric];
         if (rule.triggerCondition === '>' && value > rule.triggerValue) triggerMet = true;
@@ -4332,12 +4385,10 @@ function logout() {
         if (rule.triggerCondition === '==' && value == rule.triggerValue) triggerMet = true;
       }
       
-      // 2. সময়-ভিত্তিক ট্রিগার চেক (প্রতি মিনিটে একবার চেক করা হয়)
       if (rule.triggerSource === 'time' && rule.triggerValue === currentTime) {
         triggerMet = true;
       }
 
-      // 3. ডিভাইস-ভিত্তিক ট্রিগার চেক
       if (source === 'device' && rule.triggerSource === 'device') {
         if (data.deviceId === rule.triggerDevice) {
            const deviceCurrentState = data.states[rule.triggerRelay];
@@ -4349,27 +4400,69 @@ function logout() {
 
       if (triggerMet) {
         console.log(`অটোমেশন রুল "${rule.name}" কার্যকর হচ্ছে...`);
-        // অ্যাকশন কার্যকর করা
         database.ref(`devices/${rule.actionDevice}`).update({
           [rule.actionRelay]: rule.actionState 
         });
 
-        // যদি নোটিফিকেশন পাঠানোর অপশন চালু থাকে
         if (rule.sendNotification && rule.notificationMessage) {
             triggerNotification(`"${rule.name}" কার্যকর হয়েছে`, rule.notificationMessage);
         }
         
-        // শেষবার ফায়ার করার সময় আপডেট করা
         database.ref(`automationRules/${ruleId}/lastFired`).set(nowTimestamp);
         
-        // লগ এন্ট্রি
         const logMessage = `অটোমেশন "${rule.name}" অনুযায়ী ${rule.actionDevice} এর ${rule.actionRelay} ${rule.actionState ? 'ON' : 'OFF'} করা হয়েছে।`;
         addLogEntry(rule.actionDevice.replace('device','device'), logMessage, 'info');
+        
+        // ★★★ নতুন: অটোমেশন কার্যকর হলে অডিট লগ তৈরি ★★★
+        logAuditEvent(logMessage, "সিস্টেম অটোমেশন");
       }
     }
   }
-  // প্রতি মিনিটে সময়-ভিত্তিক রুল চেক করার জন্য টাইমার
   setInterval(() => checkAutomationRules('time', {}), 60000);
+
+  // ★★★ নতুন: অডিট লগ লোড এবং প্রদর্শন করার ফাংশন ★★★
+  function loadAuditLog() {
+      const logListContainer = document.getElementById('audit-log-list');
+      // শেষ ১০০টি লগ লোড করা হচ্ছে পারফর্মেন্স ঠিক রাখার জন্য
+      const auditLogRef = database.ref('auditLog').limitToLast(100);
+
+      auditLogRef.on('value', (snapshot) => {
+          logListContainer.innerHTML = ''; // আগের লগ মুছে ফেলা হলো
+          const logs = snapshot.val();
+          
+          if (!logs) {
+              logListContainer.innerHTML = '<p>কোনো কার্যকলাপের লগ পাওয়া যায়নি...</p>';
+              return;
+          }
+
+          // লগগুলোকে নতুন থেকে পুরানো ক্রমে সাজানো হচ্ছে
+          const logKeys = Object.keys(logs).reverse();
+
+          logKeys.forEach(key => {
+              const log = logs[key];
+              const logItem = document.createElement('div');
+              logItem.className = 'audit-log-item';
+              
+              const date = new Date(log.timestamp);
+              const formattedTime = date.toLocaleString('bn-BD', {
+                  year: 'numeric', month: 'long', day: 'numeric',
+                  hour: '2-digit', minute: '2-digit', second: '2-digit'
+              });
+              
+              const isSystem = log.user === 'সিস্টেম অটোমেশন';
+
+              logItem.innerHTML = `
+                  <div class="audit-log-header">
+                      <span class="audit-log-user ${isSystem ? 'audit-log-user-system' : ''}">👤 ${log.user}</span>
+                      <span class="audit-log-timestamp">🕒 ${formattedTime}</span>
+                  </div>
+                  <div class="audit-log-action">${log.action}</div>
+              `;
+              
+              logListContainer.appendChild(logItem);
+          });
+      });
+  }
 
 
   // এন্টার কী প্রেস ইভেন্ট লিসেনার
