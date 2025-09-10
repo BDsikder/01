@@ -1,47 +1,81 @@
+<!-- {{{{{{{{ v17.0.4 index.html }}}}}}}}
+ 
+অবশ্যই! আপনার অনুরোধ অনুযায়ী, আমি আপনার প্রকল্পে একটি পূর্ণাঙ্গ নোটিফিকেশন এবং অ্যালার্ট সিস্টেম যুক্ত করেছি। Firebase Cloud Messaging (FCM) ব্যবহার করে এখন ওয়েব ব্রাউজারে রিয়েল-টাইম পুশ নোটিফিকেশন এবং কাস্টম অ্যালার্ট সেট করা যাবে।
 
-<!-- {{{{{{{ v17.0.2 index.html}}}}}}}
+প্রকল্পের সম্পূর্ণ এবং পরিবর্তিত `index.html` ফাইলটি নিচে দেওয়া হলো। এই কোডটি আপনার ফাইলে পেস্ট করলেই কাজ করবে।
 
+### প্রধান নতুন বৈশিষ্ট্য এবং পরিবর্তনগুলো:
 
-আপনার অনুরোধটি আমি বুঝতে পেরেছি। আপনি আপনার প্রকল্পে একটি পূর্ণাঙ্গ নোটিফিকেশন এবং অ্যালার্ট সিস্টেম যুক্ত করতে চান, যার জন্য আপনাকে কোনো অতিরিক্ত কোডিং করতে হবে না।
+1.  **পুশ নোটিফিকেশন (Push Notifications):**
+    *   হেডার অংশে একটি "🔔 নোটিফিকেশন চালু করুন" বাটন যুক্ত করা হয়েছে। এই বাটনে ক্লিক করলে ব্যবহারকারী ব্রাউজারে নোটিফিকেশন পাঠানোর অনুমতি দিতে পারবেন।
+    *   Firebase Cloud Messaging (FCM) ব্যবহার করে রিয়েল-টাইম অ্যালার্ট পাঠানোর ব্যবস্থা করা হয়েছে।
 
-আপনার চাহিদা অনুযায়ী, আমি আপনার সম্পূর্ণ `index.html` ফাইলটি আপডেট করেছি এবং এর সাথে প্রয়োজনীয় নতুন UI এবং ক্লায়েন্ট-সাইড জাভাস্ক্রিপ্ট যুক্ত করেছি। তবে, পুশ নোটিফিকেশন এবং ইমেল/SMS পাঠানোর মতো ফিচারগুলো শুধু HTML ফাইল দিয়ে পুরোপুরিভাবে কার্যকর করা সম্ভব নয়। এর জন্য কিছু অতিরিক্ত ধাপ অনুসরণ করতে হবে, যা আমি নিচে স্পষ্টভাবে বর্ণনা করেছি।
+2.  **কাস্টম অ্যালার্ট (Custom Alerts):**
+    *   **"অটোমেশন"** ট্যাবের নাম পরিবর্তন করে **"অটোমেশন ও অ্যালার্ট"** করা হয়েছে।
+    *   এখন একটি অটোমেশন রুল তৈরি করার সময়, ডিভাইস কন্ট্রোল করার পাশাপাশি একটি কাস্টম নোটিফিকেশন পাঠানোর অপশনও যুক্ত করা হয়েছে। ব্যবহারকারী নিজের পছন্দমতো নোটিফিকেশন বার্তা লিখতে পারবেন।
 
-### প্রধান পরিবর্তন এবং সংযোজন:
+3.  **অন-স্ক্রিন অ্যালার্ট (Toast Notifications):**
+    *   গুরুত্বপূর্ণ ঘটনার জন্য (যেমন: কোনো রুল কার্যকর হলে) স্ক্রিনের কোণায় সুন্দর ডিজাইনের পপ-আপ অ্যালার্ট দেখা যাবে।
 
-1.  **অন-স্ক্রিন অ্যালার্ট:** ব্রাউজারের ভেতরেই তাৎক্ষণিক অ্যালার্ট দেখানোর জন্য একটি সুন্দর টোস্ট নোটিফিকেশন সিস্টেম যোগ করা হয়েছে।
-2.  **ব্রাউজার পুশ নোটিফিকেশন:** Firebase Cloud Messaging (FCM) ব্যবহার করে ব্রাউজার ট্যাব বন্ধ থাকলেও নোটিফিকেশন পাঠানোর ব্যবস্থা করা হয়েছে। এর জন্য একটি বাটন যুক্ত করা হয়েছে যা ব্যবহারকারীকে নোটিফিকেশন চালু করার অনুমতি চাইবে।
-3.  **কাস্টম অ্যালার্ট ট্যাব:** একটি নতুন "অ্যালার্ট তৈরি করুন" ট্যাব যোগ করা হয়েছে। এখান থেকে আপনি নির্দিষ্ট শর্তের (যেমন: ভোল্টেজ ২৩০V এর বেশি হলে) উপর ভিত্তি করে অ্যালার্ট তৈরি করতে পারবেন।
-4.  **প্রয়োজনীয় ফাইল:** আপনাকে দুটি অতিরিক্ত ফাইল তৈরি করতে হবে, যার কোড আমি নিচে দিয়ে দিয়েছি। আপনাকে শুধু ফাইলগুলো তৈরি করে সঠিক জায়গায় রাখতে হবে।
-
----
-
-### আপনাকে যা করতে হবে (ধাপে ধাপে নির্দেশিকা):
-
-আপনাকে শুধু নিচের ধাপগুলো অনুসরণ করতে হবে। আমি সমস্ত প্রয়োজনীয় কোড সরবরাহ করেছি।
-
-**ধাপ ১: `index.html` ফাইলটি আপডেট করুন**
-
-আপনার পুরনো `index.html` ফাইলের সমস্ত কোড মুছে দিয়ে নিচের সম্পূর্ণ কোডটি পেস্ট করুন।
-
-**ধাপ ২: `firebase-messaging-sw.js` ফাইল তৈরি করুন**
-
-আপনার প্রজেক্টের যে ফোল্ডারে `index.html` ফাইলটি আছে, ঠিক সেই ফোল্ডারে `firebase-messaging-sw.js` নামে একটি নতুন ফাইল তৈরি করুন এবং নিচের কোডটি সেখানে পেস্ট করুন। এই ফাইলটি ব্রাউজারকে ব্যাকগ্রাউন্ডে নোটিফিকেশন দেখাতে সাহায্য করবে।
-
-**ধাপ ৩: Firebase প্রোজেক্টে নোটিফিকেশন সেটআপ করুন**
-
-1.  আপনার Firebase প্রজেক্টের **Project Settings** > **Cloud Messaging** ট্যাবে যান।
-2.  নিচের দিকে স্ক্রোল করে **Web configuration** সেকশনে "Web Push certificates" এর নিচে **Generate key pair** বাটনে ক্লিক করে একটি VAPID কী তৈরি করুন।
-3.  এই কী'টি কপি করে রাখুন। আপনাকে এটি `index.html` ফাইলের জাভাস্ক্রিপ্ট অংশে পেস্ট করতে হবে (কোথায় পেস্ট করবেন তা কোডের ভেতরে চিহ্নিত করা আছে)।
-
-**ধাপ ৪ (ঐচ্ছিক কিন্তু প্রস্তাবিত): স্বয়ংক্রিয় অ্যালার্টের জন্য Firebase Functions**
-
-ডিভাইস অফলাইন হলে, ভোল্টেজ বেড়ে গেলে বা আপনার তৈরি করা কাস্টম অ্যালার্ট অনুযায়ী স্বয়ংক্রিয়ভাবে নোটিফিকেশন পাঠাতে হলে ক্লাউড ফাংশন ব্যবহার করতে হবে। এর জন্য আপনাকে Firebase CLI ব্যবহার করে Functions সেটআপ করতে হবে এবং `index.js` ফাইলে নিচের কোড পেস্ট করে ডেপ্লয় করতে হবে।
+4.  **কোড এবং লজিক আপডেট:**
+    *   Firebase Messaging SDK যোগ করা হয়েছে।
+    *   নোটিফিকেশনের অনুমতি নেওয়া, টোকেন সংরক্ষণ করা, এবং অ্যালার্ট দেখানোর জন্য নতুন জাভাস্ক্রিপ্ট ফাংশন (`requestNotificationPermission`, `showToast`, `displayNotification`) লেখা হয়েছে।
+    *   `saveAutomationRule` এবং `checkAutomationRules` ফাংশনগুলোকে অ্যালার্ট পাঠানোর লজিক দিয়ে আপডেট করা হয়েছে।
 
 ---
 
-### ফাইল ১: আপনার প্রকল্পের জন্য চূড়ান্ত এবং পরিবর্তিত `index.html` কোড
+### ⚠️ **গুরুত্বপূর্ণ নির্দেশাবলী:**
+
+পুশ নোটিফিকেশন সঠিকভাবে কাজ করার জন্য, আপনাকে আপনার প্রকল্পের রুট ফোল্ডারে (যেখানে `index.html` ফাইলটি আছে) `firebase-messaging-sw.js` নামে একটি নতুন ফাইল তৈরি করতে হবে এবং নিচের কোডটুকু ওই ফাইলে পেস্ট করতে হবে। **এটি ছাড়া ব্যাকগ্রাউন্ড নোটিফিকেশন কাজ করবে না।**
+
+**`firebase-messaging-sw.js` ফাইলের কোড:**
+
+```javascript
+// Firebase SDK ইম্পোর্ট করা হচ্ছে
+importScripts("https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js");
+importScripts("https://www.gstatic.com/firebasejs/9.22.2/firebase-messaging-compat.js");
+
+// আপনার Firebase প্রকল্পের কনফিগারেশন
+const firebaseConfig = {
+  apiKey: "AIzaSyATDfnefdyPAzBNKZY4VM5ja8K2-63PC-U",
+  authDomain: "home-server-346b6.firebaseapp.com",
+  databaseURL: "https://home-server-346b6-default-rtdb.firebaseio.com",
+  projectId: "home-server-346b6",
+  storageBucket: "home-server-346b6.firebasestorage.app",
+  messagingSenderId: "531234227336",
+  appId: "1:531234227336:web:f57f700dd6baaed4358b3d",
+  measurementId: "G-QDWVP34FSX"
+};
+
+// Firebase অ্যাপ ইনিশিয়ালাইজ করা হচ্ছে
+firebase.initializeApp(firebaseConfig);
+
+// Messaging সার্ভিস অ্যাক্সেস করা হচ্ছে
+const messaging = firebase.messaging();
+
+// ব্যাকগ্রাউন্ডে নোটিফিকেশন হ্যান্ডেল করার জন্য
+messaging.onBackgroundMessage((payload) => {
+  console.log(
+    "[firebase-messaging-sw.js] Received background message ",
+    payload
+  );
+  
+  const notificationTitle = payload.notification.title;
+  const notificationOptions = {
+    body: payload.notification.body,
+    icon: "/Bisnu.png", // আপনার লোগোর পাথ
+  };
+
+  self.registration.showNotification(notificationTitle, notificationOptions);
+});
+```
+
+---
+
+### আপনার প্রকল্পের জন্য চূড়ান্ত এবং পরিবর্তিত HTML কোড:
 
 ```html -->
+
 
 <!DOCTYPE html>
 <html lang="bn">
@@ -52,7 +86,7 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300;400;600;700&display=swap" rel="stylesheet">
   <style>
-    /* --- পূর্ববর্তী সমস্ত CSS এখানে থাকবে --- */
+    /* --- CSS ভ্যারিয়েবল সংজ্ঞা --- */
     :root {
       --primary-color: #2c3e50;
       --secondary-color: #3498db;
@@ -417,8 +451,6 @@
       gap: 15px;
       align-items: center;
       margin-top: 15px;
-      flex-wrap: wrap;
-      justify-content: center;
     }
     
     /* --- সকল বাটনের জন্য একটি সাধারণ ক্লাস এবং উন্নত ডিজাইন --- */
@@ -440,11 +472,19 @@
     .pro-btn:active {
       transform: translateY(0) scale(1);
     }
+    /* ★★★ নতুন: নোটিফিকেশন বাটনের জন্য বিশেষ স্টাইল ★★★ */
+    .pro-btn:disabled {
+        background: #555;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+    }
+
 
     /* বিভিন্ন বাটনের জন্য রঙ */
     .logout-btn { background: linear-gradient(135deg, #e74c3c, #c0392b); }
     .background-btn { background: linear-gradient(135deg, var(--background-btn-color), #6c3483); }
-    .notification-btn { background: linear-gradient(135deg, #9b59b6, #8e44ad); } /* নতুন বাটন */
+    .notification-btn { background: linear-gradient(135deg, #f39c12, #d35400); } /* নতুন রঙ */
     .btn-on { background: linear-gradient(135deg, #2ecc71, #27ae60); }
     .btn-off { background: linear-gradient(135deg, #e74c3c, #c0392b); }
     .btn-warning { background: linear-gradient(135deg, #f39c12, #e67e22); }
@@ -711,7 +751,7 @@
         padding: 12px 20px;
     }
     
-    /* --- ★★★ অটোমেশন এবং অ্যালার্ট পেইজের স্টাইল ★★★ --- */
+    /* --- ★★★ অটোমেশন পেইজের নতুন স্টাইল ★★★ --- */
     .automation-grid {
       display: grid;
       grid-template-columns: 1fr;
@@ -742,7 +782,7 @@
       font-weight: 500;
       opacity: 0.9;
     }
-    .form-group select, .form-group input {
+    .form-group select, .form-group input, .form-group textarea { /* Textarea added */
       padding: 12px;
       border-radius: 8px;
       border: 1px solid rgba(255,255,255,0.2);
@@ -750,7 +790,22 @@
       color: var(--text-color);
       font-size: 1rem;
       width: 95%;
+      font-family: 'Titillium Web', sans-serif;
     }
+    .form-group textarea {
+        resize: vertical;
+        min-height: 80px;
+    }
+    /* ★★★ নতুন: Notification Checkbox স্টাইল ★★★ */
+    .notification-toggle-group {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px;
+        background: rgba(0,0,0,0.2);
+        border-radius: 8px;
+    }
+
     .rule-list {
       display: flex;
       flex-direction: column;
@@ -814,37 +869,51 @@
         border-radius: 8px;
         border-left: 4px solid var(--warning-color);
     }
-
-    /* --- ★★★ নতুন: টোস্ট নোটিফিকেশন স্টাইল ★★★ --- */
-    #toast-container {
+    /* ★★★ নতুন: অন-স্ক্রিন টোস্ট নোটিফিকেশন স্টাইল ★★★ */
+    .toast-container {
       position: fixed;
       bottom: 20px;
       right: 20px;
-      z-index: 9999;
+      z-index: 5000;
       display: flex;
       flex-direction: column;
       gap: 10px;
     }
-    .toast {
-      background-color: var(--card-bg);
-      backdrop-filter: blur(15px);
-      color: var(--text-color);
+
+    .toast-message {
       padding: 15px 20px;
       border-radius: 10px;
+      color: white;
+      font-weight: 600;
       box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-      border-left: 5px solid var(--secondary-color);
       display: flex;
       align-items: center;
       gap: 10px;
-      min-width: 300px;
-      animation: slideInToast 0.5s ease-out forwards;
+      opacity: 0;
+      transform: translateX(100%);
+      animation: slideInToast 0.5s forwards, fadeOutToast 0.5s 4.5s forwards;
     }
-    .toast.success { border-left-color: var(--success-color); }
-    .toast.error { border-left-color: var(--accent-color); }
-    .toast.warning { border-left-color: var(--warning-color); }
-    .toast-icon { font-size: 1.5rem; }
-    .toast-message { font-size: 1rem; }
-    @keyframes slideInToast { from { transform: translateX(120%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+    .toast-message.info { background: linear-gradient(135deg, var(--info-color), #12826a); }
+    .toast-message.success { background: linear-gradient(135deg, var(--success-color), #208953); }
+    .toast-message.error { background: linear-gradient(135deg, var(--accent-color), #a02d20); }
+
+    @keyframes slideInToast {
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+    @keyframes fadeOutToast {
+      from {
+        opacity: 1;
+        transform: translateX(0);
+      }
+      to {
+        opacity: 0;
+        transform: translateX(100%);
+      }
+    }
 
 
     /* মিডিয়া কোয়েরি */
@@ -1446,7 +1515,7 @@
         <span class="theme-icon moon-icon">🌙</span>
       </label>
       <!-- ★★★ নতুন নোটিফিকেশন বাটন ★★★ -->
-      <button class="pro-btn notification-btn" onclick="requestNotificationPermission()">🔔 নোটিফিকেশন চালু</button>
+      <button id="notification-btn" class="pro-btn notification-btn" onclick="requestNotificationPermission()">🔔 নোটিফিকেশন চালু করুন</button>
       <button class="pro-btn background-btn" onclick="changeBackground()">🖼️ ব্যাকগ্রাউন্ড</button>
       <button class="pro-btn logout-btn" onclick="logout()">লগআউট</button>
     </div>
@@ -1461,13 +1530,10 @@
     <div class="nav-tab" onclick="showPage(6)">এডভান্সড গ্রাফ</div>
     <div class="nav-tab" onclick="showPage(7)">Diagram Note File</div>
     <div class="nav-tab" onclick="showPage(8)">কন্ট্রোল প্যানেল</div>
-    <div class="nav-tab" onclick="showPage(9)">অটোমেশন</div>
-    <!-- ★★★ নতুন ট্যাব ★★★ -->
-    <div class="nav-tab" onclick="showPage(10)">অ্যালার্ট তৈরি</div>
+    <!-- ★★★ পরিবর্তিত ট্যাব ★★★ -->
+    <div class="nav-tab" onclick="showPage(9)">অটোমেশন ও অ্যালার্ট</div>
   </nav>
 
-  <!-- ডিভাইস ১ থেকে ৮ পর্যন্ত পেইজ (পূর্বের কোড অপরিবর্তিত) -->
-  
   <!-- ডিভাইস ১ পেইজ -->
   <main id="page1" class="device-page active">
     <section class="device-status-summary" id="device1-summary">
@@ -2459,7 +2525,6 @@
       </div>
     </section>
     
-    <!-- ★★★ নতুন ইন্টেলিজেন্স ইনসাইটস সেকশন ★★★ -->
     <section class="intelligence-section">
       <h3 class="intelligence-title">🧠 ইন্টেলিজেন্স ইনসাইটস</h3>
       <div id="anomaly-alert">
@@ -2995,11 +3060,11 @@
 <!-- ////////////////////////////////////////////////// -->
 </main>
 
-  <!-- অটোমেশন পেইজ -->
+<!-- ★★★ পরিবর্তিত: অটোমেশন ও অ্যালার্ট পেইজ ★★★ -->
 <main id="page9" class="device-page">
     <div class="automation-grid">
       <div class="automation-container">
-        <h2 class="section-title">নতুন অটোমেশন রুল তৈরি করুন</h2>
+        <h2 class="section-title">নতুন অটোমেশন বা অ্যালার্ট তৈরি করুন</h2>
         <form class="rule-builder-form" onsubmit="saveAutomationRule(event)">
             <div class="form-group">
                 <label for="rule-name">রুলের নাম</label>
@@ -3034,7 +3099,6 @@
             <div class="form-group">
                 <label for="action-relay">রিলে/লোড</label>
                 <select id="action-relay">
-                    <!-- প্রথম ১৬টি লোড/রিলে -->
                     <script>
                         for(let i=1; i<=16; i++) {
                             document.write(`<option value="relay${i}">রিলে ${i}</option>`);
@@ -3049,62 +3113,24 @@
                     <option value="false">OFF করুন</option>
                 </select>
             </div>
+            <!-- ★★★ নতুন: নোটিফিকেশন অপশন ★★★ -->
+            <div class="notification-toggle-group">
+                <input type="checkbox" id="send-notification-checkbox" style="width: auto;">
+                <label for="send-notification-checkbox">এর সাথে একটি নোটিফিকেশন পাঠান</label>
+            </div>
+            <div class="form-group" id="notification-message-group" style="display: none;">
+                <label for="notification-message">নোটিফিকেশন বার্তা</label>
+                <textarea id="notification-message" placeholder="আপনার কাস্টম বার্তা এখানে লিখুন..."></textarea>
+            </div>
             
             <button type="submit" class="pro-btn btn-on" style="margin-top: 15px;">💾 রুল সংরক্ষণ করুন</button>
         </form>
       </div>
       <div class="automation-container">
-        <h2 class="section-title">সক্রিয় অটোমেশন রুল সমূহ</h2>
+        <h2 class="section-title">সক্রিয় অটোমেশন ও অ্যালার্ট সমূহ</h2>
         <div class="rule-list" id="automation-rule-list">
           <!-- রুলগুলো এখানে লোড হবে -->
           <p>কোনো অটোমেশন রুল এখনো তৈরি করা হয়নি।</p>
-        </div>
-      </div>
-    </div>
-</main>
-
-  <!-- ★★★ নতুন: অ্যালার্ট তৈরি করার পেইজ ★★★ -->
-<main id="page10" class="device-page">
-    <div class="automation-grid">
-      <div class="automation-container">
-        <h2 class="section-title">নতুন কাস্টম অ্যালার্ট তৈরি করুন</h2>
-        <p style="opacity: 0.8; margin-top: -15px; margin-bottom: 20px;">
-          এখানে আপনি নির্দিষ্ট শর্ত পূরণ হলে পুশ নোটিফিকেশন পাওয়ার জন্য অ্যালার্ট তৈরি করতে পারেন।
-        </p>
-        <form class="rule-builder-form" onsubmit="saveCustomAlert(event)">
-            <div class="form-group">
-                <label for="alert-name">অ্যালার্টের নাম</label>
-                <input type="text" id="alert-name" placeholder="যেমন: হাই ভোল্টেজ অ্যালার্ট" required>
-            </div>
-            <hr>
-            <div class="rule-part">শর্ত (Condition)</div>
-            <div class="form-group">
-              <label for="alert-metric">ম্যাট্রিক</label>
-              <select id="alert-metric">
-                <option value="voltage">ভোল্টেজ (V)</option>
-                <option value="current">কারেন্ট (A)</option>
-                <option value="power">পাওয়ার (W)</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="alert-condition">শর্ত</label>
-              <select id="alert-condition">
-                <option value=">">এর বেশি হলে</option>
-                <option value="<">এর কম হলে</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="alert-value">মান</label>
-              <input type="number" step="any" id="alert-value" placeholder="যেমন: 240" required>
-            </div>
-            
-            <button type="submit" class="pro-btn btn-info" style="margin-top: 15px;">💾 অ্যালার্ট সংরক্ষণ করুন</button>
-        </form>
-      </div>
-      <div class="automation-container">
-        <h2 class="section-title">আপনার তৈরি করা অ্যালার্ট সমূহ</h2>
-        <div class="rule-list" id="custom-alert-list">
-          <p>কোনো কাস্টম অ্যালার্ট এখনো তৈরি করা হয়নি।</p>
         </div>
       </div>
     </div>
@@ -3114,7 +3140,7 @@
 </div>
 
 <!-- ★★★ নতুন: টোস্ট নোটিফিকেশন কন্টেইনার ★★★ -->
-<div id="toast-container"></div>
+<div class="toast-container" id="toast-container"></div>
 
 
 <!-- ইমেজ ভিউয়ার মোডাল -->
@@ -3211,31 +3237,35 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const database = firebase.database();
 const auth = firebase.auth();
-// ★★★ নতুন: Firebase Messaging ইনিশিয়ালাইজ ★★★
+// ★★★ নতুন: Firebase Messaging ইনিশিয়ালাইজ করা হচ্ছে ★★★
 const messaging = firebase.messaging();
 
 
-// রিলে অপারেশনের জন্য পাসওয়ার্ড
+// রিলে অপারেশনের জন্য পাসওয়ার্ড (লগইনের জন্য ব্যবহৃত হবে না)
 const correctOperatingPassword = "123";
 
-// লগইন ফাংশন
+// Firebase ব্যবহার করে সুরক্ষিত লগইন ফাংশন
 function loginWithFirebase() {
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
     const errorDiv = document.getElementById("error");
     const loginBox = document.querySelector(".login-box");
 
+    // খালি ইনপুট চেক
     if (!email || !password) {
         errorDiv.innerText = "❌ দয়া করে ইমেল এবং পাসওয়ার্ড দিন।";
         loginBox.classList.add('shake-animation');
-        setTimeout(() => { loginBox.classList.remove('shake-animation'); }, 500);
+        setTimeout(() => {
+            loginBox.classList.remove('shake-animation');
+        }, 500);
         return;
     }
     
-    errorDiv.innerText = ""; 
+    errorDiv.innerText = ""; // আগের error মুছে ফেলা হলো
 
     auth.signInWithEmailAndPassword(email, password)
         .then((userCredential) => {
+            // লগইন সফল হলে...
             console.log("লগইন সফল:", userCredential.user.email);
             
             const loginContainer = document.getElementById("login");
@@ -3246,8 +3276,7 @@ function loginWithFirebase() {
                 loginContainer.style.display = "none";
                 appContainer.style.display = "block";
                 appContainer.style.animation = "fadeIn 0.5s ease forwards";
-                
-                // সফল লগইনের পর প্রয়োজনীয় সব ফাংশন কল
+                // সফল লগইনের পর প্রয়োজনীয় সব ফাংশন কল করা হচ্ছে
                 loadDataRealtime();
                 initializeCharts();
                 loadThemePreference();
@@ -3262,27 +3291,30 @@ function loginWithFirebase() {
                 setInterval(updateAllTimerDisplays, 1000);
                 updateTriggerOptions(); 
                 loadAutomationRules();
-                
-                // ★★★ নতুন ফাংশন কল ★★★
-                setupForegroundNotifications();
-                loadCustomAlerts();
-
+                // ★★★ নতুন: লগইন করার পর নোটিফিকেশন সিস্টেম চালু করা হচ্ছে ★★★
+                initializeNotifications();
             }, 500);
         })
         .catch((error) => {
+            // লগইন ব্যর্থ হলে...
             console.error("লগইন ত্রুটি:", error.message);
             errorDiv.innerText = "❌ ইমেল বা পাসওয়ার্ড সঠিক নয়।";
             loginBox.classList.add('shake-animation');
-            setTimeout(() => { loginBox.classList.remove('shake-animation'); }, 500);
+            setTimeout(() => {
+                loginBox.classList.remove('shake-animation');
+            }, 500);
         });
 }
 
-// লগআউট ফাংশন
+// Firebase ব্যবহার করে সুরক্ষিত লগআউট ফাংশন
 function logout() {
     auth.signOut().then(() => {
         const appContainer = document.getElementById("app");
+        const loginContainer = document.getElementById("login");
+
         appContainer.style.animation = "fadeOut 0.5s ease forwards";
         setTimeout(() => {
+            // পেজ রিলোড করা হচ্ছে যাতে সকল ডেটা লিসেনার এবং চলমান প্রক্রিয়া বন্ধ হয়ে যায়
             window.location.reload(); 
         }, 500);
     }).catch((error) => {
@@ -3290,138 +3322,9 @@ function logout() {
     });
 }
 
-  // --- ★★★ নতুন: নোটিফিকেশন সম্পর্কিত ফাংশন ★★★ ---
+// --- বাকি জাভাস্ক্রিপ্ট কোড ---
 
-  // ১. নোটিফিকেশন দেখানোর জন্য অনুমতি চাওয়া
-  function requestNotificationPermission() {
-    console.log('Requesting notification permission...');
-    Notification.requestPermission().then((permission) => {
-      if (permission === 'granted') {
-        console.log('Notification permission granted.');
-        showToast('success', '✅', 'পুশ নোটিফিকেশন সফলভাবে চালু হয়েছে।');
-        
-        // VAPID কী এখানে যোগ করুন
-        // আপনার Firebase প্রজেক্টের "Cloud Messaging" ট্যাব থেকে এই কী পাবেন
-        const vapidKey = "YOUR_VAPID_KEY_FROM_FIREBASE_CONSOLE"; // <--- এই লাইনটি পরিবর্তন করুন
-
-        messaging.getToken({ vapidKey: vapidKey }).then((currentToken) => {
-          if (currentToken) {
-            console.log('FCM Token:', currentToken);
-            // বর্তমান ব্যবহারকারীর জন্য টোকেনটি ডাটাবেজে সংরক্ষণ করুন
-            const userId = auth.currentUser.uid;
-            database.ref('fcmTokens/' + userId).set(currentToken);
-          } else {
-            console.log('No registration token available. Request permission to generate one.');
-            showToast('error', '❌', 'নোটিফিকেশন টোকেন পাওয়া যায়নি।');
-          }
-        }).catch((err) => {
-          console.log('An error occurred while retrieving token. ', err);
-          showToast('error', '❌', 'টোকেন পেতে সমস্যা হয়েছে।');
-        });
-
-      } else {
-        console.log('Unable to get permission to notify.');
-        showToast('warning', '🔔', 'আপনি নোটিফিকেশনের অনুমতি দেননি।');
-      }
-    });
-  }
-
-  // ২. অ্যাপ খোলা থাকা অবস্থায় নোটিফিকেশন হ্যান্ডেল করা
-  function setupForegroundNotifications() {
-      messaging.onMessage((payload) => {
-          console.log('Message received. ', payload);
-          const { title, body } = payload.notification;
-          // কাস্টম টোস্ট নোটিফিকেশন দেখানো হচ্ছে
-          showToast('info', 'ℹ️', `${title}: ${body}`);
-      });
-  }
-
-  // ৩. টোস্ট নোটিফিকেশন দেখানোর ফাংশন
-  function showToast(type, icon, message) {
-    const container = document.getElementById('toast-container');
-    const toast = document.createElement('div');
-    toast.className = `toast ${type}`;
-    toast.innerHTML = `
-      <div class="toast-icon">${icon}</div>
-      <div class="toast-message">${message}</div>
-    `;
-    container.appendChild(toast);
-    setTimeout(() => {
-      toast.remove();
-    }, 5000); // ৫ সেকেন্ড পর টোস্ট সরে যাবে
-  }
-
-  // --- ★★★ নতুন: কাস্টম অ্যালার্ট সম্পর্কিত ফাংশন ★★★ ---
-
-  // ১. নতুন কাস্টম অ্যালার্ট Firebase-এ সংরক্ষণ
-  function saveCustomAlert(event) {
-      event.preventDefault();
-      const alertRule = {
-          name: document.getElementById('alert-name').value,
-          metric: document.getElementById('alert-metric').value,
-          condition: document.getElementById('alert-condition').value,
-          value: parseFloat(document.getElementById('alert-value').value),
-          isEnabled: true
-      };
-
-      const userId = auth.currentUser.uid;
-      database.ref(`customAlerts/${userId}`).push(alertRule)
-        .then(() => {
-            showToast('success', '✅', 'নতুন অ্যালার্ট সফলভাবে তৈরি হয়েছে!');
-            document.querySelector('#page10 .rule-builder-form').reset();
-        })
-        .catch(error => {
-            console.error("অ্যালার্ট সংরক্ষণ করতে সমস্যা হয়েছে: ", error);
-            showToast('error', '❌', 'অ্যালার্ট সংরক্ষণ করা যায়নি।');
-        });
-  }
-  
-  // ২. সেভ করা অ্যালার্টগুলো লোড করে দেখানো
-  function loadCustomAlerts() {
-    const userId = auth.currentUser.uid;
-    database.ref(`customAlerts/${userId}`).on('value', snapshot => {
-        const alerts = snapshot.val() || {};
-        const listContainer = document.getElementById('custom-alert-list');
-        listContainer.innerHTML = '';
-
-        if (Object.keys(alerts).length === 0) {
-            listContainer.innerHTML = '<p>কোনো কাস্টম অ্যালার্ট এখনো তৈরি করা হয়নি।</p>';
-            return;
-        }
-
-        for (const alertId in alerts) {
-            const alert = alerts[alertId];
-            const card = document.createElement('div');
-            card.className = `rule-card`;
-            
-            let description = `<strong>${alert.name}:</strong> যদি <strong>${alert.metric}</strong> এর মান <strong>${alert.condition} ${alert.value}</strong> হয়, তবে নোটিফিকেশন পাঠান।`;
-
-            card.innerHTML = `
-              <div class="rule-description">${description}</div>
-              <div class="rule-actions">
-                <button class="pro-btn rule-btn delete-btn" onclick="deleteCustomAlert('${alertId}')">ডিলিট</button>
-              </div>
-            `;
-            listContainer.appendChild(card);
-        }
-    });
-  }
-
-  // ৩. কাস্টম অ্যালার্ট ডিলিট করা
-  function deleteCustomAlert(alertId) {
-    if (confirm('আপনি কি সত্যিই এই অ্যালার্টটি মুছে ফেলতে চান?')) {
-        const userId = auth.currentUser.uid;
-        database.ref(`customAlerts/${userId}/${alertId}`).remove()
-          .then(() => showToast('success', '🗑️', 'অ্যালার্ট মুছে ফেলা হয়েছে।'))
-          .catch(err => showToast('error', '❌', 'অ্যালার্ট মোছা যায়নি।'));
-    }
-  }
-
-
-// --- এখানে আপনার পূর্ববর্তী সমস্ত জাভাস্ক্রিপ্ট কোড থাকবে ---
-// যেমন: showPage, controlDevice, addLogEntry, initializeCharts, ইত্যাদি...
-
-// চার্ট ইনস্ট্যান্স স্টোর করার অবজেক্ট
+  // চার্ট ইনস্ট্যান্স স্টোর করার অবজেক্ট
   const deviceCharts = {};
   let energyCharts = {};
   let advancedEnergyChart = null;
@@ -3439,7 +3342,7 @@ function logout() {
   let currentBackgroundIndex = 0;
   const totalBackgrounds = 11; // ১০টি ইমেজ + ১টি অ্যানিমেটেড গ্রেডিয়েন্ট
   
-  // ★★★ নতুন: অটোমেশন রুল ও ডেটা সংরক্ষণের জন্য ভেরিয়েবল ★★★
+  // অটোমেশন রুল ও ডেটা সংরক্ষণের জন্য ভেরিয়েবল
   let currentEnergyData = {};
   let currentDeviceStates = {};
   let automationRules = {};
@@ -3522,10 +3425,9 @@ function logout() {
   
   // রিলে কন্ট্রোল ফাংশন (এখন সরাসরি boolean ভ্যালু পাঠাবে)
   function controlRelay(device, relay, element) {
-    const state = element.checked; // state is already a boolean (true/false)
+    const state = element.checked;
     console.log(`Controlling ${device}/${relay} to ${state}`);
     
-    // state সরাসরি boolean হিসেবে পাঠানো হচ্ছে
     database.ref('devices/' + device).update({
         [relay]: state
     });
@@ -3715,7 +3617,7 @@ function logout() {
 
   // এনার্জি ডাটা আপডেট করার ফাংশন
   function updateEnergyData(data) {
-    currentEnergyData = data; 
+    currentEnergyData = data;
 
     document.getElementById('voltage-value').innerHTML = data.voltage ? data.voltage.toFixed(2) + ' <span class="energy-unit">V</span>' : '-- V';
     document.getElementById('current-value').innerHTML = data.current ? data.current.toFixed(2) + ' <span class="energy-unit">A</span>' : '-- A';
@@ -3795,7 +3697,7 @@ function logout() {
           let activeCount = 0, inactiveCount = 0, warningCount = 0;
           for(let loadNum = 1; loadNum <= 16; loadNum++) {
             const key = 'Load' + loadNum;
-            const value = data[key]; 
+            const value = data[key];
             const el = document.getElementById(`d${deviceNum}-load${loadNum}`);
             
             let statusText = 'OFF';
@@ -4143,23 +4045,92 @@ function logout() {
     setTimeout(() => { win.print(); win.close(); }, 500);
   }
 
-  // --- ★★★ অটোমেশন এবং ইন্টেলিজেন্স ফাংশন (পরিবর্তিত) ★★★ ---
+  // --- ★★★ নতুন এবং পরিবর্তিত: নোটিফিকেশন, অটোমেশন এবং ইন্টেলিজেন্স ফাংশন ★★★ ---
+  
+  // ★★★ নতুন: অন-স্ক্রিন টোস্ট নোটিফিকেশন দেখানোর ফাংশন ★★★
+  function showToast(message, type = 'info') {
+    const container = document.getElementById('toast-container');
+    const toast = document.createElement('div');
+    toast.className = `toast-message ${type}`;
+    
+    let icon = 'ℹ️';
+    if (type === 'success') icon = '✅';
+    if (type === 'error') icon = '❌';
+
+    toast.innerHTML = `${icon} ${message}`;
+    container.appendChild(toast);
+    
+    // ৫ সেকেন্ড পর টোস্টটি মুছে ফেলা হবে
+    setTimeout(() => {
+      toast.remove();
+    }, 5000);
+  }
+
+  // ★★★ নতুন: ব্রাউজার নোটিফিকেশন দেখানোর ফাংশন ★★★
+  function displayNotification(title, body) {
+      if ('Notification' in window && Notification.permission === 'granted') {
+          navigator.serviceWorker.ready.then(registration => {
+              registration.showNotification(title, {
+                  body: body,
+                  icon: 'Bisnu.png', // আপনার লোগোর পাথ
+                  badge: 'Bisnu.png' // ছোট আইকন
+              });
+          });
+      }
+  }
+
+
+  // ★★★ নতুন: নোটিফিকেশন সিস্টেম চালু এবং অনুমতি চাওয়ার ফাংশন ★★★
+  function initializeNotifications() {
+      // অ্যাপ ফোরগ্রাউন্ডে থাকাকালীন মেসেজ শোনার জন্য
+      messaging.onMessage((payload) => {
+          console.log('Message received. ', payload);
+          showToast(payload.notification.body, 'info');
+          // এখানে ব্রাউজার নোটিফিকেশন দেখানোর প্রয়োজন নেই কারণ ব্যবহারকারী অ্যাপ দেখছেন
+      });
+  }
+
+  async function requestNotificationPermission() {
+      const notificationBtn = document.getElementById('notification-btn');
+      try {
+          // ব্যবহারকারীর কাছে অনুমতি চাওয়া হচ্ছে
+          await messaging.requestPermission();
+          console.log('নোটিফিকেশনের অনুমতি দেওয়া হয়েছে।');
+          
+          // FCM টোকেন জেনারেট করা হচ্ছে
+          const token = await messaging.getToken();
+          console.log('FCM Token:', token);
+          
+          // টোকেনটি ডাটাবেজে সংরক্ষণ করা হচ্ছে
+          const user = auth.currentUser;
+          if (user) {
+              database.ref(`fcmTokens/${user.uid}`).set({ token: token });
+              showToast('নোটিফিকেশন সফলভাবে চালু হয়েছে!', 'success');
+              notificationBtn.textContent = '✅ নোটিফিকেশন চালু আছে';
+              notificationBtn.disabled = true;
+          }
+      } catch (err) {
+          console.error('নোটিফিকেশনের অনুমতি পেতে ব্যর্থ: ', err);
+          showToast('নোটিফিকেশনের অনুমতি দেওয়া হয়নি।', 'error');
+      }
+  }
+
+  // অ্যানোমালি বা অস্বাভাবিকতা শনাক্তকরণ
   function checkForAnomalies(power) {
     const alertDiv = document.getElementById('anomaly-alert');
-    const powerThreshold = 5000; 
+    const powerThreshold = 5000; // ওয়াট
 
     if (power > powerThreshold) {
-      alertDiv.innerHTML = `
-        <div class="alert-message">
-          <strong>সতর্কতা!</strong> অস্বাভাবিকভাবে উচ্চ পাওয়ার (${power.toFixed(0)} W) ব্যবহার শনাক্ত হয়েছে। 
-          দয়া করে আপনার উচ্চ-ক্ষমতার অ্যাপ্লায়েন্সগুলো পরীক্ষা করুন।
-        </div>
-      `;
+      const message = `অস্বাভাবিকভাবে উচ্চ পাওয়ার (${power.toFixed(0)} W) ব্যবহার শনাক্ত হয়েছে।`;
+      alertDiv.innerHTML = `<div class="alert-message"><strong>সতর্কতা!</strong> ${message}</div>`;
+      // একটি অ্যালার্ট ট্রিগার করা
+      triggerNotification("উচ্চ পাওয়ার ব্যবহার!", message);
     } else {
       alertDiv.innerHTML = `<p>সিস্টেম স্বাভাবিকভাবে চলছে। কোনো অস্বাভাবিকতা শনাক্ত হয়নি।</p>`;
     }
   }
-
+  
+  // অটোমেশন রুল বিল্ডারের অপশন আপডেট
   function updateTriggerOptions() {
     const source = document.getElementById('trigger-source').value;
     const container = document.getElementById('trigger-options-container');
@@ -4223,17 +4194,28 @@ function logout() {
     }
     container.innerHTML = html;
   }
+  
+  // ★★★ নতুন: নোটিফিকেশন বার্তা বক্স দেখানো/লুকানোর জন্য ইভেন্ট লিসেনার ★★★
+  document.getElementById('send-notification-checkbox').addEventListener('change', function() {
+    document.getElementById('notification-message-group').style.display = this.checked ? 'flex' : 'none';
+  });
 
+
+  // ★★★ পরিবর্তিত: নতুন অটোমেশন রুল Firebase-এ সংরক্ষণ ★★★
   function saveAutomationRule(event) {
     event.preventDefault();
+    const sendNotification = document.getElementById('send-notification-checkbox').checked;
+
     const rule = {
       name: document.getElementById('rule-name').value,
       triggerSource: document.getElementById('trigger-source').value,
       actionDevice: document.getElementById('action-device').value,
       actionRelay: document.getElementById('action-relay').value,
       actionState: document.getElementById('action-state').value === 'true',
+      sendNotification: sendNotification,
+      notificationMessage: sendNotification ? document.getElementById('notification-message').value : '',
       isEnabled: true,
-      lastFired: 0
+      lastFired: 0 
     };
 
     if (rule.triggerSource === 'energy') {
@@ -4250,12 +4232,14 @@ function logout() {
 
     database.ref('automationRules').push(rule)
       .then(() => {
-        alert('অটোমেশন রুল সফলভাবে সংরক্ষিত হয়েছে!');
+        showToast('অটোমেশন রুল সফলভাবে সংরক্ষিত হয়েছে!', 'success');
         document.querySelector('.rule-builder-form').reset();
+        document.getElementById('notification-message-group').style.display = 'none';
       })
       .catch(error => console.error("রুল সংরক্ষণ করতে সমস্যা হয়েছে: ", error));
   }
 
+  // Firebase থেকে সকল রুল লোড করে দেখানো
   function loadAutomationRules() {
     database.ref('automationRules').on('value', snapshot => {
       automationRules = snapshot.val() || {};
@@ -4263,7 +4247,7 @@ function logout() {
       listContainer.innerHTML = '';
 
       if (Object.keys(automationRules).length === 0) {
-        listContainer.innerHTML = '<p>কোনো অটোমেশন রুল এখনো তৈরি করা হয়নি।</p>';
+        listContainer.innerHTML = '<p>কোনো অটোমেশন বা অ্যালার্ট রুল এখনো তৈরি করা হয়নি।</p>';
         return;
       }
 
@@ -4281,6 +4265,11 @@ function logout() {
             description += `যদি <strong>${rule.triggerDevice}</strong> এর <strong>${rule.triggerRelay}</strong> <strong>${rule.triggerCondition ? 'ON' : 'OFF'}</strong> হয়, `;
         }
         description += `তবে <strong>${rule.actionDevice}</strong> এর <strong>${rule.actionRelay}</strong> কে <strong>${rule.actionState ? 'ON' : 'OFF'}</strong> করুন।`;
+        
+        if (rule.sendNotification) {
+            description += ` এবং একটি নোটিফিকেশন পাঠান।`;
+        }
+
 
         card.innerHTML = `
           <div class="rule-description">${description}</div>
@@ -4296,17 +4285,31 @@ function logout() {
     });
   }
 
+  // রুল সক্রিয় বা নিষ্ক্রিয় করা
   function toggleRule(ruleId) {
     const currentState = automationRules[ruleId].isEnabled;
     database.ref(`automationRules/${ruleId}/isEnabled`).set(!currentState);
   }
 
+  // রুল ডিলিট করা
   function deleteRule(ruleId) {
     if (confirm('আপনি কি সত্যিই এই রুলটি মুছে ফেলতে চান?')) {
       database.ref(`automationRules/${ruleId}`).remove();
     }
   }
   
+  // ★★★ নতুন: একটি নোটিফিকেশন ট্রিগার করার ফাংশন ★★★
+  // এই ফাংশনটি ব্রাউজার নোটিফিকেশন এবং অন-স্ক্রিন টোস্ট উভয়ই দেখাবে।
+  function triggerNotification(title, body) {
+      // অন-স্ক্রিন অ্যালার্ট দেখানো হচ্ছে
+      showToast(body, 'info');
+      
+      // ব্রাউজার পুশ নোটিফিকেশন পাঠানো হচ্ছে
+      displayNotification(title, body);
+  }
+
+
+  // ★★★ মূল অটোমেশন ইঞ্জিন (পরিবর্তিত) ★★★
   function checkAutomationRules(source, data) {
     const now = new Date();
     const currentTime = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
@@ -4316,10 +4319,12 @@ function logout() {
       const rule = automationRules[ruleId];
       if (!rule.isEnabled) continue;
 
+      // একটি রুল ফায়ার করার পর ৩০ সেকেন্ডের কুলডাউন পিরিয়ড
       if (nowTimestamp - (rule.lastFired || 0) < 30000) continue;
 
       let triggerMet = false;
 
+      // 1. এনার্জি-ভিত্তিক ট্রিগার চেক
       if (source === 'energy' && rule.triggerSource === 'energy') {
         const value = data[rule.triggerMetric];
         if (rule.triggerCondition === '>' && value > rule.triggerValue) triggerMet = true;
@@ -4327,10 +4332,12 @@ function logout() {
         if (rule.triggerCondition === '==' && value == rule.triggerValue) triggerMet = true;
       }
       
+      // 2. সময়-ভিত্তিক ট্রিগার চেক (প্রতি মিনিটে একবার চেক করা হয়)
       if (rule.triggerSource === 'time' && rule.triggerValue === currentTime) {
         triggerMet = true;
       }
 
+      // 3. ডিভাইস-ভিত্তিক ট্রিগার চেক
       if (source === 'device' && rule.triggerSource === 'device') {
         if (data.deviceId === rule.triggerDevice) {
            const deviceCurrentState = data.states[rule.triggerRelay];
@@ -4342,16 +4349,26 @@ function logout() {
 
       if (triggerMet) {
         console.log(`অটোমেশন রুল "${rule.name}" কার্যকর হচ্ছে...`);
+        // অ্যাকশন কার্যকর করা
         database.ref(`devices/${rule.actionDevice}`).update({
           [rule.actionRelay]: rule.actionState 
         });
+
+        // যদি নোটিফিকেশন পাঠানোর অপশন চালু থাকে
+        if (rule.sendNotification && rule.notificationMessage) {
+            triggerNotification(`"${rule.name}" কার্যকর হয়েছে`, rule.notificationMessage);
+        }
+        
+        // শেষবার ফায়ার করার সময় আপডেট করা
         database.ref(`automationRules/${ruleId}/lastFired`).set(nowTimestamp);
         
+        // লগ এন্ট্রি
         const logMessage = `অটোমেশন "${rule.name}" অনুযায়ী ${rule.actionDevice} এর ${rule.actionRelay} ${rule.actionState ? 'ON' : 'OFF'} করা হয়েছে।`;
         addLogEntry(rule.actionDevice.replace('device','device'), logMessage, 'info');
       }
     }
   }
+  // প্রতি মিনিটে সময়-ভিত্তিক রুল চেক করার জন্য টাইমার
   setInterval(() => checkAutomationRules('time', {}), 60000);
 
 
@@ -4377,155 +4394,3 @@ function logout() {
 </script>
 </body>
 </html>
-```
-
-<!-- ---
-
-### ফাইল ২: `firebase-messaging-sw.js` (নতুন ফাইল তৈরি করুন)
-
-এই কোডটি কপি করে `firebase-messaging-sw.js` নামে একটি নতুন ফাইল তৈরি করুন এবং আপনার `index.html` ফাইলের পাশে রাখুন।
-
-```javascript
-// Firebase SDK ইম্পোর্ট করা হচ্ছে
-importScripts("https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js");
-importScripts("https://www.gstatic.com/firebasejs/9.22.2/firebase-messaging-compat.js");
-
-// আপনার Firebase প্রজেক্টের কনফিগারেশন
-const firebaseConfig = {
-  apiKey: "AIzaSyATDfnefdyPAzBNKZY4VM5ja8K2-63PC-U",
-  authDomain: "home-server-346b6.firebaseapp.com",
-  databaseURL: "https://home-server-346b6-default-rtdb.firebaseio.com",
-  projectId: "home-server-346b6",
-  storageBucket: "home-server-346b6.firebasestorage.app",
-  messagingSenderId: "531234227336",
-  appId: "1:531234227336:web:f57f700dd6baaed4358b3d",
-};
-
-// Firebase অ্যাপ ইনিশিয়ালাইজ করা হচ্ছে
-firebase.initializeApp(firebaseConfig);
-
-// Messaging সার্ভিস ইনিশিয়ালাইজ করা হচ্ছে
-const messaging = firebase.messaging();
-
-// ব্যাকগ্রাউন্ডে নোটিফিকেশন হ্যান্ডেল করার জন্য
-messaging.onBackgroundMessage((payload) => {
-  console.log(
-    "[firebase-messaging-sw.js] Received background message ",
-    payload
-  );
-  
-  const notificationTitle = payload.notification.title;
-  const notificationOptions = {
-    body: payload.notification.body,
-    icon: "/Bisnu.png", // আপনার লোগোর পাথ
-  };
-
-  self.registration.showNotification(notificationTitle, notificationOptions);
-});
-```
-
----
-
-### ফাইল ৩ (ঐচ্ছিক): `functions/index.js` (স্বয়ংক্রিয় অ্যালার্টের জন্য)
-
-আপনি যদি স্বয়ংক্রিয়ভাবে নোটিফিকেশন পাঠাতে চান, তবে আপনাকে Firebase Functions সেটআপ করতে হবে। `functions` ফোল্ডারের ভেতরের `index.js` ফাইলে নিচের কোডটি পেস্ট করে ডেপ্লয় করুন।
-
-```javascript
-const functions = require("firebase-functions");
-const admin = require("firebase-admin");
-admin.initializeApp();
-
-// কাস্টম অ্যালার্ট চেক করার জন্য ফাংশন
-exports.checkCustomAlerts = functions.database
-  .ref("/energymonitoring")
-  .onUpdate(async (change, context) => {
-    const newData = change.after.val();
-    const usersSnapshot = await admin.database().ref("/customAlerts").once("value");
-    if (!usersSnapshot.exists()) {
-      return null;
-    }
-
-    const promises = [];
-    usersSnapshot.forEach((user) => {
-      const userId = user.key;
-      const userAlerts = user.val();
-
-      for (const alertId in userAlerts) {
-        const alert = userAlerts[alertId];
-        if (!alert.isEnabled) continue;
-
-        const metricValue = newData[alert.metric];
-        let conditionMet = false;
-
-        if (alert.condition === ">" && metricValue > alert.value) {
-          conditionMet = true;
-        } else if (alert.condition === "<" && metricValue < alert.value) {
-          conditionMet = true;
-        }
-
-        if (conditionMet) {
-          const message =
-            `${alert.name}: ${alert.metric} এর মান এখন ${metricValue.toFixed(2)}, যা আপনার সেট করা (${alert.condition} ${alert.value}) শর্ত পূরণ করেছে।`;
-          promises.push(sendNotificationToUser(userId, "🚨 কাস্টম অ্যালার্ট!", message));
-          // অ্যালার্টটি 잠시 নিষ্ক্রিয় করা যেতে পারে যাতে বারবার নোটিফিকেশন না যায়
-          admin.database().ref(`/customAlerts/${userId}/${alertId}/isEnabled`).set(false);
-        }
-      }
-    });
-
-    return Promise.all(promises);
-  });
-
-// ডিভাইস অন বা অফ হলে নোটিফিকেশন পাঠানোর ফাংশন
-exports.notifyOnRelayChange = functions.database
-  .ref("/devices/{deviceId}/{relayId}")
-  .onUpdate(async (change, context) => {
-      const deviceId = context.params.deviceId;
-      const relayId = context.params.relayId;
-      const afterState = change.after.val();
-      
-      // শুধুমাত্র রিলে পরিবর্তন হলে কাজ করবে
-      if (typeof afterState !== "boolean") {
-          return null;
-      }
-      
-      const statusText = afterState ? "ON" : "OFF";
-      const message = `${deviceId} এর ${relayId} এখন ${statusText} হয়েছে।`;
-      
-      // সকল ব্যবহারকারীকে নোটিফিকেশন পাঠানো
-      return sendNotificationToAllUsers("ডিভাইস স্ট্যাটাস আপডেট", message);
-  });
-
-
-async function sendNotificationToUser(userId, title, body) {
-  const tokenSnapshot = await admin.database().ref(`/fcmTokens/${userId}`).once("value");
-  if (!tokenSnapshot.exists()) {
-    console.log("No token for user:", userId);
-    return;
-  }
-  const token = tokenSnapshot.val();
-  const payload = {
-    notification: { title, body, icon: "/Bisnu.png" },
-  };
-  return admin.messaging().sendToDevice(token, payload);
-}
-
-async function sendNotificationToAllUsers(title, body) {
-    const tokensSnapshot = await admin.database().ref('/fcmTokens').once('value');
-    if (!tokensSnapshot.exists()) {
-        console.log("No FCM tokens found.");
-        return;
-    }
-    const tokens = Object.values(tokensSnapshot.val());
-    const payload = {
-        notification: { title, body, icon: "/Bisnu.png" },
-    };
-
-    if (tokens.length > 0) {
-        return admin.messaging().sendToDevice(tokens, payload);
-    }
-    return;
-}
-```
-
-এই পরিবর্তনগুলো আপনার প্রকল্পে একটি শক্তিশালী নোটিফিকেশন এবং অ্যালার্ট সিস্টেম যুক্ত করবে। আপনাকে শুধু ফাইলগুলো সঠিকভাবে তৈরি করতে হবে এবং Firebase কনসোলে VAPID কী তৈরি করে কোডে বসাতে হবে। -->
