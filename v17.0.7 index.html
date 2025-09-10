@@ -1,0 +1,1807 @@
+<!-- অবশ্যই, আমি আপনার অনুরোধ অনুযায়ী HTML ফাইল থেকে CSS এবং JavaScript কোড আলাদা করে তিনটি ভিন্ন ফাইলে ভাগ করে দিয়েছি। এটি আপনার কোডকে আরও পরিচ্ছন্ন, পরিচালনাযোগ্য এবং দ্রুত লোড হতে সাহায্য করবে।
+
+এখানে তিনটি আলাদা ফাইল দেওয়া হলো:
+
+1.  **`index.html`** (মূল HTML কাঠামো)
+2.  **`style.css`** (সমস্ত CSS স্টাইল)
+3.  **`script.js`** (সমস্ত JavaScript কোড)
+
+এই তিনটি ফাইল একই ফোল্ডারে রাখলে আপনার অ্যাপ্লিকেশনটি আগের মতোই কাজ করবে।
+
+---
+
+### 1. `index.html` (পরিবর্তিত)
+
+এই ফাইলটিতে এখন শুধু মূল HTML কাঠামো রয়েছে। CSS এবং JavaScript ফাইল দুটিকে `<link>` এবং `<script>` ট্যাগের মাধ্যমে এখানে যুক্ত করা হয়েছে।
+
+```html -->
+
+
+
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BISNU IoT ডিভাইস কন্ট্রোল প্যানেল</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <!-- CSS ফাইল লিংক করা হয়েছে -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-0"> <!-- ডিফল্ট ব্যাকগ্রাউন্ড ক্লাস -->
+
+<!-- লক স্ক্রিন -->
+<div class="login-container" id="login">
+  <div class="login-particles" id="particles"></div>
+  
+  <div class="login-logo-container">
+    <img src="Bisnu.png" class="login-logo" alt="BISNU IoT Logo">
+    <div class="login-logo-ring"></div>
+    <div class="login-logo-ring"></div>
+    <div class="login-logo-ring"></div>
+  </div>
+  
+  <div class="login-box">
+    <div class="login-box-inner">
+      <h2>BISNU IoT কন্ট্রোল প্যানেল</h2>
+      <div class="input-group">
+        <input type="email" id="email" placeholder="ইমেল লিখুন" autocomplete="email">
+      </div>
+      <div class="input-group">
+        <input type="password" id="password" placeholder="পাসওয়ার্ড লিখুন" autocomplete="current-password">
+      </div>
+      <button class="login-btn" onclick="loginWithFirebase()">লগইন করুন</button>
+      <div class="error-message" id="error"></div>
+      <div class="login-footer">
+        শুধুমাত্র অনুমোদিত ব্যবহারকারীদের জন্য
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- মূল অ্যাপ্লিকেশন -->
+<div id="app">
+  <header class="dashboard-header">
+    <div class="app-logo-container">
+      <img src="Bisnu.png" class="app-logo" alt="BISNU IoT Logo">
+      <div class="app-logo-ring"></div>
+      <div class="app-logo-ring"></div>
+      <div class="app-logo-ring"></div>
+    </div>
+    
+    <h1 class="dashboard-title">IoT ডিভাইস মনিটরিং সিস্টেম</h1>
+    
+    <div class="header-controls">
+      <label class="theme-toggle">
+        <input type="checkbox" id="theme-toggle">
+        <span class="theme-slider"></span>
+        <span class="theme-icon sun-icon">☀️</span>
+        <span class="theme-icon moon-icon">🌙</span>
+      </label>
+      <!-- ★★★ নতুন নোটিফিকেশন বাটন ★★★ -->
+      <button id="notification-btn" class="pro-btn notification-btn" onclick="requestNotificationPermission()">🔔 নোটিফিকেশন চালু করুন</button>
+      <button class="pro-btn background-btn" onclick="changeBackground()">🖼️ ব্যাকগ্রাউন্ড</button>
+      <button class="pro-btn logout-btn" onclick="logout()">লগআউট</button>
+    </div>
+  </header>
+  
+  <!-- ★★★ পরিবর্তিত: নেভিগেশন বারে অডিট লগ ট্যাব যুক্ত করা হয়েছে ★★★ -->
+  <nav class="nav-tabs">
+    <div class="nav-tab active" onclick="showPage(1)">ডিভাইস ১</div>
+    <div class="nav-tab" onclick="showPage(2)">ডিভাইস ২</div>
+    <div class="nav-tab" onclick="showPage(3)">ডিভাইস ৩</div>
+    <div class="nav-tab" onclick="showPage(4)">ডিভাইস ৪</div>
+    <div class="nav-tab" onclick="showPage(5)">এনার্জি মনিটর</div>
+    <div class="nav-tab" onclick="showPage(6)">এডভান্সড গ্রাফ</div>
+    <div class="nav-tab" onclick="showPage(7)">Diagram Note File</div>
+    <div class="nav-tab" onclick="showPage(8)">কন্ট্রোল প্যানেল</div>
+    <div class="nav-tab" onclick="showPage(9)">অটোমেশন ও অ্যালার্ট</div>
+    <div class="nav-tab" onclick="showPage(10)">📜 অডিট লগ</div>
+  </nav>
+
+  <!-- ডিভাইস ১ পেইজ -->
+  <main id="page1" class="device-page active">
+    <section class="device-status-summary" id="device1-summary">
+      <div class="status-item">
+        <div class="status-count" id="d1-active-count">0</div>
+        <div class="status-label">এক্টিভ</div>
+      </div>
+      <div class="status-item">
+        <div class="status-count" id="d1-inactive-count">0</div>
+        <div class="status-label">ইনএক্টিভ</div>
+      </div>
+      <div class="status-item">
+        <div class="status-count" id="d1-warning-count">0</div>
+        <div class="status-label">সতর্কতা</div>
+      </div>
+      <div class="status-item">
+        <div class="status-count">16</div>
+        <div class="status-label">মোট লোড</div>
+      </div>
+    </section>
+    
+    <section class="device-cards">
+      <!-- ডিভাইস ১ এর ১৬টি লোডের জন্য কার্ড -->
+      <div class="device-card">
+        <div class="card-header">
+          <span class="card-title">লোড 1</span>
+          <span class="card-status status-inactive" id="d1-load1-status">ইনএক্টিভ</span>
+        </div>
+        <div class="card-value" id="d1-load1">--</div>
+        <div class="card-footer">
+          <button class="pro-btn card-btn btn-on" onclick="controlDevice('device1', 'Load1', 1)">ON</button>
+          <button class="pro-btn card-btn btn-warning" onclick="controlDevice('device1', 'Load1', 2)">WARN</button>
+          <button class="pro-btn card-btn btn-off" onclick="controlDevice('device1', 'Load1', 0)">OFF</button>
+        </div>
+      </div>
+      <div class="device-card">
+        <div class="card-header">
+          <span class="card-title">লোড 2</span>
+          <span class="card-status status-inactive" id="d1-load2-status">ইনএক্টিভ</span>
+        </div>
+        <div class="card-value" id="d1-load2">--</div>
+        <div class="card-footer">
+          <button class="pro-btn card-btn btn-on" onclick="controlDevice('device1', 'Load2', 1)">ON</button>
+          <button class="pro-btn card-btn btn-warning" onclick="controlDevice('device1', 'Load2', 2)">WARN</button>
+          <button class="pro-btn card-btn btn-off" onclick="controlDevice('device1', 'Load2', 0)">OFF</button>
+        </div>
+      </div>
+      <div class="device-card">
+        <div class="card-header">
+          <span class="card-title">লোড 3</span>
+          <span class="card-status status-inactive" id="d1-load3-status">ইনএক্টিভ</span>
+        </div>
+        <div class="card-value" id="d1-load3">--</div>
+        <div class="card-footer">
+          <button class="pro-btn card-btn btn-on" onclick="controlDevice('device1', 'Load3', 1)">ON</button>
+          <button class="pro-btn card-btn btn-warning" onclick="controlDevice('device1', 'Load3', 2)">WARN</button>
+          <button class="pro-btn card-btn btn-off" onclick="controlDevice('device1', 'Load3', 0)">OFF</button>
+        </div>
+      </div>
+      <div class="device-card">
+        <div class="card-header">
+          <span class="card-title">লোড 4</span>
+          <span class="card-status status-inactive" id="d1-load4-status">ইনএক্টিভ</span>
+        </div>
+        <div class="card-value" id="d1-load4">--</div>
+        <div class="card-footer">
+          <button class="pro-btn card-btn btn-on" onclick="controlDevice('device1', 'Load4', 1)">ON</button>
+          <button class="pro-btn card-btn btn-warning" onclick="controlDevice('device1', 'Load4', 2)">WARN</button>
+          <button class="pro-btn card-btn btn-off" onclick="controlDevice('device1', 'Load4', 0)">OFF</button>
+        </div>
+      </div>
+      <div class="device-card">
+        <div class="card-header">
+          <span class="card-title">লোড 5</span>
+          <span class="card-status status-inactive" id="d1-load5-status">ইনএক্টিভ</span>
+        </div>
+        <div class="card-value" id="d1-load5">--</div>
+        <div class="card-footer">
+          <button class="pro-btn card-btn btn-on" onclick="controlDevice('device1', 'Load5', 1)">ON</button>
+          <button class="pro-btn card-btn btn-warning" onclick="controlDevice('device1', 'Load5', 2)">WARN</button>
+          <button class="pro-btn card-btn btn-off" onclick="controlDevice('device1', 'Load5', 0)">OFF</button>
+        </div>
+      </div>
+      <div class="device-card">
+        <div class="card-header">
+          <span class="card-title">লোড 6</span>
+          <span class="card-status status-inactive" id="d1-load6-status">ইনএক্টিভ</span>
+        </div>
+        <div class="card-value" id="d1-load6">--</div>
+        <div class="card-footer">
+          <button class="pro-btn card-btn btn-on" onclick="controlDevice('device1', 'Load6', 1)">ON</button>
+          <button class="pro-btn card-btn btn-warning" onclick="controlDevice('device1', 'Load6', 2)">WARN</button>
+          <button class="pro-btn card-btn btn-off" onclick="controlDevice('device1', 'Load6', 0)">OFF</button>
+        </div>
+      </div>
+      <div class="device-card">
+        <div class="card-header">
+          <span class="card-title">লোড 7</span>
+          <span class="card-status status-inactive" id="d1-load7-status">ইনএক্টিভ</span>
+        </div>
+        <div class="card-value" id="d1-load7">--</div>
+        <div class="card-footer">
+          <button class="pro-btn card-btn btn-on" onclick="controlDevice('device1', 'Load7', 1)">ON</button>
+          <button class="pro-btn card-btn btn-warning" onclick="controlDevice('device1', 'Load7', 2)">WARN</button>
+          <button class="pro-btn card-btn btn-off" onclick="controlDevice('device1', 'Load7', 0)">OFF</button>
+        </div>
+      </div>
+      <div class="device-card">
+        <div class="card-header">
+          <span class="card-title">লোড 8</span>
+          <span class="card-status status-inactive" id="d1-load8-status">ইনএক্টিভ</span>
+        </div>
+        <div class="card-value" id="d1-load8">--</div>
+        <div class="card-footer">
+          <button class="pro-btn card-btn btn-on" onclick="controlDevice('device1', 'Load8', 1)">ON</button>
+          <button class="pro-btn card-btn btn-warning" onclick="controlDevice('device1', 'Load8', 2)">WARN</button>
+          <button class="pro-btn card-btn btn-off" onclick="controlDevice('device1', 'Load8', 0)">OFF</button>
+        </div>
+      </div>
+      <div class="device-card">
+        <div class="card-header">
+          <span class="card-title">লোড 9</span>
+          <span class="card-status status-inactive" id="d1-load9-status">ইনএক্টিভ</span>
+        </div>
+        <div class="card-value" id="d1-load9">--</div>
+        <div class="card-footer">
+          <button class="pro-btn card-btn btn-on" onclick="controlDevice('device1', 'Load9', 1)">ON</button>
+          <button class="pro-btn card-btn btn-warning" onclick="controlDevice('device1', 'Load9', 2)">WARN</button>
+          <button class="pro-btn card-btn btn-off" onclick="controlDevice('device1', 'Load9', 0)">OFF</button>
+        </div>
+      </div>
+      <div class="device-card">
+        <div class="card-header">
+          <span class="card-title">লোড 10</span>
+          <span class="card-status status-inactive" id="d1-load10-status">ইনএক্টিভ</span>
+        </div>
+        <div class="card-value" id="d1-load10">--</div>
+        <div class="card-footer">
+          <button class="pro-btn card-btn btn-on" onclick="controlDevice('device1', 'Load10', 1)">ON</button>
+          <button class="pro-btn card-btn btn-warning" onclick="controlDevice('device1', 'Load10', 2)">WARN</button>
+          <button class="pro-btn card-btn btn-off" onclick="controlDevice('device1', 'Load10', 0)">OFF</button>
+        </div>
+      </div>
+      <div class="device-card">
+        <div class="card-header">
+          <span class="card-title">লোড 11</span>
+          <span class="card-status status-inactive" id="d1-load11-status">ইনএক্টিভ</span>
+        </div>
+        <div class="card-value" id="d1-load11">--</div>
+        <div class="card-footer">
+          <button class="pro-btn card-btn btn-on" onclick="controlDevice('device1', 'Load11', 1)">ON</button>
+          <button class="pro-btn card-btn btn-warning" onclick="controlDevice('device1', 'Load11', 2)">WARN</button>
+          <button class="pro-btn card-btn btn-off" onclick="controlDevice('device1', 'Load11', 0)">OFF</button>
+        </div>
+      </div>
+      <div class="device-card">
+        <div class="card-header">
+          <span class="card-title">লোড 12</span>
+          <span class="card-status status-inactive" id="d1-load12-status">ইনএক্টিভ</span>
+        </div>
+        <div class="card-value" id="d1-load12">--</div>
+        <div class="card-footer">
+          <button class="pro-btn card-btn btn-on" onclick="controlDevice('device1', 'Load12', 1)">ON</button>
+          <button class="pro-btn card-btn btn-warning" onclick="controlDevice('device1', 'Load12', 2)">WARN</button>
+          <button class="pro-btn card-btn btn-off" onclick="controlDevice('device1', 'Load12', 0)">OFF</button>
+        </div>
+      </div>
+      <div class="device-card">
+        <div class="card-header">
+          <span class="card-title">লোড 13</span>
+          <span class="card-status status-inactive" id="d1-load13-status">ইনএক্টিভ</span>
+        </div>
+        <div class="card-value" id="d1-load13">--</div>
+        <div class="card-footer">
+          <button class="pro-btn card-btn btn-on" onclick="controlDevice('device1', 'Load13', 1)">ON</button>
+          <button class="pro-btn card-btn btn-warning" onclick="controlDevice('device1', 'Load13', 2)">WARN</button>
+          <button class="pro-btn card-btn btn-off" onclick="controlDevice('device1', 'Load13', 0)">OFF</button>
+        </div>
+      </div>
+      <div class="device-card">
+        <div class="card-header">
+          <span class="card-title">লোড 14</span>
+          <span class="card-status status-inactive" id="d1-load14-status">ইনএক্টিভ</span>
+        </div>
+        <div class="card-value" id="d1-load14">--</div>
+        <div class="card-footer">
+          <button class="pro-btn card-btn btn-on" onclick="controlDevice('device1', 'Load14', 1)">ON</button>
+          <button class="pro-btn card-btn btn-warning" onclick="controlDevice('device1', 'Load14', 2)">WARN</button>
+          <button class="pro-btn card-btn btn-off" onclick="controlDevice('device1', 'Load14', 0)">OFF</button>
+        </div>
+      </div>
+      <div class="device-card">
+        <div class="card-header">
+          <span class="card-title">লোড 15</span>
+          <span class="card-status status-inactive" id="d1-load15-status">ইনএক্টিভ</span>
+        </div>
+        <div class="card-value" id="d1-load15">--</div>
+        <div class="card-footer">
+          <button class="pro-btn card-btn btn-on" onclick="controlDevice('device1', 'Load15', 1)">ON</button>
+          <button class="pro-btn card-btn btn-warning" onclick="controlDevice('device1', 'Load15', 2)">WARN</button>
+          <button class="pro-btn card-btn btn-off" onclick="controlDevice('device1', 'Load15', 0)">OFF</button>
+        </div>
+      </div>
+      <div class="device-card">
+        <div class="card-header">
+          <span class="card-title">লোড 16</span>
+          <span class="card-status status-inactive" id="d1-load16-status">ইনএক্টিভ</span>
+        </div>
+        <div class="card-value" id="d1-load16">--</div>
+        <div class="card-footer">
+          <button class="pro-btn card-btn btn-on" onclick="controlDevice('device1', 'Load16', 1)">ON</button>
+          <button class="pro-btn card-btn btn-warning" onclick="controlDevice('device1', 'Load16', 2)">WARN</button>
+          <button class="pro-btn card-btn btn-off" onclick="controlDevice('device1', 'Load16', 0)">OFF</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- এনালিটিক্স সেকশন -->
+    <section class="analytics-section">
+      <div class="chart-container">
+        <h3 class="section-title">ডিভাইস ১ স্ট্যাটাস গ্রাফ</h3>
+        <canvas id="device1-chart"></canvas>
+      </div>
+      
+      <div class="log-container">
+        <h3 class="section-title">ডিভাইস ১ লগ</h3>
+        <div class="log-list" id="device1-logs">
+          <!-- লগ আইটেমগুলো এখানে যোগ হবে -->
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ডিভাইস ২ পেইজ -->
+  <main id="page2" class="device-page">
+    <section class="device-status-summary" id="device2-summary">
+      <div class="status-item">
+        <div class="status-count" id="d2-active-count">0</div>
+        <div class="status-label">এক্টিভ</div>
+      </div>
+      <div class="status-item">
+        <div class="status-count" id="d2-inactive-count">0</div>
+        <div class="status-label">ইনএক্টিভ</div>
+      </div>
+      <div class="status-item">
+        <div class="status-count" id="d2-warning-count">0</div>
+        <div class="status-label">সতর্কতা</div>
+      </div>
+      <div class="status-item">
+        <div class="status-count">16</div>
+        <div class="status-label">মোট লোড</div>
+      </div>
+    </section>
+    
+    <section class="device-cards">
+      <!-- ডিভাইস ২ এর ১৬টি লোডের জন্য কার্ড -->
+      <div class="device-card">
+        <div class="card-header">
+          <span class="card-title">লোড 1</span>
+          <span class="card-status status-inactive" id="d2-load1-status">ইনএক্টিভ</span>
+        </div>
+        <div class="card-value" id="d2-load1">--</div>
+        <div class="card-footer">
+          <button class="pro-btn card-btn btn-on" onclick="controlDevice('device2', 'Load1', 1)">ON</button>
+          <button class="pro-btn card-btn btn-warning" onclick="controlDevice('device2', 'Load1', 2)">WARN</button>
+          <button class="pro-btn card-btn btn-off" onclick="controlDevice('device2', 'Load1', 0)">OFF</button>
+        </div>
+      </div>
+      <div class="device-card">
+        <div class="card-header">
+          <span class="card-title">লোড 2</span>
+          <span class="card-status status-inactive" id="d2-load2-status">ইনএক্টিভ</span>
+        </div>
+        <div class="card-value" id="d2-load2">--</div>
+        <div class="card-footer">
+          <button class="pro-btn card-btn btn-on" onclick="controlDevice('device2', 'Load2', 1)">ON</button>
+          <button class="pro-btn card-btn btn-warning" onclick="controlDevice('device2', 'Load2', 2)">WARN</button>
+          <button class="pro-btn card-btn btn-off" onclick="controlDevice('device2', 'Load2', 0)">OFF</button>
+        </div>
+      </div>
+      <div class="device-card">
+        <div class="card-header">
+          <span class="card-title">লোড 3</span>
+          <span class="card-status status-inactive" id="d2-load3-status">ইনএক্টিভ</span>
+        </div>
+        <div class="card-value" id="d2-load3">--</div>
+        <div class="card-footer">
+          <button class="pro-btn card-btn btn-on" onclick="controlDevice('device2', 'Load3', 1)">ON</button>
+          <button class="pro-btn card-btn btn-warning" onclick="controlDevice('device2', 'Load3', 2)">WARN</button>
+          <button class="pro-btn card-btn btn-off" onclick="controlDevice('device2', 'Load3', 0)">OFF</button>
+        </div>
+      </div>
+      <div class="device-card">
+        <div class="card-header">
+          <span class="card-title">লোড 4</span>
+          <span class="card-status status-inactive" id="d2-load4-status">ইনএক্টিভ</span>
+        </div>
+        <div class="card-value" id="d2-load4">--</div>
+        <div class="card-footer">
+          <button class="pro-btn card-btn btn-on" onclick="controlDevice('device2', 'Load4', 1)">ON</button>
+          <button class="pro-btn card-btn btn-warning" onclick="controlDevice('device2', 'Load4', 2)">WARN</button>
+          <button class="pro-btn card-btn btn-off" onclick="controlDevice('device2', 'Load4', 0)">OFF</button>
+        </div>
+      </div>
+      <div class="device-card">
+        <div class="card-header">
+          <span class="card-title">লোড 5</span>
+          <span class="card-status status-inactive" id="d2-load5-status">ইনএক্টিভ</span>
+        </div>
+        <div class="card-value" id="d2-load5">--</div>
+        <div class="card-footer">
+          <button class="pro-btn card-btn btn-on" onclick="controlDevice('device2', 'Load5', 1)">ON</button>
+          <button class="pro-btn card-btn btn-warning" onclick="controlDevice('device2', 'Load5', 2)">WARN</button>
+          <button class="pro-btn card-btn btn-off" onclick="controlDevice('device2', 'Load5', 0)">OFF</button>
+        </div>
+      </div>
+      <div class="device-card">
+        <div class="card-header">
+          <span class="card-title">লোড 6</span>
+          <span class="card-status status-inactive" id="d2-load6-status">ইনএক্টিভ</span>
+        </div>
+        <div class="card-value" id="d2-load6">--</div>
+        <div class="card-footer">
+          <button class="pro-btn card-btn btn-on" onclick="controlDevice('device2', 'Load6', 1)">ON</button>
+          <button class="pro-btn card-btn btn-warning" onclick="controlDevice('device2', 'Load6', 2)">WARN</button>
+          <button class="pro-btn card-btn btn-off" onclick="controlDevice('device2', 'Load6', 0)">OFF</button>
+        </div>
+      </div>
+      <div class="device-card">
+        <div class="card-header">
+          <span class="card-title">লোড 7</span>
+          <span class="card-status status-inactive" id="d2-load7-status">ইনএক্টিভ</span>
+        </div>
+        <div class="card-value" id="d2-load7">--</div>
+        <div class="card-footer">
+          <button class="pro-btn card-btn btn-on" onclick="controlDevice('device2', 'Load7', 1)">ON</button>
+          <button class="pro-btn card-btn btn-warning" onclick="controlDevice('device2', 'Load7', 2)">WARN</button>
+          <button class="pro-btn card-btn btn-off" onclick="controlDevice('device2', 'Load7', 0)">OFF</button>
+        </div>
+      </div>
+      <div class="device-card">
+        <div class="card-header">
+          <span class="card-title">লোড 8</span>
+          <span class="card-status status-inactive" id="d2-load8-status">ইনএক্টিভ</span>
+        </div>
+        <div class="card-value" id="d2-load8">--</div>
+        <div class="card-footer">
+          <button class="pro-btn card-btn btn-on" onclick="controlDevice('device2', 'Load8', 1)">ON</button>
+          <button class="pro-btn card-btn btn-warning" onclick="controlDevice('device2', 'Load8', 2)">WARN</button>
+          <button class="pro-btn card-btn btn-off" onclick="controlDevice('device2', 'Load8', 0)">OFF</button>
+        </div>
+      </div>
+      <div class="device-card">
+        <div class="card-header">
+          <span class="card-title">লোড 9</span>
+          <span class="card-status status-inactive" id="d2-load9-status">ইনএক্টিভ</span>
+        </div>
+        <div class="card-value" id="d2-load9">--</div>
+        <div class="card-footer">
+          <button class="pro-btn card-btn btn-on" onclick="controlDevice('device2', 'Load9', 1)">ON</button>
+          <button class="pro-btn card-btn btn-warning" onclick="controlDevice('device2', 'Load9', 2)">WARN</button>
+          <button class="pro-btn card-btn btn-off" onclick="controlDevice('device2', 'Load9', 0)">OFF</button>
+        </div>
+      </div>
+      <div class="device-card">
+        <div class="card-header">
+          <span class="card-title">লোড 10</span>
+          <span class="card-status status-inactive" id="d2-load10-status">ইনএক্টিভ</span>
+        </div>
+        <div class="card-value" id="d2-load10">--</div>
+        <div class="card-footer">
+          <button class="pro-btn card-btn btn-on" onclick="controlDevice('device2', 'Load10', 1)">ON</button>
+          <button class="pro-btn card-btn btn-warning" onclick="controlDevice('device2', 'Load10', 2)">WARN</button>
+          <button class="pro-btn card-btn btn-off" onclick="controlDevice('device2', 'Load10', 0)">OFF</button>
+        </div>
+      </div>
+      <div class="device-card">
+        <div class="card-header">
+          <span class="card-title">লোড 11</span>
+          <span class="card-status status-inactive" id="d2-load11-status">ইনএক্টিভ</span>
+        </div>
+        <div class="card-value" id="d2-load11">--</div>
+        <div class="card-footer">
+          <button class="pro-btn card-btn btn-on" onclick="controlDevice('device2', 'Load11', 1)">ON</button>
+          <button class="pro-btn card-btn btn-warning" onclick="controlDevice('device2', 'Load11', 2)">WARN</button>
+          <button class="pro-btn card-btn btn-off" onclick="controlDevice('device2', 'Load11', 0)">OFF</button>
+        </div>
+      </div>
+      <div class="device-card">
+        <div class="card-header">
+          <span class="card-title">লোড 12</span>
+          <span class="card-status status-inactive" id="d2-load12-status">ইনএক্টিভ</span>
+        </div>
+        <div class="card-value" id="d2-load12">--</div>
+        <div class="card-footer">
+          <button class="pro-btn card-btn btn-on" onclick="controlDevice('device2', 'Load12', 1)">ON</button>
+          <button class="pro-btn card-btn btn-warning" onclick="controlDevice('device2', 'Load12', 2)">WARN</button>
+          <button class="pro-btn card-btn btn-off" onclick="controlDevice('device2', 'Load12', 0)">OFF</button>
+        </div>
+      </div>
+      <div class="device-card">
+        <div class="card-header">
+          <span class="card-title">লোড 13</span>
+          <span class="card-status status-inactive" id="d2-load13-status">ইনএক্টিভ</span>
+        </div>
+        <div class="card-value" id="d2-load13">--</div>
+        <div class="card-footer">
+          <button class="pro-btn card-btn btn-on" onclick="controlDevice('device2', 'Load13', 1)">ON</button>
+          <button class="pro-btn card-btn btn-warning" onclick="controlDevice('device2', 'Load13', 2)">WARN</button>
+          <button class="pro-btn card-btn btn-off" onclick="controlDevice('device2', 'Load13', 0)">OFF</button>
+        </div>
+      </div>
+      <div class="device-card">
+        <div class="card-header">
+          <span class="card-title">লোড 14</span>
+          <span class="card-status status-inactive" id="d2-load14-status">ইনএক্টিভ</span>
+        </div>
+        <div class="card-value" id="d2-load14">--</div>
+        <div class="card-footer">
+          <button class="pro-btn card-btn btn-on" onclick="controlDevice('device2', 'Load14', 1)">ON</button>
+          <button class="pro-btn card-btn btn-warning" onclick="controlDevice('device2', 'Load14', 2)">WARN</button>
+          <button class="pro-btn card-btn btn-off" onclick="controlDevice('device2', 'Load14', 0)">OFF</button>
+        </div>
+      </div>
+      <div class="device-card">
+        <div class="card-header">
+          <span class="card-title">লোড 15</span>
+          <span class="card-status status-inactive" id="d2-load15-status">ইনএক্টিভ</span>
+        </div>
+        <div class="card-value" id="d2-load15">--</div>
+        <div class="card-footer">
+          <button class="pro-btn card-btn btn-on" onclick="controlDevice('device2', 'Load15', 1)">ON</button>
+          <button class="pro-btn card-btn btn-warning" onclick="controlDevice('device2', 'Load15', 2)">WARN</button>
+          <button class="pro-btn card-btn btn-off" onclick="controlDevice('device2', 'Load15', 0)">OFF</button>
+        </div>
+      </div>
+      <div class="device-card">
+        <div class="card-header">
+          <span class="card-title">লোড 16</span>
+          <span class="card-status status-inactive" id="d2-load16-status">ইনএক্টিভ</span>
+        </div>
+        <div class="card-value" id="d2-load16">--</div>
+        <div class="card-footer">
+          <button class="pro-btn card-btn btn-on" onclick="controlDevice('device2', 'Load16', 1)">ON</button>
+          <button class="pro-btn card-btn btn-warning" onclick="controlDevice('device2', 'Load16', 2)">WARN</button>
+          <button class="pro-btn card-btn btn-off" onclick="controlDevice('device2', 'Load16', 0)">OFF</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- এনালিটিক্স সেকশন -->
+    <section class="analytics-section">
+      <div class="chart-container">
+        <h3 class="section-title">ডিভাইস ২ স্ট্যাটাস গ্রাফ</h3>
+        <canvas id="device2-chart"></canvas>
+      </div>
+      
+      <div class="log-container">
+        <h3 class="section-title">ডিভাইস ২ লগ</h3>
+        <div class="log-list" id="device2-logs">
+          <!-- লগ আইটেমগুলো এখানে যোগ হবে -->
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ডিভাইস ৩ পেইজ -->
+  <main id="page3" class="device-page">
+    <section class="device-status-summary" id="device3-summary">
+      <div class="status-item">
+        <div class="status-count" id="d3-active-count">0</div>
+        <div class="status-label">এক্টিভ</div>
+      </div>
+      <div class="status-item">
+        <div class="status-count" id="d3-inactive-count">0</div>
+        <div class="status-label">ইনএক্টিভ</div>
+      </div>
+      <div class="status-item">
+        <div class="status-count" id="d3-warning-count">0</div>
+        <div class="status-label">সতর্কতা</div>
+      </div>
+      <div class="status-item">
+        <div class="status-count">16</div>
+        <div class="status-label">মোট লোড</div>
+      </div>
+    </section>
+    
+    <section class="device-cards">
+      <!-- ডিভাইস ৩ এর ১৬টি লোডের জন্য কার্ড -->
+      <div class="device-card">
+        <div class="card-header">
+          <span class="card-title">লোড 1</span>
+          <span class="card-status status-inactive" id="d3-load1-status">ইনএক্টিভ</span>
+        </div>
+        <div class="card-value" id="d3-load1">--</div>
+        <div class="card-footer">
+          <button class="pro-btn card-btn btn-on" onclick="controlDevice('device3', 'Load1', 1)">ON</button>
+          <button class="pro-btn card-btn btn-warning" onclick="controlDevice('device3', 'Load1', 2)">WARN</button>
+          <button class="pro-btn card-btn btn-off" onclick="controlDevice('device3', 'Load1', 0)">OFF</button>
+        </div>
+      </div>
+      <div class="device-card">
+        <div class="card-header">
+          <span class="card-title">লোড 2</span>
+          <span class="card-status status-inactive" id="d3-load2-status">ইনএক্টিভ</span>
+        </div>
+        <div class="card-value" id="d3-load2">--</div>
+        <div class="card-footer">
+          <button class="pro-btn card-btn btn-on" onclick="controlDevice('device3', 'Load2', 1)">ON</button>
+          <button class="pro-btn card-btn btn-warning" onclick="controlDevice('device3', 'Load2', 2)">WARN</button>
+          <button class="pro-btn card-btn btn-off" onclick="controlDevice('device3', 'Load2', 0)">OFF</button>
+        </div>
+      </div>
+      <div class="device-card">
+        <div class="card-header">
+          <span class="card-title">লোড 3</span>
+          <span class="card-status status-inactive" id="d3-load3-status">ইনএক্টিভ</span>
+        </div>
+        <div class="card-value" id="d3-load3">--</div>
+        <div class="card-footer">
+          <button class="pro-btn card-btn btn-on" onclick="controlDevice('device3', 'Load3', 1)">ON</button>
+          <button class="pro-btn card-btn btn-warning" onclick="controlDevice('device3', 'Load3', 2)">WARN</button>
+          <button class="pro-btn card-btn btn-off" onclick="controlDevice('device3', 'Load3', 0)">OFF</button>
+        </div>
+      </div>
+      <div class="device-card">
+        <div class="card-header">
+          <span class="card-title">লোড 4</span>
+          <span class="card-status status-inactive" id="d3-load4-status">ইনএক্টিভ</span>
+        </div>
+        <div class="card-value" id="d3-load4">--</div>
+        <div class="card-footer">
+          <button class="pro-btn card-btn btn-on" onclick="controlDevice('device3', 'Load4', 1)">ON</button>
+          <button class="pro-btn card-btn btn-warning" onclick="controlDevice('device3', 'Load4', 2)">WARN</button>
+          <button class="pro-btn card-btn btn-off" onclick="controlDevice('device3', 'Load4', 0)">OFF</button>
+        </div>
+      </div>
+      <div class="device-card">
+        <div class="card-header">
+          <span class="card-title">লোড 5</span>
+          <span class="card-status status-inactive" id="d3-load5-status">ইনএক্টিভ</span>
+        </div>
+        <div class="card-value" id="d3-load5">--</div>
+        <div class="card-footer">
+          <button class="pro-btn card-btn btn-on" onclick="controlDevice('device3', 'Load5', 1)">ON</button>
+          <button class="pro-btn card-btn btn-warning" onclick="controlDevice('device3', 'Load5', 2)">WARN</button>
+          <button class="pro-btn card-btn btn-off" onclick="controlDevice('device3', 'Load5', 0)">OFF</button>
+        </div>
+      </div>
+      <div class="device-card">
+        <div class="card-header">
+          <span class="card-title">লোড 6</span>
+          <span class="card-status status-inactive" id="d3-load6-status">ইনএক্টিভ</span>
+        </div>
+        <div class="card-value" id="d3-load6">--</div>
+        <div class="card-footer">
+          <button class="pro-btn card-btn btn-on" onclick="controlDevice('device3', 'Load6', 1)">ON</button>
+          <button class="pro-btn card-btn btn-warning" onclick="controlDevice('device3', 'Load6', 2)">WARN</button>
+          <button class="pro-btn card-btn btn-off" onclick="controlDevice('device3', 'Load6', 0)">OFF</button>
+        </div>
+      </div>
+      <div class="device-card">
+        <div class="card-header">
+          <span class="card-title">লোড 7</span>
+          <span class="card-status status-inactive" id="d3-load7-status">ইনএক্টিভ</span>
+        </div>
+        <div class="card-value" id="d3-load7">--</div>
+        <div class="card-footer">
+          <button class="pro-btn card-btn btn-on" onclick="controlDevice('device3', 'Load7', 1)">ON</button>
+          <button class="pro-btn card-btn btn-warning" onclick="controlDevice('device3', 'Load7', 2)">WARN</button>
+          <button class="pro-btn card-btn btn-off" onclick="controlDevice('device3', 'Load7', 0)">OFF</button>
+        </div>
+      </div>
+      <div class="device-card">
+        <div class="card-header">
+          <span class="card-title">লোড 8</span>
+          <span class="card-status status-inactive" id="d3-load8-status">ইনএক্টিভ</span>
+        </div>
+        <div class="card-value" id="d3-load8">--</div>
+        <div class="card-footer">
+          <button class="pro-btn card-btn btn-on" onclick="controlDevice('device3', 'Load8', 1)">ON</button>
+          <button class="pro-btn card-btn btn-warning" onclick="controlDevice('device3', 'Load8', 2)">WARN</button>
+          <button class="pro-btn card-btn btn-off" onclick="controlDevice('device3', 'Load8', 0)">OFF</button>
+        </div>
+      </div>
+      <div class="device-card">
+        <div class="card-header">
+          <span class="card-title">লোড 9</span>
+          <span class="card-status status-inactive" id="d3-load9-status">ইনএক্টিভ</span>
+        </div>
+        <div class="card-value" id="d3-load9">--</div>
+        <div class="card-footer">
+          <button class="pro-btn card-btn btn-on" onclick="controlDevice('device3', 'Load9', 1)">ON</button>
+          <button class="pro-btn card-btn btn-warning" onclick="controlDevice('device3', 'Load9', 2)">WARN</button>
+          <button class="pro-btn card-btn btn-off" onclick="controlDevice('device3', 'Load9', 0)">OFF</button>
+        </div>
+      </div>
+      <div class="device-card">
+        <div class="card-header">
+          <span class="card-title">লোড 10</span>
+          <span class="card-status status-inactive" id="d3-load10-status">ইনএক্টিভ</span>
+        </div>
+        <div class="card-value" id="d3-load10">--</div>
+        <div class="card-footer">
+          <button class="pro-btn card-btn btn-on" onclick="controlDevice('device3', 'Load10', 1)">ON</button>
+          <button class="pro-btn card-btn btn-warning" onclick="controlDevice('device3', 'Load10', 2)">WARN</button>
+          <button class="pro-btn card-btn btn-off" onclick="controlDevice('device3', 'Load10', 0)">OFF</button>
+        </div>
+      </div>
+      <div class="device-card">
+        <div class="card-header">
+          <span class="card-title">লোড 11</span>
+          <span class="card-status status-inactive" id="d3-load11-status">ইনএক্টিভ</span>
+        </div>
+        <div class="card-value" id="d3-load11">--</div>
+        <div class="card-footer">
+          <button class="pro-btn card-btn btn-on" onclick="controlDevice('device3', 'Load11', 1)">ON</button>
+          <button class="pro-btn card-btn btn-warning" onclick="controlDevice('device3', 'Load11', 2)">WARN</button>
+          <button class="pro-btn card-btn btn-off" onclick="controlDevice('device3', 'Load11', 0)">OFF</button>
+        </div>
+      </div>
+      <div class="device-card">
+        <div class="card-header">
+          <span class="card-title">লোড 12</span>
+          <span class="card-status status-inactive" id="d3-load12-status">ইনএক্টিভ</span>
+        </div>
+        <div class="card-value" id="d3-load12">--</div>
+        <div class="card-footer">
+          <button class="pro-btn card-btn btn-on" onclick="controlDevice('device3', 'Load12', 1)">ON</button>
+          <button class="pro-btn card-btn btn-warning" onclick="controlDevice('device3', 'Load12', 2)">WARN</button>
+          <button class="pro-btn card-btn btn-off" onclick="controlDevice('device3', 'Load12', 0)">OFF</button>
+        </div>
+      </div>
+      <div class="device-card">
+        <div class="card-header">
+          <span class="card-title">লোড 13</span>
+          <span class="card-status status-inactive" id="d3-load13-status">ইনএক্টিভ</span>
+        </div>
+        <div class="card-value" id="d3-load13">--</div>
+        <div class="card-footer">
+          <button class="pro-btn card-btn btn-on" onclick="controlDevice('device3', 'Load13', 1)">ON</button>
+          <button class="pro-btn card-btn btn-warning" onclick="controlDevice('device3', 'Load13', 2)">WARN</button>
+          <button class="pro-btn card-btn btn-off" onclick="controlDevice('device3', 'Load13', 0)">OFF</button>
+        </div>
+      </div>
+      <div class="device-card">
+        <div class="card-header">
+          <span class="card-title">লোড 14</span>
+          <span class="card-status status-inactive" id="d3-load14-status">ইনএক্টিভ</span>
+        </div>
+        <div class="card-value" id="d3-load14">--</div>
+        <div class="card-footer">
+          <button class="pro-btn card-btn btn-on" onclick="controlDevice('device3', 'Load14', 1)">ON</button>
+          <button class="pro-btn card-btn btn-warning" onclick="controlDevice('device3', 'Load14', 2)">WARN</button>
+          <button class="pro-btn card-btn btn-off" onclick="controlDevice('device3', 'Load14', 0)">OFF</button>
+        </div>
+      </div>
+      <div class="device-card">
+        <div class="card-header">
+          <span class="card-title">লোড 15</span>
+          <span class="card-status status-inactive" id="d3-load15-status">ইনএক্টিভ</span>
+        </div>
+        <div class="card-value" id="d3-load15">--</div>
+        <div class="card-footer">
+          <button class="pro-btn card-btn btn-on" onclick="controlDevice('device3', 'Load15', 1)">ON</button>
+          <button class="pro-btn card-btn btn-warning" onclick="controlDevice('device3', 'Load15', 2)">WARN</button>
+          <button class="pro-btn card-btn btn-off" onclick="controlDevice('device3', 'Load15', 0)">OFF</button>
+        </div>
+      </div>
+      <div class="device-card">
+        <div class="card-header">
+          <span class="card-title">লোড 16</span>
+          <span class="card-status status-inactive" id="d3-load16-status">ইনএক্টিভ</span>
+        </div>
+        <div class="card-value" id="d3-load16">--</div>
+        <div class="card-footer">
+          <button class="pro-btn card-btn btn-on" onclick="controlDevice('device3', 'Load16', 1)">ON</button>
+          <button class="pro-btn card-btn btn-warning" onclick="controlDevice('device3', 'Load16', 2)">WARN</button>
+          <button class="pro-btn card-btn btn-off" onclick="controlDevice('device3', 'Load16', 0)">OFF</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- এনালিটিক্স সেকশন -->
+    <section class="analytics-section">
+      <div class="chart-container">
+        <h3 class="section-title">ডিভাইস ৩ স্ট্যাটাস গ্রাফ</h3>
+        <canvas id="device3-chart"></canvas>
+      </div>
+      
+      <div class="log-container">
+        <h3 class="section-title">ডিভাইস ৩ লগ</h3>
+        <div class="log-list" id="device3-logs">
+          <!-- লগ আইটেমগুলো এখানে যোগ হবে -->
+        </div>
+      </div>
+    </section>
+  </main>
+  
+  <!-- ডিভাইস ৪ পেইজ -->
+  <main id="page4" class="device-page">
+    <section class="device-status-summary" id="device4-summary">
+      <div class="status-item">
+        <div class="status-count" id="d4-active-count">0</div>
+        <div class="status-label">এক্টিভ</div>
+      </div>
+      <div class="status-item">
+        <div class="status-count" id="d4-inactive-count">0</div>
+        <div class="status-label">ইনএক্টিভ</div>
+      </div>
+      <div class="status-item">
+        <div class="status-count" id="d4-warning-count">0</div>
+        <div class="status-label">সতর্কতা</div>
+      </div>
+      <div class="status-item">
+        <div class="status-count">16</div>
+        <div class="status-label">মোট লোড</div>
+      </div>
+    </section>
+    
+    <section class="device-cards">
+      <!-- ডিভাইস ৪ এর ১৬টি লোডের জন্য কার্ড -->
+      <div class="device-card">
+        <div class="card-header">
+          <span class="card-title">লোড 1</span>
+          <span class="card-status status-inactive" id="d4-load1-status">ইনএক্টিভ</span>
+        </div>
+        <div class="card-value" id="d4-load1">--</div>
+        <div class="card-footer">
+          <button class="pro-btn card-btn btn-on" onclick="controlDevice('device4', 'Load1', 1)">ON</button>
+          <button class="pro-btn card-btn btn-warning" onclick="controlDevice('device4', 'Load1', 2)">WARN</button>
+          <button class="pro-btn card-btn btn-off" onclick="controlDevice('device4', 'Load1', 0)">OFF</button>
+        </div>
+      </div>
+      <div class="device-card">
+        <div class="card-header">
+          <span class="card-title">লোড 2</span>
+          <span class="card-status status-inactive" id="d4-load2-status">ইনএক্টিভ</span>
+        </div>
+        <div class="card-value" id="d4-load2">--</div>
+        <div class="card-footer">
+          <button class="pro-btn card-btn btn-on" onclick="controlDevice('device4', 'Load2', 1)">ON</button>
+          <button class="pro-btn card-btn btn-warning" onclick="controlDevice('device4', 'Load2', 2)">WARN</button>
+          <button class="pro-btn card-btn btn-off" onclick="controlDevice('device4', 'Load2', 0)">OFF</button>
+        </div>
+      </div>
+      <div class="device-card">
+        <div class="card-header">
+          <span class="card-title">লোড 3</span>
+          <span class="card-status status-inactive" id="d4-load3-status">ইনএক্টিভ</span>
+        </div>
+        <div class="card-value" id="d4-load3">--</div>
+        <div class="card-footer">
+          <button class="pro-btn card-btn btn-on" onclick="controlDevice('device4', 'Load3', 1)">ON</button>
+          <button class="pro-btn card-btn btn-warning" onclick="controlDevice('device4', 'Load3', 2)">WARN</button>
+          <button class="pro-btn card-btn btn-off" onclick="controlDevice('device4', 'Load3', 0)">OFF</button>
+        </div>
+      </div>
+      <div class="device-card">
+        <div class="card-header">
+          <span class="card-title">লোড 4</span>
+          <span class="card-status status-inactive" id="d4-load4-status">ইনএক্টিভ</span>
+        </div>
+        <div class="card-value" id="d4-load4">--</div>
+        <div class="card-footer">
+          <button class="pro-btn card-btn btn-on" onclick="controlDevice('device4', 'Load4', 1)">ON</button>
+          <button class="pro-btn card-btn btn-warning" onclick="controlDevice('device4', 'Load4', 2)">WARN</button>
+          <button class="pro-btn card-btn btn-off" onclick="controlDevice('device4', 'Load4', 0)">OFF</button>
+        </div>
+      </div>
+      <div class="device-card">
+        <div class="card-header">
+          <span class="card-title">লোড 5</span>
+          <span class="card-status status-inactive" id="d4-load5-status">ইনএক্টিভ</span>
+        </div>
+        <div class="card-value" id="d4-load5">--</div>
+        <div class="card-footer">
+          <button class="pro-btn card-btn btn-on" onclick="controlDevice('device4', 'Load5', 1)">ON</button>
+          <button class="pro-btn card-btn btn-warning" onclick="controlDevice('device4', 'Load5', 2)">WARN</button>
+          <button class="pro-btn card-btn btn-off" onclick="controlDevice('device4', 'Load5', 0)">OFF</button>
+        </div>
+      </div>
+      <div class="device-card">
+        <div class="card-header">
+          <span class="card-title">লোড 6</span>
+          <span class="card-status status-inactive" id="d4-load6-status">ইনএক্টিভ</span>
+        </div>
+        <div class="card-value" id="d4-load6">--</div>
+        <div class="card-footer">
+          <button class="pro-btn card-btn btn-on" onclick="controlDevice('device4', 'Load6', 1)">ON</button>
+          <button class="pro-btn card-btn btn-warning" onclick="controlDevice('device4', 'Load6', 2)">WARN</button>
+          <button class="pro-btn card-btn btn-off" onclick="controlDevice('device4', 'Load6', 0)">OFF</button>
+        </div>
+      </div>
+      <div class="device-card">
+        <div class="card-header">
+          <span class="card-title">লোড 7</span>
+          <span class="card-status status-inactive" id="d4-load7-status">ইনএক্টিভ</span>
+        </div>
+        <div class="card-value" id="d4-load7">--</div>
+        <div class="card-footer">
+          <button class="pro-btn card-btn btn-on" onclick="controlDevice('device4', 'Load7', 1)">ON</button>
+          <button class="pro-btn card-btn btn-warning" onclick="controlDevice('device4', 'Load7', 2)">WARN</button>
+          <button class="pro-btn card-btn btn-off" onclick="controlDevice('device4', 'Load7', 0)">OFF</button>
+        </div>
+      </div>
+      <div class="device-card">
+        <div class="card-header">
+          <span class="card-title">লোড 8</span>
+          <span class="card-status status-inactive" id="d4-load8-status">ইনএক্টিভ</span>
+        </div>
+        <div class="card-value" id="d4-load8">--</div>
+        <div class="card-footer">
+          <button class="pro-btn card-btn btn-on" onclick="controlDevice('device4', 'Load8', 1)">ON</button>
+          <button class="pro-btn card-btn btn-warning" onclick="controlDevice('device4', 'Load8', 2)">WARN</button>
+          <button class="pro-btn card-btn btn-off" onclick="controlDevice('device4', 'Load8', 0)">OFF</button>
+        </div>
+      </div>
+      <div class="device-card">
+        <div class="card-header">
+          <span class="card-title">লোড 9</span>
+          <span class="card-status status-inactive" id="d4-load9-status">ইনএক্টিভ</span>
+        </div>
+        <div class="card-value" id="d4-load9">--</div>
+        <div class="card-footer">
+          <button class="pro-btn card-btn btn-on" onclick="controlDevice('device4', 'Load9', 1)">ON</button>
+          <button class="pro-btn card-btn btn-warning" onclick="controlDevice('device4', 'Load9', 2)">WARN</button>
+          <button class="pro-btn card-btn btn-off" onclick="controlDevice('device4', 'Load9', 0)">OFF</button>
+        </div>
+      </div>
+      <div class="device-card">
+        <div class="card-header">
+          <span class="card-title">লোড 10</span>
+          <span class="card-status status-inactive" id="d4-load10-status">ইনএক্টিভ</span>
+        </div>
+        <div class="card-value" id="d4-load10">--</div>
+        <div class="card-footer">
+          <button class="pro-btn card-btn btn-on" onclick="controlDevice('device4', 'Load10', 1)">ON</button>
+          <button class="pro-btn card-btn btn-warning" onclick="controlDevice('device4', 'Load10', 2)">WARN</button>
+          <button class="pro-btn card-btn btn-off" onclick="controlDevice('device4', 'Load10', 0)">OFF</button>
+        </div>
+      </div>
+      <div class="device-card">
+        <div class="card-header">
+          <span class="card-title">লোড 11</span>
+          <span class="card-status status-inactive" id="d4-load11-status">ইনএক্টিভ</span>
+        </div>
+        <div class="card-value" id="d4-load11">--</div>
+        <div class="card-footer">
+          <button class="pro-btn card-btn btn-on" onclick="controlDevice('device4', 'Load11', 1)">ON</button>
+          <button class="pro-btn card-btn btn-warning" onclick="controlDevice('device4', 'Load11', 2)">WARN</button>
+          <button class="pro-btn card-btn btn-off" onclick="controlDevice('device4', 'Load11', 0)">OFF</button>
+        </div>
+      </div>
+      <div class="device-card">
+        <div class="card-header">
+          <span class="card-title">লোড 12</span>
+          <span class="card-status status-inactive" id="d4-load12-status">ইনএক্টিভ</span>
+        </div>
+        <div class="card-value" id="d4-load12">--</div>
+        <div class="card-footer">
+          <button class="pro-btn card-btn btn-on" onclick="controlDevice('device4', 'Load12', 1)">ON</button>
+          <button class="pro-btn card-btn btn-warning" onclick="controlDevice('device4', 'Load12', 2)">WARN</button>
+          <button class="pro-btn card-btn btn-off" onclick="controlDevice('device4', 'Load12', 0)">OFF</button>
+        </div>
+      </div>
+      <div class="device-card">
+        <div class="card-header">
+          <span class="card-title">লোড 13</span>
+          <span class="card-status status-inactive" id="d4-load13-status">ইনএক্টিভ</span>
+        </div>
+        <div class="card-value" id="d4-load13">--</div>
+        <div class="card-footer">
+          <button class="pro-btn card-btn btn-on" onclick="controlDevice('device4', 'Load13', 1)">ON</button>
+          <button class="pro-btn card-btn btn-warning" onclick="controlDevice('device4', 'Load13', 2)">WARN</button>
+          <button class="pro-btn card-btn btn-off" onclick="controlDevice('device4', 'Load13', 0)">OFF</button>
+        </div>
+      </div>
+      <div class="device-card">
+        <div class="card-header">
+          <span class="card-title">লোড 14</span>
+          <span class="card-status status-inactive" id="d4-load14-status">ইনএক্টিভ</span>
+        </div>
+        <div class="card-value" id="d4-load14">--</div>
+        <div class="card-footer">
+          <button class="pro-btn card-btn btn-on" onclick="controlDevice('device4', 'Load14', 1)">ON</button>
+          <button class="pro-btn card-btn btn-warning" onclick="controlDevice('device4', 'Load14', 2)">WARN</button>
+          <button class="pro-btn card-btn btn-off" onclick="controlDevice('device4', 'Load14', 0)">OFF</button>
+        </div>
+      </div>
+      <div class="device-card">
+        <div class="card-header">
+          <span class="card-title">লোড 15</span>
+          <span class="card-status status-inactive" id="d4-load15-status">ইনএক্টিভ</span>
+        </div>
+        <div class="card-value" id="d4-load15">--</div>
+        <div class="card-footer">
+          <button class="pro-btn card-btn btn-on" onclick="controlDevice('device4', 'Load15', 1)">ON</button>
+          <button class="pro-btn card-btn btn-warning" onclick="controlDevice('device4', 'Load15', 2)">WARN</button>
+          <button class="pro-btn card-btn btn-off" onclick="controlDevice('device4', 'Load15', 0)">OFF</button>
+        </div>
+      </div>
+      <div class="device-card">
+        <div class="card-header">
+          <span class="card-title">লোড 16</span>
+          <span class="card-status status-inactive" id="d4-load16-status">ইনএক্টিভ</span>
+        </div>
+        <div class="card-value" id="d4-load16">--</div>
+        <div class="card-footer">
+          <button class="pro-btn card-btn btn-on" onclick="controlDevice('device4', 'Load16', 1)">ON</button>
+          <button class="pro-btn card-btn btn-warning" onclick="controlDevice('device4', 'Load16', 2)">WARN</button>
+          <button class="pro-btn card-btn btn-off" onclick="controlDevice('device4', 'Load16', 0)">OFF</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- এনালিটিক্স সেকশন -->
+    <section class="analytics-section">
+      <div class="chart-container">
+        <h3 class="section-title">ডিভাইস ৪ স্ট্যাটাস গ্রাফ</h3>
+        <canvas id="device4-chart"></canvas>
+      </div>
+      
+      <div class="log-container">
+        <h3 class="section-title">ডিভাইস ৪ লগ</h3>
+        <div class="log-list" id="device4-logs">
+          <!-- লগ আইটেমগুলো এখানে যোগ হবে -->
+        </div>
+      </div>
+    </section>
+  </main>
+  
+  <!-- এনার্জি মনিটরিং পেইজ -->
+  <main id="page5" class="device-page">
+    <section class="energy-metrics">
+      <div class="energy-card voltage-card">
+        <div class="energy-title">⚡ ভোল্টেজ</div>
+        <div class="energy-value" id="voltage-value">-- <span class="energy-unit">V</span></div>
+      </div>
+
+      <div class="energy-card current-card">
+        <div class="energy-title">🔌 কারেন্ট</div>
+        <div class="energy-value" id="current-value">-- <span class="energy-unit">A</span></div>
+      </div>
+
+      <div class="energy-card power-card">
+        <div class="energy-title">💡 পাওয়ার</div>
+        <div class="energy-value" id="power-value">-- <span class="energy-unit">W</span></div>
+      </div>
+
+      <div class="energy-card energy-card-main">
+        <div class="energy-title">🔋 এনার্জি</div>
+        <div class="energy-value" id="energy-value">-- <span class="energy-unit">kWh</span></div>
+      </div>
+
+      <div class="energy-card frequency-card">
+        <div class="energy-title">⏱️ ফ্রিকোয়েন্সি</div>
+        <div class="energy-value" id="frequency-value">-- <span class="energy-unit">Hz</span></div>
+      </div>
+
+      <div class="energy-card power-factor-card">
+        <div class="energy-title">📊 পাওয়ার ফ্যাক্টর</div>
+        <div class="energy-value" id="power-factor-value">-- <span class="energy-unit"></span></div>
+      </div>
+
+      <div class="energy-card active-power-card">
+        <div class="energy-title">🔆 অ্যাক্টিভ পাওয়ার</div>
+        <div class="energy-value" id="active-power-value">-- <span class="energy-unit">W</span></div>
+      </div>
+
+      <div class="energy-card reactive-power-card">
+        <div class="energy-title">🌀 রিঅ্যাক্টিভ পাওয়ার</div>
+        <div class="energy-value" id="reactive-power-value">-- <span class="energy-unit">VAR</span></div>
+      </div>
+
+      <div class="energy-card units-card">
+        <div class="energy-title">✔️ ব্যবহৃত ইউনিট</div>
+        <div class="energy-value" id="units-value">-- <span class="energy-unit">Units</span></div>
+      </div>
+
+      <div class="energy-card cost-card">
+        <div class="energy-title">💰 দৈনিক খরচ</div>
+        <div class="energy-value" id="daily-cost-value">-- <span class="energy-unit">BDT</span></div>
+      </div>
+
+      <div class="energy-card timestamp-card">
+        <div class="energy-title">🕒 টাইমস্ট্যাম্প</div>
+        <div class="energy-value" id="timestamp-value" style="font-size: 1.2rem; font-weight: 500;">--</div>
+      </div>
+    </section>
+    
+    <section class="intelligence-section">
+      <h3 class="intelligence-title">🧠 ইন্টেলিজেন্স ইনসাইটস</h3>
+      <div id="anomaly-alert">
+        <p>সিস্টেম স্বাভাবিকভাবে চলছে। কোনো অস্বাভাবিকতা শনাক্ত হয়নি।</p>
+      </div>
+    </section>
+
+    <section class="energy-graphs">
+      <div class="graph-container">
+        <h3 class="graph-title">ভোল্টেজ ট্রেন্ড</h3>
+        <canvas id="voltage-chart"></canvas>
+      </div>
+      <div class="graph-container">
+        <h3 class="graph-title">কারেন্ট ট্রেন্ড</h3>
+        <canvas id="current-chart"></canvas>
+      </div>
+      <div class="graph-container">
+        <h3 class="graph-title">পাওয়ার ট্রেন্ড</h3>
+        <canvas id="power-chart"></canvas>
+      </div>
+      <div class="graph-container">
+        <h3 class="graph-title">এনার্জি কনজাম্পশন</h3>
+        <canvas id="energy-chart"></canvas>
+      </div>
+    </section>
+  </main>
+
+  <!-- এডভান্সড এনার্জি মনিটরিং পেইজ -->
+  <main id="page6" class="device-page">
+    <div class="time-selection">
+      <button class="time-btn active" onclick="changeTimeRange(30)">৩০ মিনিট</button>
+      <button class="time-btn" onclick="changeTimeRange(60)">১ ঘন্টা</button>
+      <button class="time-btn" onclick="changeTimeRange(180)">৩ ঘন্টা</button>
+      <button class="time-btn" onclick="changeTimeRange(360)">৬ ঘন্টা</button>
+      <button class="time-btn" onclick="changeTimeRange(720)">১২ ঘন্টা</button>
+    </div>
+
+    <div class="metric-selection">
+      <div class="metric-card selected" onclick="selectMetric('voltage')">
+        <div class="metric-title"><span class="metric-icon">⚡</span> ভোল্টেজ</div>
+        <div class="metric-description">ভোল্টেজের পরিবর্তন পর্যবেক্ষণ করুন</div>
+      </div>
+      <div class="metric-card" onclick="selectMetric('current')">
+        <div class="metric-title"><span class="metric-icon">🔌</span> কারেন্ট</div>
+        <div class="metric-description">কারেন্টের প্রবাহ বিশ্লেষণ করুন</div>
+      </div>
+      <div class="metric-card" onclick="selectMetric('power')">
+        <div class="metric-title"><span class="metric-icon">💡</span> পাওয়ার</div>
+        <div class="metric-description">পাওয়ার ব্যবহারের ট্রেন্ড দেখুন</div>
+      </div>
+      <div class="metric-card" onclick="selectMetric('energy')">
+        <div class="metric-title"><span class="metric-icon">🔋</span> এনার্জি</div>
+        <div class="metric-description">এনার্জি খরচের হিসাব দেখুন</div>
+      </div>
+      <div class="metric-card" onclick="selectMetric('frequency')">
+        <div class="metric-title"><span class="metric-icon">⏱️</span> ফ্রিকোয়েন্সি</div>
+        <div class="metric-description">ফ্রিকোয়েন্সির স্থিতিশীলতা পরীক্ষা করুন</div>
+      </div>
+      <div class="metric-card" onclick="selectMetric('powerFactor')">
+        <div class="metric-title"><span class="metric-icon">📊</span> পাওয়ার ফ্যাক্টর</div>
+        <div class="metric-description">পাওয়ার ফ্যাক্টরের মান বিশ্লেষণ করুন</div>
+      </div>
+      <div class="metric-card" onclick="selectMetric('activePower')">
+        <div class="metric-title"><span class="metric-icon">🔆</span> অ্যাক্টিভ পাওয়ার</div>
+        <div class="metric-description">রিয়েল পাওয়ার ব্যবহার দেখুন</div>
+      </div>
+      <div class="metric-card" onclick="selectMetric('reactivePower')">
+        <div class="metric-title"><span class="metric-icon">🌀</span> রিঅ্যাক্টিভ পাওয়ার</div>
+        <div class="metric-description">রিঅ্যাক্টিভ পাওয়ার ট্রেন্ড</div>
+      </div>
+    </div>
+
+    <section class="advanced-graph-container">
+      <div class="graph-header">
+        <h3 class="graph-title" id="advanced-graph-title">ভোল্টেজ ট্রেন্ড (৩০ মিনিট)</h3>
+        <div class="graph-controls">
+          <button class="graph-btn" onclick="downloadGraphData()">ডাটা ডাউনলোড</button>
+          <button class="graph-btn" onclick="printGraph()">প্রিন্ট</button>
+        </div>
+      </div>
+      <canvas id="advanced-energy-chart"></canvas>
+      <div class="no-data-message" id="no-data-message" style="display: none;">
+        নির্বাচিত সময় রেঞ্জে কোনো ডাটা পাওয়া যায়নি
+      </div>
+    </section>
+  </main>
+  
+  <!-- Diagram Note File পেইজ -->
+  <main id="page7" class="device-page">
+    <section class="notes-container">
+      <h2 class="note-title">Diagram Note File</h2>
+      
+      <p class="note-paragraph">
+        এই পৃষ্ঠাটি আমাদের প্রকল্পের জন্য গুরুত্বপূর্ণ নোট এবং ডকুমেন্টেশন সংরক্ষণ করতে ব্যবহৃত হবে।
+         এখানে আপনি প্রকল্পের বিভিন্ন ডায়াগ্রাম, নোট এবং গুরুত্বপূর্ণ তথ্য পাবেন যা প্রকল্পের উন্নয়ন এবং রক্ষণাবেক্ষণের জন্য প্রয়োজনীয়।
+      </p>
+      
+      <div class="note-letter">
+        <div class="note-letter-title">গুরুত্বপূর্ণ নোট #1</div>
+        <div class="note-letter-content">
+          প্রকল্পের সার্কিট ডায়াগ্রামটি নিচে দেওয়া হয়েছে। দয়া করে নিশ্চিত করুন যে সমস্ত সংযোগ সঠিকভাবে করা হয়েছে এবং প্রতিটি কম্পোনেন্ট সঠিকভাবে স্থাপন করা হয়েছে।
+           সার্কিট ডায়াগ্রামে কোন পরিবর্তন প্রয়োজন হলে দয়া করে টিম লিডারকে জানান।
+        </div>
+      </div>
+      
+      <div class="note-images">
+        <div class="note-image" onclick="openImageModal('electrical-single-line-diagram-4.jpg', 'প্রকল্পের সার্কিট ডায়াগ্রাম')">
+          <img src="electrical-single-line-diagram-4.jpg" alt="সার্কিট ডায়াগ্রাম">
+          <div class="note-image-caption">প্রকল্পের সার্কিট ডায়াগ্রাম</div>
+        </div>
+
+        <div class="note-image" onclick="openImageModal('6005990.jpg', 'সিস্টেম ফ্লো চার্ট')">
+          <img src="6005990.jpg" alt="ফ্লো চার্ট">
+          <div class="note-image-caption">সিস্টেম ফ্লো চার্ট</div>
+        </div>
+      </div>
+      
+      <h3 class="note-subtitle">প্রকল্পের মূল বৈশিষ্ট্য</h3>
+      <p class="note-paragraph">
+        1. রিয়েল-টাইম ডিভাইস মনিটরিং<br>
+        2. এনার্জি কনজাম্পশন ট্র্যাকিং<br>
+        3. রিমোট কন্ট্রোল সক্ষমতা<br>
+        4. ডেটা ভিজুয়ালাইজেশন<br>
+        5. মাল্টি-ডিভাইস সাপোর্ট
+      </p>
+      
+      <div class="note-letter">
+        <div class="note-letter-title">গুরুত্বপূর্ণ নোট #2</div>
+        <div class="note-letter-content">
+          সিস্টেম আপডেটের সময় নিচের সতর্কতাগুলো মেনে চলুন:<br>
+          - আপডেট করার আগে ব্যাকআপ নিন<br>
+          - প্রোডাকশন সিস্টেমে সরাসরি আপডেট করবেন না<br>
+          - পরিবর্তন করার আগে টিমের সাথে আলোচনা করুন<br>
+          - সমস্ত পরিবর্তন ডকুমেন্ট করুন
+        </div>
+      </div>
+      
+      <h3 class="note-subtitle">সিস্টেম আর্কিটেকচার</h3>
+      <p class="note-paragraph">
+        আমাদের সিস্টেমটি তিনটি মূল অংশ নিয়ে গঠিত:<br>
+        1. IoT ডিভাইস - ডাটা কালেকশন এবং একচুয়েশন<br>
+        2. ক্লাউড সার্ভার - ডাটা প্রসেসিং এবং স্টোরেজ<br>
+        3. ওয়েব ইন্টারফেস - ইউজার ইন্টারঅ্যাকশন
+      </p>
+      
+      <div class="note-images">
+        <div class="note-image" onclick="openImageModal('https://i.ibb.co/5KJZ0Lm/system-architecture.jpg', 'সিস্টেম আর্কিটেকচার ডায়াগ্রাম')">
+          <img src="https://i.ibb.co/5KJZ0Lm/system-architecture.jpg" alt="সিস্টেম আর্কিটেকচার">
+          <div class="note-image-caption">সিস্টেম আর্কিটেকচার ডায়াগ্রাম</div>
+        </div>
+      </div>
+      
+      <h3 class="note-subtitle">ভবিষ্যতের উন্নয়ন পরিকল্পনা</h3>
+      <p class="note-paragraph">
+        - মোবাইল অ্যাপ্লিকেশন সংযোজন<br>
+        - AI-ভিত্তিক এনার্জি অপ্টিমাইজেশন<br>
+        - মাল্টি-ইউজার সাপোর্ট<br>
+        - অ্যাডভান্সড রিপোর্টিং সিস্টেম<br>
+        - থার্ড-পার্টি ইন্টিগ্রেশন
+      </p>
+    </section>
+  </main>
+
+  <!-- কন্ট্রোল প্যানেল পেইজ -->
+  <main id="page8" class="device-page">
+    <section class="control-section">
+      <h2 class="control-section-title">ডিভাইস ১ কন্ট্রোল</h2>
+      <div class="toggle-switch-grid">
+        <!-- রিলে ১ থেকে ৮ এর জন্য নতুন কন্টেইনার -->
+        <div class="toggle-switch-container">
+          <div class="toggle-switch-header">
+            <span class="toggle-switch-label">রিলে ১</span>
+            <div class="device-time-info">
+              <span class="current-date">--</span>
+              <span class="current-time">--</span>
+            </div>
+          </div>
+          <div class="toggle-switch-body">
+            <div class="timer-status" id="timer-status-relay1">টাইমার সেট করা নেই</div>
+          </div>
+
+          <div class="toggle-switch-footer">
+            <button class="pro-btn timer-btn" onclick="openTimerModal('relay1')">⏲️ টাইমার</button>
+            <label class="toggle-switch">
+              <input type="checkbox" id="d1-relay1-toggle" onchange="promptForRelayPassword('device1', 'relay1', this)">
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+<div class="toggle-switch-container">
+    <div class="toggle-switch-header">
+        <span class="toggle-switch-label">রিলে ২</span>
+        <div class="device-time-info">
+            <span class="current-date">--</span>
+            <span class="current-time">--</span>
+        </div>
+    </div>
+    <div class="toggle-switch-body">
+        <div class="timer-status" id="timer-status-relay2">টাইমার সেট করা নেই</div>
+    </div>
+    <div class="toggle-switch-footer">
+        <button class="pro-btn timer-btn" onclick="openTimerModal('relay2')">⏲️ টাইমার</button>
+        <label class="toggle-switch">
+            <input type="checkbox" id="d1-relay2-toggle" onchange="promptForRelayPassword('device1', 'relay2', this)">
+            <span class="slider"></span>
+        </label>
+    </div>
+</div>
+
+<div class="toggle-switch-container">
+    <div class="toggle-switch-header">
+        <span class="toggle-switch-label">রিলে ৩</span>
+        <div class="device-time-info">
+            <span class="current-date">--</span>
+            <span class="current-time">--</span>
+        </div>
+    </div>
+    <div class="toggle-switch-body">
+        <div class="timer-status" id="timer-status-relay3">টাইমার সেট করা নেই</div>
+    </div>
+    <div class="toggle-switch-footer">
+        <button class="pro-btn timer-btn" onclick="openTimerModal('relay3')">⏲️ টাইমার</button>
+        <label class="toggle-switch">
+            <input type="checkbox" id="d1-relay3-toggle" onchange="promptForRelayPassword('device1', 'relay3', this)">
+            <span class="slider"></span>
+        </label>
+    </div>
+</div>
+
+<div class="toggle-switch-container">
+    <div class="toggle-switch-header">
+        <span class="toggle-switch-label">রিলে ৪</span>
+        <div class="device-time-info">
+            <span class="current-date">--</span>
+            <span class="current-time">--</span>
+        </div>
+    </div>
+    <div class="toggle-switch-body">
+        <div class="timer-status" id="timer-status-relay4">টাইমার সেট করা নেই</div>
+    </div>
+    <div class="toggle-switch-footer">
+        <button class="pro-btn timer-btn" onclick="openTimerModal('relay4')">⏲️ টাইমার</button>
+        <label class="toggle-switch">
+            <input type="checkbox" id="d1-relay4-toggle" onchange="promptForRelayPassword('device1', 'relay4', this)">
+            <span class="slider"></span>
+        </label>
+    </div>
+</div>
+
+<div class="toggle-switch-container">
+    <div class="toggle-switch-header">
+        <span class="toggle-switch-label">রিলে ৫</span>
+        <div class="device-time-info">
+            <span class="current-date">--</span>
+            <span class="current-time">--</span>
+        </div>
+    </div>
+    <div class="toggle-switch-body">
+        <div class="timer-status" id="timer-status-relay5">টাইমার সেট করা নেই</div>
+    </div>
+    <div class="toggle-switch-footer">
+        <button class="pro-btn timer-btn" onclick="openTimerModal('relay5')">⏲️ টাইমার</button>
+        <label class="toggle-switch">
+            <input type="checkbox" id="d1-relay5-toggle" onchange="promptForRelayPassword('device1', 'relay5', this)">
+            <span class="slider"></span>
+        </label>
+    </div>
+</div>
+
+<div class="toggle-switch-container">
+    <div class="toggle-switch-header">
+        <span class="toggle-switch-label">রিলে ৬</span>
+        <div class="device-time-info">
+            <span class="current-date">--</span>
+            <span class="current-time">--</span>
+        </div>
+    </div>
+    <div class="toggle-switch-body">
+        <div class="timer-status" id="timer-status-relay6">টাইমার সেট করা নেই</div>
+    </div>
+    <div class="toggle-switch-footer">
+        <button class="pro-btn timer-btn" onclick="openTimerModal('relay6')">⏲️ টাইমার</button>
+        <label class="toggle-switch">
+            <input type="checkbox" id="d1-relay6-toggle" onchange="promptForRelayPassword('device1', 'relay6', this)">
+            <span class="slider"></span>
+        </label>
+    </div>
+</div>
+
+<div class="toggle-switch-container">
+    <div class="toggle-switch-header">
+        <span class="toggle-switch-label">রিলে ৭</span>
+        <div class="device-time-info">
+            <span class="current-date">--</span>
+            <span class="current-time">--</span>
+        </div>
+    </div>
+    <div class="toggle-switch-body">
+        <div class="timer-status" id="timer-status-relay7">টাইমার সেট করা নেই</div>
+    </div>
+    <div class="toggle-switch-footer">
+        <button class="pro-btn timer-btn" onclick="openTimerModal('relay7')">⏲️ টাইমার</button>
+        <label class="toggle-switch">
+            <input type="checkbox" id="d1-relay7-toggle" onchange="promptForRelayPassword('device1', 'relay7', this)">
+            <span class="slider"></span>
+        </label>
+    </div>
+</div>
+
+<div class="toggle-switch-container">
+    <div class="toggle-switch-header">
+        <span class="toggle-switch-label">রিলে ৮</span>
+        <div class="device-time-info">
+            <span class="current-date">--</span>
+            <span class="current-time">--</span>
+        </div>
+    </div>
+    <div class="toggle-switch-body">
+        <div class="timer-status" id="timer-status-relay8">টাইমার সেট করা নেই</div>
+    </div>
+    <div class="toggle-switch-footer">
+        <button class="pro-btn timer-btn" onclick="openTimerModal('relay8')">⏲️ টাইমার</button>
+        <label class="toggle-switch">
+            <input type="checkbox" id="d1-relay8-toggle" onchange="promptForRelayPassword('device1', 'relay8', this)">
+            <span class="slider"></span>
+        </label>
+    </div>
+</div>
+</div>
+</section>
+
+<section class="control-section">
+    <h2 class="control-section-title">ডিভাইস ২ কন্ট্রোল</h2>
+    <div class="toggle-switch-grid">
+        <!-- ডিভাইস ২ এর রিলে কন্টেইনার -->
+        <div class="toggle-switch-container">
+            <div class="toggle-switch-header">
+                <span class="toggle-switch-label">রিলে ১</span>
+                <div class="device-time-info">
+                    <span class="current-date">--</span>
+                    <span class="current-time">--</span>
+                </div>
+            </div>
+            <div class="toggle-switch-body">
+                <div class="timer-status" id="timer-status-d2-relay1">টাইমার সেট করা নেই</div>
+            </div>
+            <div class="toggle-switch-footer">
+                <button class="pro-btn timer-btn" onclick="openTimerModal('d2-relay1')">⏲️ টাইমার</button>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="d2-relay1-toggle" onchange="promptForRelayPassword('device2', 'relay1', this)">
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+
+        <div class="toggle-switch-container">
+            <div class="toggle-switch-header">
+                <span class="toggle-switch-label">রিলে ২</span>
+                <div class="device-time-info">
+                    <span class="current-date">--</span>
+                    <span class="current-time">--</span>
+                </div>
+            </div>
+            <div class="toggle-switch-body">
+                <div class="timer-status" id="timer-status-d2-relay2">টাইমার সেট করা নেই</div>
+            </div>
+            <div class="toggle-switch-footer">
+                <button class="pro-btn timer-btn" onclick="openTimerModal('d2-relay2')">⏲️ টাইমার</button>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="d2-relay2-toggle" onchange="promptForRelayPassword('device2', 'relay2', this)">
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+
+        <div class="toggle-switch-container">
+            <div class="toggle-switch-header">
+                <span class="toggle-switch-label">রিলে ৩</span>
+                <div class="device-time-info">
+                    <span class="current-date">--</span>
+                    <span class="current-time">--</span>
+                </div>
+            </div>
+            <div class="toggle-switch-body">
+                <div class="timer-status" id="timer-status-d2-relay3">টাইমার সেট করা নেই</div>
+            </div>
+            <div class="toggle-switch-footer">
+                <button class="pro-btn timer-btn" onclick="openTimerModal('d2-relay3')">⏲️ টাইমার</button>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="d2-relay3-toggle" onchange="promptForRelayPassword('device2', 'relay3', this)">
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+
+        <div class="toggle-switch-container">
+            <div class="toggle-switch-header">
+                <span class="toggle-switch-label">রিলে ৪</span>
+                <div class="device-time-info">
+                    <span class="current-date">--</span>
+                    <span class="current-time">--</span>
+                </div>
+            </div>
+            <div class="toggle-switch-body">
+                <div class="timer-status" id="timer-status-d2-relay4">টাইমার সেট করা নেই</div>
+            </div>
+            <div class="toggle-switch-footer">
+                <button class="pro-btn timer-btn" onclick="openTimerModal('d2-relay4')">⏲️ টাইমার</button>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="d2-relay4-toggle" onchange="promptForRelayPassword('device2', 'relay4', this)">
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+
+        <div class="toggle-switch-container">
+            <div class="toggle-switch-header">
+                <span class="toggle-switch-label">রিলে ৫</span>
+                <div class="device-time-info">
+                    <span class="current-date">--</span>
+                    <span class="current-time">--</span>
+                </div>
+            </div>
+            <div class="toggle-switch-body">
+                <div class="timer-status" id="timer-status-d2-relay5">টাইমার সেট করা নেই</div>
+            </div>
+            <div class="toggle-switch-footer">
+                <button class="pro-btn timer-btn" onclick="openTimerModal('d2-relay5')">⏲️ টাইমার</button>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="d2-relay5-toggle" onchange="promptForRelayPassword('device2', 'relay5', this)">
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ////////////////////////////////////////////////// -->
+
+<section class="control-section">
+    <h2 class="control-section-title">ডিভাইস ৩ কন্ট্রোল</h2>
+    <div class="toggle-switch-grid">
+
+        <div class="toggle-switch-container">
+            <div class="toggle-switch-header">
+                <span class="toggle-switch-label">রিলে 1</span>
+                <div class="device-time-info">
+                    <span class="current-date">--</span>
+                    <span class="current-time">--</span>
+                </div>
+            </div>
+            <div class="toggle-switch-body">
+                <div class="timer-status" id="timer-status-d3-relay1">টাইমার সেট করা নেই</div>
+            </div>
+            <div class="toggle-switch-footer">
+                <button class="pro-btn timer-btn" onclick="openTimerModal('d3-relay1')">⏲️ টাইমার</button>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="d3-relay1-toggle" onchange="promptForRelayPassword('device3', 'relay1', this)">
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+
+        <div class="toggle-switch-container">
+            <div class="toggle-switch-header">
+                <span class="toggle-switch-label">রিলে 2</span>
+                <div class="device-time-info">
+                    <span class="current-date">--</span>
+                    <span class="current-time">--</span>
+                </div>
+            </div>
+            <div class="toggle-switch-body">
+                <div class="timer-status" id="timer-status-d3-relay2">টাইমার সেট করা নেই</div>
+            </div>
+            <div class="toggle-switch-footer">
+                <button class="pro-btn timer-btn" onclick="openTimerModal('d3-relay2')">⏲️ টাইমার</button>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="d3-relay2-toggle" onchange="promptForRelayPassword('device3', 'relay2', this)">
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- ////////////////////////////////////////////////// -->
+
+<section class="control-section">
+    <h2 class="control-section-title">ডিভাইস 4 কন্ট্রোল</h2>
+    <div class="toggle-switch-grid">
+
+        <div class="toggle-switch-container">
+            <div class="toggle-switch-header">
+                <span class="toggle-switch-label">রিলে 1</span>
+                <div class="device-time-info">
+                    <span class="current-date">--</span>
+                    <span class="current-time">--</span>
+                </div>
+            </div>
+            <div class="toggle-switch-body">
+                <div class="timer-status" id="timer-status-d4-relay1">টাইমার সেট করা নেই</div>
+            </div>
+            <div class="toggle-switch-footer">
+                <button class="pro-btn timer-btn" onclick="openTimerModal('d4-relay1')">⏲️ টাইমার</button>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="d4-relay1-toggle" onchange="promptForRelayPassword('device4', 'relay1', this)">
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+
+        <div class="toggle-switch-container">
+            <div class="toggle-switch-header">
+                <span class="toggle-switch-label">রিলে 2</span>
+                <div class="device-time-info">
+                    <span class="current-date">--</span>
+                    <span class="current-time">--</span>
+                </div>
+            </div>
+            <div class="toggle-switch-body">
+                <div class="timer-status" id="timer-status-d4-relay2">টাইমার সেট করা নেই</div>
+            </div>
+            <div class="toggle-switch-footer">
+                <button class="pro-btn timer-btn" onclick="openTimerModal('d4-relay2')">⏲️ টাইমার</button>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="d4-relay2-toggle" onchange="promptForRelayPassword('device4', 'relay2', this)">
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ////////////////////////////////////////////////// -->
+</main>
+
+<!-- ★★★ পরিবর্তিত: অটোমেশন ও অ্যালার্ট পেইজ ★★★ -->
+<main id="page9" class="device-page">
+    <div class="automation-grid">
+      <div class="automation-container">
+        <h2 class="section-title">নতুন অটোমেশন বা অ্যালার্ট তৈরি করুন</h2>
+        <div class="rule-builder-card">
+            <form class="rule-builder-form" onsubmit="saveAutomationRule(event)">
+                <div class="form-group">
+                    <label for="rule-name">রুলের নাম</label>
+                    <input type="text" id="rule-name" placeholder="যেমন: সন্ধ্যায় লাইট অন" required>
+                </div>
+                
+                <!-- IF / ট্রিগার বক্স -->
+                <div class="rule-condition-box">
+                    <div class="rule-part if-part">IF (যদি)</div>
+                    <div class="form-group">
+                        <label for="trigger-source">ট্রিগারের উৎস</label>
+                        <select id="trigger-source" onchange="updateTriggerOptions()">
+                            <option value="energy">এনার্জি মনিটর</option>
+                            <option value="time">সময়</option>
+                            <option value="device">অন্য ডিভাইস</option>
+                        </select>
+                    </div>
+                    <div id="trigger-options-container">
+                        <!-- অপশনগুলো জাভাস্ক্রিপ্ট দিয়ে তৈরি হবে -->
+                    </div>
+                </div>
+
+                <!-- THEN / অ্যাকশন বক্স -->
+                <div class="rule-action-box">
+                    <div class="rule-part then-part">THEN (তবে)</div>
+                    <div class="form-group">
+                        <label for="action-device">ডিভাইস</label>
+                        <select id="action-device">
+                            <option value="device1">ডিভাইস ১</option>
+                            <option value="device2">ডিভাইস ২</option>
+                            <option value="device3">ডিভাইস ৩</option>
+                            <option value="device4">ডিভাইস ৪</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="action-relay">রিলে/লোড</label>
+                        <select id="action-relay">
+                            <script>
+                                for(let i=1; i<=16; i++) {
+                                    document.write(`<option value="relay${i}">রিলে ${i}</option>`);
+                                }
+                            </script>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="action-state">অ্যাকশন</label>
+                        <select id="action-state">
+                            <option value="true">ON করুন</option>
+                            <option value="false">OFF করুন</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- নোটিফিকেশন অপশন -->
+                <div class="notification-toggle-group">
+                    <input type="checkbox" id="send-notification-checkbox" style="width: auto;">
+                    <label for="send-notification-checkbox">এর সাথে একটি নোটিফিকেশন পাঠান</label>
+                </div>
+                <div class="form-group" id="notification-message-group" style="display: none;">
+                    <label for="notification-message">নোটিফিকেশন বার্তা</label>
+                    <textarea id="notification-message" placeholder="আপনার কাস্টম বার্তা এখানে লিখুন..."></textarea>
+                </div>
+                
+                <button type="submit" class="pro-btn btn-on" style="margin-top: 15px;">💾 রুল সংরক্ষণ করুন</button>
+            </form>
+        </div>
+      </div>
+      <div class="automation-container">
+        <h2 class="section-title">সক্রিয় অটোমেশন ও অ্যালার্ট সমূহ</h2>
+        <div class="rule-list" id="automation-rule-list">
+          <p>কোনো অটোমেশন রুল এখনো তৈরি করা হয়নি।</p>
+        </div>
+      </div>
+    </div>
+</main>
+
+<!-- ★★★ পরিবর্তিত: অডিট লগ পেইজ ★★★ -->
+<main id="page10" class="device-page">
+    <section class="audit-log-container">
+        <h2 class="section-title">ব্যবহারকারী কার্যকলাপের লগ</h2>
+        <div class="audit-log-list" id="audit-log-list">
+            <p>কোনো কার্যকলাপের লগ পাওয়া যায়নি...</p>
+        </div>
+    </section>
+</main>
+
+
+</div>
+
+<!-- টোস্ট নোটিফিকেশন কন্টেইনার -->
+<div class="toast-container" id="toast-container"></div>
+
+
+<!-- ইমেজ ভিউয়ার মোডাল -->
+<div id="imageModal" class="image-modal">
+  <span class="close-modal" onclick="closeImageModal()">&times;</span>
+  <div class="modal-content">
+    <img id="modalImage" class="modal-image" src="" alt="">
+    <div id="modalCaption" class="modal-caption"></div>
+  </div>
+</div>
+
+<!-- রিলে পাসওয়ার্ড ভেরিফিকেশন মোডাল -->
+<div id="relayPasswordModal" class="password-modal-container">
+  <div class="password-modal-box">
+    <h3>অপারেশন নিশ্চিত করুন</h3>
+    <p>এই রিলেটি অপারেট করতে দয়া করে পাসওয়ার্ড দিন।</p>
+    <div class="password-input-group">
+      <input type="password" id="relayPasswordInput" placeholder="অপারেটিং পাসওয়ার্ড" autocomplete="off">
+    </div>
+    <div class="password-error-message" id="relayPasswordError"></div>
+    <div class="password-modal-buttons">
+      <button class="pro-btn modal-btn cancel-btn" onclick="cancelRelayOperation()">বাতিল</button>
+      <button class="pro-btn modal-btn confirm-btn" onclick="verifyAndOperateRelay()">নিশ্চিত করুন</button>
+    </div>
+  </div>
+</div>
+
+<!-- টাইমার সেটিং মোডাল -->
+<div id="timerModal" class="password-modal-container">
+  <div class="timer-modal-box">
+    <h3 id="timer-modal-title">টাইমার সেটিংস</h3>
+    <div class="timer-form">
+      <div class="timer-row">
+        <label>টাইমার স্ট্যাটাস</label>
+        <button id="timer-enabled-btn" class="modal-btn disabled" onclick="toggleTimerEnabled()">নিষ্ক্রিয়</button>
+      </div>
+      <div class="timer-row">
+        <label for="timer-online-time">অনলাইন হওয়ার সময়</label>
+        <input type="time" id="timer-online-time" class="timer-time-input" step="1">
+      </div>
+      <div class="timer-row">
+        <label for="timer-offline-time">অফলাইন হওয়ার সময়</label>
+        <input type="time" id="timer-offline-time" class="timer-time-input" step="1">
+      </div>
+      <div class="timer-row">
+        <label for="timer-relay-select">কোন রিলে কন্ট্রোল হবে?</label>
+        <select id="timer-relay-select" class="timer-select">
+            <option value="relay1">ডিভাইস ১ - রিলে ১</option>
+            <option value="relay2">ডিভাইস ১ - রিলে ২</option>
+            <option value="relay3">ডিভাইস ১ - রিলে ৩</option>
+            <option value="relay4">ডিভাইস ১ - রিলে ৪</option>
+            <option value="relay5">ডিভাইস ১ - রিলে ৫</option>
+            <option value="relay6">ডিভাইস ১ - রিলে ৬</option>
+            <option value="relay7">ডিভাইস ১ - রিলে ৭</option>
+            <option value="relay8">ডিভাইস ১ - রিলে ৮</option>
+        </select>
+      </div>
+    </div>
+    <p class="timer-note">পরিবর্তনগুলো সংরক্ষণ করতে আপনার অপারেটিং পাসওয়ার্ড প্রয়োজন হবে।</p>
+    <div class="password-input-group">
+      <input type="password" id="timerPasswordInput" placeholder="অপারেটিং পাসওয়ার্ড" autocomplete="off">
+    </div>
+    <div class="password-error-message" id="timerPasswordError"></div>
+    <div class="password-modal-buttons">
+      <button class="pro-btn modal-btn cancel-btn" onclick="closeTimerModal()">বাতিল</button>
+      <button class="pro-btn modal-btn confirm-btn" onclick="saveTimerSettings()">সংরক্ষণ করুন</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- Firebase SDK (এগুলো script.js এর আগে লোড হতে হবে) -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-messaging-compat.js"></script>
+
+<!-- কাস্টম JavaScript ফাইল লিংক করা হয়েছে -->
+<script src="script.js"></script>
+
+</body>
+</html>
