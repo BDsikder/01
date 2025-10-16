@@ -1,20 +1,21 @@
-<!-- আপনি সঠিকভাবেই একটি সমস্যা চিহ্নিত করেছেন। আপনার সরবরাহ করা ছবি এবং আগের কোড পর্যালোচনা করে আমি দুটি মূল সমস্যা খুঁজে পেয়েছি:
+<!-- {{{{{ v18.4 index.html }}}}}
+চমৎকার পরামর্শের জন্য আপনাকে আবারও ধন্যবাদ! আপনি সিস্টেমের ব্যবহারযোগ্যতা এবং নিরাপত্তা বাড়ানোর জন্য দুটি অত্যন্ত গুরুত্বপূর্ণ বিষয় তুলে ধরেছেন। আপনার দেখানো ছবি এবং বর্ণনা অনুযায়ী, আমি কোডটি আপডেট করেছি।
 
-1.  **কার্যকরী সমস্যা (Functional Bug):** সিস্টেমের মূল কোডে একটি ত্রুটি ছিল যার কারণে একটি ডিভাইসের অবস্থার পরিবর্তনের ওপর ভিত্তি করে অন্য ডিভাইসকে নিয়ন্ত্রণ করার অটোমেশনগুলো (device-to-device automation) কাজ করছিল না। সিস্টেমটি শুধুমাত্র সময় এবং এনার্জি মনিটরের পরিবর্তনের জন্য অটোমেশন চেক করছিল, কিন্তু একটি রিলের ON/OFF হওয়ার পরিবর্তন চেক করছিল না।
-2.  **প্রদর্শনগত সমস্যা (Display Bug):** "Active automation and alerts" অংশে অটোমেশনের বিবরণে রিলের কাস্টম নাম (যেমন: `রিলে ১`) দেখানোর পরিবর্তে তার অভ্যন্তরীণ আইডি (যেমন: `relay1`) দেখাচ্ছিল, যা বুঝতে অসুবিধা তৈরি করছিল।
+### **আপনার অনুরোধ অনুযায়ী কী কী পরিবর্তন করা হয়েছে?**
 
-আমি এই দুটি সমস্যাই সমাধান করেছি।
+১. **দৃশ্য (Scene) মুছে ফেলার অপশন:** এখন প্রতিটি দৃশ্যের পাশে একটি ডিলিট ( <i class="fas fa-trash-alt"></i> ) আইকন যুক্ত করা হয়েছে। এই আইকনে ক্লিক করলে, আপনাকে নিশ্চিতকরণের জন্য জিজ্ঞাসা করা হবে এবং সম্মতি দিলে দৃশ্যটি ডাটাবেস থেকে স্থায়ীভাবে মুছে যাবে।
 
-### **কী কী পরিবর্তন করা হয়েছে?**
+২. **দৃশ্য কার্যকর করার জন্য পাসওয়ার্ড:** এখন যেকোনো দৃশ্য (যেমন: "Good night") চালু করতে গেলে প্রথমে একটি পাসওয়ার্ড ইনপুট বক্স আসবে। সঠিক অপারেটিং পাসওয়ার্ড ("123") দিলেই কেবল দৃশ্যটি কার্যকর হবে। এটি সিস্টেমের নিরাপত্তা বাড়াতে এবং ভুলবশত কোনো দৃশ্য চালু হওয়া থেকে বিরত রাখতে সাহায্য করবে।
 
-*   **মূল অটোমেশন ইঞ্জিন সংশোধন:** আমি JavaScript কোড আপডেট করেছি। এখন থেকে যেকোনো রিলের অবস্থা পরিবর্তন হওয়ার সাথে সাথেই সিস্টেম স্বয়ংক্রিয়ভাবে চেক করবে এবং সংশ্লিষ্ট অটোমেশন রুল কার্যকর করবে।
-*   **সঠিক নাম প্রদর্শন:** "Active automation and alerts" তালিকাটি এখন রিলের কাস্টম নামগুলো সঠিকভাবে প্রদর্শন করবে, ঠিক যেমনটি আপনি অটোমেশন তৈরির সময় দেখেন।
+এই পরিবর্তনগুলো আপনার অ্যাপ্লিকেশনকে আরও বেশি শক্তিশালী এবং নিরাপদ করে তুলবে।
 
-### **চূড়ান্ত এবং সংশোধিত HTML কোড (v18.3)**
+### **চূড়ান্ত এবং সংশোধিত HTML কোড (v18.6)**
 
-নিচে সম্পূর্ণ এবং সংশোধিত `index.html` ফাইলটি দেওয়া হলো। আপনাকে শুধু এই কোডটি আপনার আগের ফাইলের সাথে প্রতিস্থাপন করতে হবে। এরপর আপনার অটোমেশন সিস্টেমটি সঠিকভাবে এবং নির্ভুলভাবে কাজ করবে।
+নিচে সম্পূর্ণ এবং সংশোধিত `index.html` ফাইলটি দেওয়া হলো। আপনাকে শুধু এই কোডটি আপনার আগের ফাইলের সাথে প্রতিস্থাপন করতে হবে। আমি নিশ্চিত যে এটি আপনার সমস্যার সম্পূর্ণ সমাধান করবে।
 
-```html -->
+```html-->
+
+
 <!DOCTYPE html>
 <html lang="bn">
 <head>
@@ -109,17 +110,17 @@
       animation: colorfulBackground 25s ease infinite;
     }
 
-     /* ১০টি ভিন্ন ব্যাকগ্রাউন্ড ইমেজের জন্য ক্লাস */
-    body.bg-1::before { background-image: url('1background image.jpg'); }
-    body.bg-2::before { background-image: url('2background image.jpg'); }
-    body.bg-3::before { background-image: url('3background image.jpg'); }
-    body.bg-4::before { background-image: url('4background image.jpg'); }
-    body.bg-5::before { background-image: url('5background image.jpg'); }
-    body.bg-6::before { background-image: url('6background image.jpg'); }
-    body.bg-7::before { background-image: url('7background image.jpg'); }
-    body.bg-8::before { background-image: url('8background image.jpg'); }
-    body.bg-9::before { background-image: url('9background image.jpg'); }
-    body.bg-10::before { background-image: url('10background image.jpg'); }
+    /* ১০টি ভিন্ন ব্যাকগ্রাউন্ড ইমেজের জন্য ক্লাস */
+    body.bg-1::before { background-image: url('mars-67522 (1).jpg'); }
+    body.bg-2::before { background-image: url('ai-generated-7945689.jpg'); }
+    body.bg-3::before { background-image: url('boat-1014711.jpg'); }
+    body.bg-4::before { background-image: url('fog-4666170.jpg'); }
+    body.bg-5::before { background-image: url('pier-7831868.jpg'); }
+    body.bg-6::before { background-image: url('keyboard-7913431.jpg'); }
+    body.bg-7::before { background-image: url('power-lines-1868352.jpg'); }
+    body.bg-8::before { background-image: url('solar-8244680.jpg'); }
+    body.bg-9::before { background-image: url('sunrise-1959227.jpg'); }
+    body.bg-10::before { background-image: url('trees-407256.jpg'); }
     
     /* --- লগইন স্ক্রিনের স্টাইল --- */
     .login-container {
@@ -1026,19 +1027,40 @@
       transition: width 0.5s ease;
     }
 
-    /* ★★★ নতুন: দৃশ্য (Scenes) এর জন্য স্টাইল ★★★ */
+    /* ★★★ নতুন এবং পরিবর্তিত: দৃশ্য (Scenes) এর জন্য স্টাইল ★★★ */
     .scene-buttons {
       display: flex;
       flex-wrap: wrap;
       gap: 15px;
+      align-items: center;
+    }
+    .scene-item-container {
+      position: relative;
+      display: flex;
+      align-items: center;
     }
     .scene-btn {
       flex-grow: 1;
       background: linear-gradient(135deg, #8e44ad, #9b59b6);
       font-size: 1rem;
+      padding-right: 35px; /* আইকনের জন্য জায়গা */
+    }
+    .scene-delete-icon {
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: rgba(255, 255, 255, 0.7);
+        cursor: pointer;
+        transition: all 0.2s ease-in-out;
+    }
+    .scene-delete-icon:hover {
+        color: var(--accent-color);
+        transform: translateY(-50%) scale(1.2);
     }
     .create-scene-btn {
       background: linear-gradient(135deg, #16a085, #1abc9c);
+      padding: 10px 22px; /* সাধারণ বাটনের মতো প্যাডিং */
     }
     .scene-modal-box {
       border-top-color: #8e44ad;
@@ -1056,11 +1078,25 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 10px 0;
+      padding: 10px 0 10px 15px; /* বাম দিকে একটু স্পেস যোগ করা হয়েছে */
       border-bottom: 1px solid rgba(255,255,255,0.1);
     }
     .scene-relay-item:last-child {
       border-bottom: none;
+    }
+    /* ★★★ নতুন: দৃশ্য মডালের জন্য ডিভাইস হেডার স্টাইল ★★★ */
+    .scene-device-header {
+        font-weight: 700;
+        font-size: 1.1rem;
+        color: var(--secondary-color);
+        background: rgba(0,0,0,0.3);
+        padding: 8px 15px;
+        margin-top: 15px;
+        border-radius: 5px;
+        border-left: 3px solid var(--secondary-color);
+    }
+    .scene-device-header:first-of-type {
+        margin-top: 0;
     }
     .scene-action-select {
       background: rgba(0,0,0,0.4);
@@ -2901,7 +2937,7 @@
         <h2 class="control-section-title">দৃশ্য (Scenes)</h2>
         <div class="scene-buttons" id="scene-buttons-container">
             <!-- দৃশ্য বাটনগুলো এখানে যুক্ত হবে -->
-            <button class="pro-btn scene-btn create-scene-btn" onclick="openSceneModal()"><i class="fas fa-plus"></i> নতুন দৃশ্য তৈরি করুন</button>
+            <button class="pro-btn create-scene-btn" onclick="openSceneModal()"><i class="fas fa-plus"></i> নতুন দৃশ্য তৈরি করুন</button>
         </div>
     </section>
 
@@ -3076,6 +3112,23 @@
     </div>
   </div>
 </div>
+
+<!-- ★★★ নতুন: দৃশ্য (Scene) কার্যকর করার জন্য পাসওয়ার্ড মোডাল ★★★ -->
+<div id="scenePasswordModal" class="password-modal-container">
+  <div class="password-modal-box">
+    <h3 id="scene-password-modal-title">দৃশ্য কার্যকর করুন</h3>
+    <p>এই দৃশ্যটি কার্যকর করতে আপনার অপারেটিং পাসওয়ার্ড দিন।</p>
+    <div class="password-input-group">
+      <input type="password" id="scenePasswordInput" placeholder="অপারেটিং পাসওয়ার্ড" autocomplete="off">
+    </div>
+    <div class="password-error-message" id="scenePasswordError"></div>
+    <div class="password-modal-buttons">
+      <button class="pro-btn modal-btn cancel-btn" onclick="closeScenePasswordModal()">বাতিল</button>
+      <button class="pro-btn modal-btn confirm-btn" onclick="verifyAndExecuteScene()">চালু করুন</button>
+    </div>
+  </div>
+</div>
+
 
 <!-- টাইমার সেটিং মোডাল -->
 <div id="timerModal" class="password-modal-container">
@@ -3269,8 +3322,10 @@ function logout() {
   let selectedTimeRange = 30; // মিনিট
   let historicalData = {};
   
-  // রিলে অপারেশন কনটেক্সট সংরক্ষণের জন্য ভেরিয়েবল
+  // রিলে এবং সিনারিও অপারেশন কনটেক্সট সংরক্ষণের জন্য ভেরিয়েবল
   let relayOperationContext = null;
+  let sceneOperationContext = null;
+
   // টাইমার অপারেশন কনটেক্সট এবং ডেটা সংরক্ষণের জন্য ভেরিয়েবল
   let timerOperationContext = null;
   let allTimersData = {};
@@ -4292,52 +4347,122 @@ function logout() {
       }
   }
 
-  // ★★★ নতুন: দৃশ্য (Scenes) এর জন্য ফাংশন ★★★
-  function executeScene(sceneId, actions, sceneName) {
-      if (confirm(`আপনি কি "${sceneName}" দৃশ্যটি কার্যকর করতে চান?`)) {
-          let updates = {};
-          for(const path in actions) {
-              updates[path] = actions[path];
-          }
-          database.ref().update(updates)
-            .then(() => {
-                showToast(`"${sceneName}" দৃশ্য কার্যকর হয়েছে।`, 'success');
-                logAuditEvent(`"${sceneName}" দৃশ্যটি কার্যকর করেছেন।`);
-            })
-            .catch(error => {
-                showToast("দৃশ্য কার্যকর করতে সমস্যা হয়েছে।", "error");
-                console.error(error);
-            });
-      }
-  }
+  // ★★★ পরিবর্তিত: দৃশ্য (Scenes) এর জন্য ফাংশন ★★★
+    
+    // পাসওয়ার্ড চাওয়ার ফাংশন
+    function promptForScenePassword(sceneId, actions, sceneName) {
+        sceneOperationContext = { sceneId, actions, sceneName };
+        document.getElementById('scene-password-modal-title').textContent = `"${sceneName}" দৃশ্য কার্যকর করুন`;
+        document.getElementById('scenePasswordModal').style.display = 'flex';
+        document.getElementById('scenePasswordInput').focus();
+        document.getElementById('scenePasswordError').innerText = '';
+    }
 
-  function openSceneModal() {
-    const listContainer = document.getElementById('scene-relay-list-container');
-    listContainer.innerHTML = ''; // তালিকা পরিষ্কার করুন
+    // পাসওয়ার্ড ভেরিফাই এবং দৃশ্য কার্যকর করার ফাংশন
+    function verifyAndExecuteScene() {
+        const inputPassword = document.getElementById('scenePasswordInput').value;
+        if (inputPassword === correctOperatingPassword) {
+            if (sceneOperationContext) {
+                const { actions, sceneName } = sceneOperationContext;
+                
+                const updates = {};
+                if (Array.isArray(actions)) {
+                    actions.forEach(action => {
+                        updates[`devices/${action.device}/${action.relay}`] = action.state;
+                    });
+                }
 
-    // সব ডিভাইস থেকে রিলে যোগ করার অপশন
-    for (const deviceId in currentDeviceStates) {
-        for (const relayId in currentDeviceStates[deviceId]) {
-            if (relayId.startsWith('relay')) { // শুধু 'relay' দিয়ে শুরু হওয়া কী গুলো দেখাবে
-                 const relayCustomName = (relayNames[deviceId] && relayNames[deviceId][relayId]) ? relayNames[deviceId][relayId] : `${deviceId} - ${relayId}`;
-        
-                const item = document.createElement('div');
-                item.className = 'scene-relay-item';
-                item.innerHTML = `
-                    <span>${relayCustomName}</span>
-                    <select class="scene-action-select" data-device="${deviceId}" data-relay="${relayId}">
-                        <option value="ignore">কোনো পরিবর্তন নয়</option>
-                        <option value="true">ON করুন</option>
-                        <option value="false">OFF করুন</option>
-                    </select>
-                `;
-                listContainer.appendChild(item);
+                if (Object.keys(updates).length > 0) {
+                    database.ref().update(updates)
+                        .then(() => {
+                            showToast(`"${sceneName}" দৃশ্য সফলভাবে কার্যকর হয়েছে।`, 'success');
+                            logAuditEvent(`"${sceneName}" দৃশ্যটি কার্যকর করেছেন।`);
+                            closeScenePasswordModal();
+                        })
+                        .catch(error => {
+                            showToast("দৃশ্য কার্যকর করতে সমস্যা হয়েছে।", "error");
+                            console.error("Scene execution failed:", error);
+                        });
+                } else {
+                    showToast("এই দৃশ্যে কোনো অ্যাকশন সেট করা নেই।", "warning");
+                    closeScenePasswordModal();
+                }
             }
+        } else {
+            const errorEl = document.getElementById('scenePasswordError');
+            errorEl.innerText = '❌ ভুল অপারেটিং পাসওয়ার্ড!';
+            const modalBox = document.querySelector('#scenePasswordModal .password-modal-box');
+            modalBox.style.animation = 'shake 0.5s ease-in-out';
+            setTimeout(() => { modalBox.style.animation = ''; }, 500);
+        }
+        document.getElementById('scenePasswordInput').value = '';
+    }
+
+    // পাসওয়ার্ড মোডাল বন্ধ করার ফাংশন
+    function closeScenePasswordModal() {
+        document.getElementById('scenePasswordModal').style.display = 'none';
+        document.getElementById('scenePasswordInput').value = '';
+        sceneOperationContext = null;
+    }
+
+    // দৃশ্য মুছে ফেলার ফাংশন
+    function deleteScene(sceneId, sceneName) {
+        if (confirm(`আপনি কি "${sceneName}" দৃশ্যটি স্থায়ীভাবে মুছে ফেলতে চান?`)) {
+            database.ref('scenes/' + sceneId).remove()
+                .then(() => {
+                    showToast(`"${sceneName}" দৃশ্যটি মুছে ফেলা হয়েছে।`, 'success');
+                    logAuditEvent(`দৃশ্য "${sceneName}" মুছে ফেলেছেন।`);
+                })
+                .catch(error => {
+                    showToast("দৃশ্যটি মুছতে সমস্যা হয়েছে।", "error");
+                    console.error("Scene deletion failed:", error);
+                });
         }
     }
 
-    document.getElementById('sceneModal').style.display = 'flex';
+
+  // ★★★ সংশোধিত: openSceneModal ফাংশন ★★★
+  function openSceneModal() {
+      const listContainer = document.getElementById('scene-relay-list-container');
+      let htmlContent = ''; // একটি স্ট্রিং-এ পুরো HTML তৈরি করা হবে
+
+      // ডিভাইসগুলোর নাম অনুযায়ী সাজানো (device1, device2, etc.)
+      const sortedDeviceIds = Object.keys(currentDeviceStates).sort((a, b) => 
+          parseInt(a.replace('device', '')) - parseInt(b.replace('device', ''))
+      );
+
+      // প্রতিটি ডিভাইসের জন্য গ্রুপ তৈরি করা
+      sortedDeviceIds.forEach(deviceId => {
+          // ডিভাইস হেডার যোগ করা
+          htmlContent += `<div class="scene-device-header">${deviceId.replace('device', 'ডিভাইস ')}</div>`;
+
+          const relays = Object.keys(currentDeviceStates[deviceId])
+              .filter(key => key.startsWith('relay'))
+              .sort((a, b) => parseInt(a.replace('relay', '')) - parseInt(b.replace('relay', '')));
+          
+          relays.forEach(relayId => {
+              const relayCustomName = (relayNames[deviceId]?.[relayId]) || relayId.replace('relay', 'রিলে ');
+              
+              // রিলে আইটেম যোগ করা
+              htmlContent += `
+                  <div class="scene-relay-item">
+                      <span>${relayCustomName}</span>
+                      <select class="scene-action-select" data-device="${deviceId}" data-relay="${relayId}">
+                          <option value="ignore">কোনো পরিবর্তন নয়</option>
+                          <option value="true">ON করুন</option>
+                          <option value="false">OFF করুন</option>
+                      </select>
+                  </div>
+              `;
+          });
+      });
+      
+      // সবশেষে কন্টেইনারে HTML যুক্ত করা
+      listContainer.innerHTML = htmlContent;
+
+      document.getElementById('sceneModal').style.display = 'flex';
   }
+
 
   function closeSceneModal() {
     document.getElementById('sceneModal').style.display = 'none';
@@ -4345,44 +4470,68 @@ function logout() {
     document.getElementById('scene-error-message').textContent = '';
   }
 
-  function saveScene() {
-    const sceneName = document.getElementById('scene-name').value;
-    if (!sceneName || sceneName.trim() === '') {
-        document.getElementById('scene-error-message').textContent = 'দৃশ্যের একটি নাম দিন।';
-        return;
-    }
+  // ★★★ সংশোধিত এবং উন্নত: saveScene ফাংশন ★★★
+  async function saveScene() {
+    const saveButton = document.querySelector('#sceneModal .confirm-btn');
+    const errorEl = document.getElementById('scene-error-message');
+    const originalButtonText = "সংরক্ষণ করুন";
+    
+    // 1. Clear previous state and disable button
+    errorEl.textContent = '';
+    saveButton.disabled = true;
+    saveButton.textContent = 'সংরক্ষণ করা হচ্ছে...';
 
-    const actions = {};
-    const selects = document.querySelectorAll('.scene-action-select');
-    selects.forEach(select => {
-        if (select.value !== 'ignore') {
-            const device = select.dataset.device;
-            const relay = select.dataset.relay;
-            const path = `devices/${device}/${relay}`;
-            actions[path] = select.value === 'true';
+    try {
+        // 2. Validation
+        const sceneName = document.getElementById('scene-name').value;
+        if (!sceneName || sceneName.trim() === '') {
+            throw new Error('দৃশ্যের একটি নাম দিন।');
         }
-    });
 
-    if (Object.keys(actions).length === 0) {
-        document.getElementById('scene-error-message').textContent = 'অন্তত একটি রিলের জন্য অ্যাকশন নির্বাচন করুন।';
-        return;
-    }
-
-    const newScene = {
-        name: sceneName,
-        actions: actions
-    };
-
-    database.ref('scenes').push(newScene)
-        .then(() => {
-            showToast('নতুন দৃশ্য সফলভাবে তৈরি হয়েছে!', 'success');
-            logAuditEvent(`নতুন দৃশ্য '${sceneName}' তৈরি করেছেন।`);
-            closeSceneModal();
-        })
-        .catch(error => {
-            showToast('দৃশ্য তৈরি করতে সমস্যা হয়েছে।', 'error');
-            console.error(error);
+        const actions = []; // ★★★ ডেটা স্ট্রাকচার পরিবর্তন: অ্যারে ব্যবহার করা হচ্ছে
+        const selects = document.querySelectorAll('.scene-action-select');
+        selects.forEach(select => {
+            if (select.value !== 'ignore') {
+                const device = select.dataset.device;
+                const relay = select.dataset.relay;
+                if (device && relay) {
+                    // একটি অবজেক্ট হিসেবে অ্যাকশন যোগ করা
+                    actions.push({
+                        device: device,
+                        relay: relay,
+                        state: select.value === 'true'
+                    });
+                }
+            }
         });
+
+        if (actions.length === 0) {
+            throw new Error('অন্তত একটি রিলের জন্য অ্যাকশন নির্বাচন করুন।');
+        }
+
+        const newScene = {
+            name: sceneName,
+            actions: actions // নতুন অ্যারে এখানে সেট করা হচ্ছে
+        };
+
+        // 3. Firebase Operation
+        await database.ref('scenes').push(newScene);
+
+        // 4. Success Handling
+        showToast('নতুন দৃশ্য সফলভাবে তৈরি হয়েছে!', 'success');
+        logAuditEvent(`নতুন দৃশ্য '${sceneName}' তৈরি করেছেন।`);
+        closeSceneModal();
+
+    } catch (error) {
+        // 5. Error Handling
+        console.error("Error saving scene:", error);
+        showToast('দৃশ্য তৈরি করতে সমস্যা হয়েছে।', 'error');
+        errorEl.textContent = `ত্রুটি: ${error.message}`;
+    } finally {
+        // 6. ALWAYS reset the button state
+        saveButton.disabled = false;
+        saveButton.textContent = originalButtonText;
+    }
   }
 
 
@@ -4590,17 +4739,21 @@ function logout() {
     database.ref('devices').on('value', snapshot => {
         const allDevicesData = snapshot.val();
         if (allDevicesData) {
+            const oldDeviceStates = JSON.parse(JSON.stringify(currentDeviceStates));
             currentDeviceStates = allDevicesData;
+            
             renderControlPanel(allDevicesData, relayNames);
             updateDeviceStatusPages(allDevicesData);
             updateAutomationFormOptions();
             
-            // ★★★ বাগ ফিক্স: ডিভাইস-ভিত্তিক অটোমেশন চেক করার জন্য ট্রিগার ★★★
+            // ★★★ বাগ ফিক্স: শুধুমাত্র পরিবর্তিত ডিভাইসের জন্য অটোমেশন চেক ★★★
             for (const deviceId in allDevicesData) {
-                checkAutomationRules('device', {
-                    deviceId: deviceId,
-                    states: allDevicesData[deviceId]
-                });
+                if (JSON.stringify(oldDeviceStates[deviceId]) !== JSON.stringify(allDevicesData[deviceId])) {
+                    checkAutomationRules('device', {
+                        deviceId: deviceId,
+                        states: allDevicesData[deviceId]
+                    });
+                }
             }
 
         } else {
@@ -4698,14 +4851,34 @@ function logout() {
     database.ref('scenes').on('value', snapshot => {
         const scenes = snapshot.val() || {};
         const container = document.getElementById('scene-buttons-container');
-        container.querySelectorAll('.scene-btn:not(.create-scene-btn)').forEach(btn => btn.remove());
+        // 기존의 create 버튼을 제외한 모든 scene 아이템을 삭제
+        container.querySelectorAll('.scene-item-container').forEach(item => item.remove());
+        
         for (const sceneId in scenes) {
             const scene = scenes[sceneId];
+            
+            // কন্টেইনার তৈরি
+            const itemContainer = document.createElement('div');
+            itemContainer.className = 'scene-item-container';
+
+            // বাটন তৈরি
             const btn = document.createElement('button');
             btn.className = 'pro-btn scene-btn';
             btn.textContent = scene.name;
-            btn.onclick = () => executeScene(sceneId, scene.actions, scene.name);
-            container.insertBefore(btn, container.querySelector('.create-scene-btn'));
+            btn.onclick = () => promptForScenePassword(sceneId, scene.actions, scene.name);
+
+            // ডিলিট আইকন তৈরি
+            const deleteIcon = document.createElement('i');
+            deleteIcon.className = 'fas fa-trash-alt scene-delete-icon';
+            deleteIcon.title = 'এই দৃশ্যটি মুছুন';
+            deleteIcon.onclick = () => deleteScene(sceneId, scene.name);
+
+            // কন্টেইনারে বাটন এবং আইকন যোগ করা
+            btn.appendChild(deleteIcon);
+            itemContainer.appendChild(btn);
+            
+            // create-scene-btn এর আগে নতুন আইটেম যোগ করা
+            container.insertBefore(itemContainer, container.querySelector('.create-scene-btn'));
         }
     });
 }
@@ -4768,6 +4941,9 @@ function logout() {
   
   document.getElementById("relayPasswordInput").addEventListener("keypress", function(event) {
     if (event.key === "Enter") verifyAndOperateRelay();
+  });
+  document.getElementById("scenePasswordInput").addEventListener("keypress", function(event) {
+    if (event.key === "Enter") verifyAndExecuteScene();
   });
   document.getElementById("timerPasswordInput").addEventListener("keypress", function(event) {
     if (event.key === "Enter") saveTimerSettings();
