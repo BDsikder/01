@@ -1,24 +1,21 @@
-<!--{{{{{{{v18.4 index.html}}}}}}} 
- 
+<!-- {{{{{{{{{ v18.4 index.html }}}}}}}}
+আপনি সঠিকভাবেই একটি সমস্যা চিহ্নিত করেছেন। আপনার সরবরাহ করা ছবি এবং আগের কোড পর্যালোচনা করে আমি দুটি মূল সমস্যা খুঁজে পেয়েছি:
 
+1.  **কার্যকরী সমস্যা (Functional Bug):** সিস্টেমের মূল কোডে একটি ত্রুটি ছিল যার কারণে একটি ডিভাইসের অবস্থার পরিবর্তনের ওপর ভিত্তি করে অন্য ডিভাইসকে নিয়ন্ত্রণ করার অটোমেশনগুলো (device-to-device automation) কাজ করছিল না। সিস্টেমটি শুধুমাত্র সময় এবং এনার্জি মনিটরের পরিবর্তনের জন্য অটোমেশন চেক করছিল, কিন্তু একটি রিলের ON/OFF হওয়ার পরিবর্তন চেক করছিল না।
+2.  **প্রদর্শনগত সমস্যা (Display Bug):** "Active automation and alerts" অংশে অটোমেশনের বিবরণে রিলের কাস্টম নাম (যেমন: `রিলে ১`) দেখানোর পরিবর্তে তার অভ্যন্তরীণ আইডি (যেমন: `relay1`) দেখাচ্ছিল, যা বুঝতে অসুবিধা তৈরি করছিল।
 
-অবশ্যই! আপনার অনুরোধটি আমি বুঝতে পেরেছি। আপনি চাইছেন কন্ট্রোল প্যানেলে (পেজ ৮) কোনো ডিভাইস বা রিলে যোগ করা হলে বা মুছে ফেলা হলে, সেই পরিবর্তনটি যেন অটোমেশন ও অ্যালার্ট তৈরির পেজেও (পেজ ৯) স্বয়ংক্রিয়ভাবে আপডেট হয়ে যায়।
-
-এই কাজটি করার জন্য আমি আপনার `index.html` ফাইলটি আপডেট করেছি। এখন থেকে কন্ট্রোল প্যানেলের যেকোনো পরিবর্তন অটোমেশন পেজের ডিভাইস এবং রিলে তালিকাভুক্ত ড্রপডাউন মেনুগুলোতে সঙ্গে সঙ্গে প্রতিফলিত হবে।
+আমি এই দুটি সমস্যাই সমাধান করেছি।
 
 ### **কী কী পরিবর্তন করা হয়েছে?**
 
-1.  **ডাইনামিক ড্রপডাউন মেনু:** অটোমেশন পেজের (পেজ ৯) 'IF' এবং 'THEN' সেকশনের ডিভাইস ও রিলে বাছাই করার ড্রপডাউন মেনুগুলোকে এখন সম্পূর্ণ ডাইনামিক করা হয়েছে। এগুলো এখন আর হার্ডকোডেড নয়, বরং সরাসরি Firebase ডেটাবেস থেকে তথ্য নিয়ে তৈরি হয়।
-2.  **স্বয়ংক্রিয় আপডেট:** যখনই আপনি কন্ট্রোল প্যানেল থেকে কোনো ডিভাইস বা রিলে যোগ করবেন বা মুছে ফেলবেন, Firebase-এর রিয়েল-টাইম ক্ষমতার কারণে অটোমেশন পেজের ড্রপডাউন মেনুগুলোও তাৎক্ষণিকভাবে আপডেট হয়ে যাবে।
-3.  **নতুন JavaScript ফাংশন:** এই কাজটি সম্পাদনের জন্য `updateAutomationFormOptions()` এবং `populateRelayDropdown()` নামে দুটি নতুন JavaScript ফাংশন যোগ করা হয়েছে, যা এই ডাইনামিক আপডেট নিশ্চিত করে।
+*   **মূল অটোমেশন ইঞ্জিন সংশোধন:** আমি JavaScript কোড আপডেট করেছি। এখন থেকে যেকোনো রিলের অবস্থা পরিবর্তন হওয়ার সাথে সাথেই সিস্টেম স্বয়ংক্রিয়ভাবে চেক করবে এবং সংশ্লিষ্ট অটোমেশন রুল কার্যকর করবে।
+*   **সঠিক নাম প্রদর্শন:** "Active automation and alerts" তালিকাটি এখন রিলের কাস্টম নামগুলো সঠিকভাবে প্রদর্শন করবে, ঠিক যেমনটি আপনি অটোমেশন তৈরির সময় দেখেন।
 
-### **চূড়ান্ত এবং পরিবর্তিত HTML কোড (v18.2)**
+### **চূড়ান্ত এবং সংশোধিত HTML কোড (v18.3)**
 
-নিচে সম্পূর্ণ এবং পরিবর্তিত `index.html` ফাইলটি দেওয়া হলো। আপনাকে শুধু এই কোডটি আপনার আগের ফাইলের সাথে প্রতিস্থাপন করতে হবে। এরপর থেকে আপনার সিস্টেমটি সঠিকভাবে কাজ করবে।
+নিচে সম্পূর্ণ এবং সংশোধিত `index.html` ফাইলটি দেওয়া হলো। আপনাকে শুধু এই কোডটি আপনার আগের ফাইলের সাথে প্রতিস্থাপন করতে হবে। এরপর আপনার অটোমেশন সিস্টেমটি সঠিকভাবে এবং নির্ভুলভাবে কাজ করবে।
 
 ```html -->
-
-
 <!DOCTYPE html>
 <html lang="bn">
 <head>
@@ -113,7 +110,7 @@
       animation: colorfulBackground 25s ease infinite;
     }
 
-    /* ১০টি ভিন্ন ব্যাকগ্রাউন্ড ইমেজের জন্য ক্লাস */
+     /* ১০টি ভিন্ন ব্যাকগ্রাউন্ড ইমেজের জন্য ক্লাস */
     body.bg-1::before { background-image: url('1background image.jpg'); }
     body.bg-2::before { background-image: url('2background image.jpg'); }
     body.bg-3::before { background-image: url('3background image.jpg'); }
@@ -149,7 +146,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background-image: url('Login image.jpg');
+      background-image: url('ai-generated-7945689.jpg');
       background-size: cover;
       background-position: center;
       filter: blur(5px) brightness(0.6);
@@ -4221,7 +4218,7 @@ function logout() {
   }
 
 
-  // ★★★ মূল অটোমেশন ইঞ্জিন (পরিবর্তিত) ★★★
+  // ★★★ মূল অটোমেশন ইঞ্জিন (পরিবর্তিত এবং সংশোধিত) ★★★
   function checkAutomationRules(source, data) {
     const now = new Date();
     const currentTime = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
@@ -4231,6 +4228,7 @@ function logout() {
       const rule = automationRules[ruleId];
       if (!rule.isEnabled) continue;
 
+      // রেট লিমিটিং: একই রুল ৩০ সেকেন্ডের মধ্যে একাধিকবার কার্যকর হবে না
       if (nowTimestamp - (rule.lastFired || 0) < 30000) continue;
 
       let triggerMet = false;
@@ -4242,14 +4240,13 @@ function logout() {
         if (rule.triggerCondition === '==' && value == rule.triggerValue) triggerMet = true;
       }
       
-      if (rule.triggerSource === 'time' && rule.triggerValue === currentTime) {
+      if (source === 'time' && rule.triggerSource === 'time' && rule.triggerValue === currentTime) {
         triggerMet = true;
       }
 
       if (source === 'device' && rule.triggerSource === 'device') {
         if (data.deviceId === rule.triggerDevice) {
            const deviceCurrentState = data.states[rule.triggerRelay];
-           // *** পরিবর্তন: 'rule.triggerCondition' এর পরিবর্তে 'triggerState' ব্যবহার করা হচ্ছে ***
            if (deviceCurrentState === rule.triggerState) {
              triggerMet = true;
            }
@@ -4597,7 +4594,16 @@ function logout() {
             currentDeviceStates = allDevicesData;
             renderControlPanel(allDevicesData, relayNames);
             updateDeviceStatusPages(allDevicesData);
-            updateAutomationFormOptions(); // ★★★ এখানে কল করা হয়েছে
+            updateAutomationFormOptions();
+            
+            // ★★★ বাগ ফিক্স: ডিভাইস-ভিত্তিক অটোমেশন চেক করার জন্য ট্রিগার ★★★
+            for (const deviceId in allDevicesData) {
+                checkAutomationRules('device', {
+                    deviceId: deviceId,
+                    states: allDevicesData[deviceId]
+                });
+            }
+
         } else {
             // যখন সব ডিভাইস মুছে ফেলা হয়
             currentDeviceStates = {};
@@ -4643,12 +4649,25 @@ function logout() {
         const rule = automationRules[ruleId];
         const card = document.createElement('div');
         card.className = `rule-card ${rule.isEnabled ? '' : 'disabled'}`;
+        
+        // ★★★ বাগ ফিক্স: রুলের বিবরণে কাস্টম নাম ব্যবহার করা ★★★
         let description = `<strong>${rule.name}:</strong> `;
-        if (rule.triggerSource === 'energy') { description += `যদি <strong>${rule.triggerMetric}</strong> এর মান <strong>${rule.triggerCondition} ${rule.triggerValue}</strong> হয়, `; }
-        else if (rule.triggerSource === 'time') { description += `যদি সময় <strong>${rule.triggerValue}</strong> হয়, `; }
-        else if (rule.triggerSource === 'device') { description += `যদি <strong>${rule.triggerDevice}</strong> এর <strong>${rule.triggerRelay}</strong> <strong>${rule.triggerState ? 'ON' : 'OFF'}</strong> হয়, `; }
-        description += `তবে <strong>${rule.actionDevice}</strong> এর <strong>${rule.actionRelay}</strong> কে <strong>${rule.actionState ? 'ON' : 'OFF'}</strong> করুন।`;
+        if (rule.triggerSource === 'energy') { 
+            description += `যদি <strong>${rule.triggerMetric}</strong> এর মান <strong>${rule.triggerCondition} ${rule.triggerValue}</strong> হয়, `; 
+        } else if (rule.triggerSource === 'time') { 
+            description += `যদি সময় <strong>${rule.triggerValue}</strong> হয়, `; 
+        } else if (rule.triggerSource === 'device') { 
+            const triggerDeviceName = rule.triggerDevice.replace('device', 'ডিভাইস ');
+            const triggerRelayName = (relayNames[rule.triggerDevice] && relayNames[rule.triggerDevice][rule.triggerRelay]) ? relayNames[rule.triggerDevice][rule.triggerRelay] : rule.triggerRelay;
+            description += `যদি <strong>${triggerDeviceName}</strong> এর <strong>'${triggerRelayName}'</strong> <strong>${rule.triggerState ? 'ON' : 'OFF'}</strong> হয়, `; 
+        }
+        
+        const actionDeviceName = rule.actionDevice.replace('device', 'ডিভাইস ');
+        const actionRelayName = (relayNames[rule.actionDevice] && relayNames[rule.actionDevice][rule.actionRelay]) ? relayNames[rule.actionDevice][rule.actionRelay] : rule.actionRelay;
+        description += `তবে <strong>${actionDeviceName}</strong> এর <strong>'${actionRelayName}'</strong> কে <strong>${rule.actionState ? 'ON' : 'OFF'}</strong> করুন।`;
+        
         if (rule.sendNotification) { description += ` এবং একটি নোটিফিকেশন পাঠান।`; }
+        
         card.innerHTML = `<div class="rule-description">${description}</div><div class="rule-actions"><button class="pro-btn rule-btn toggle-rule-btn ${rule.isEnabled ? 'enabled' : 'disabled'}" onclick="toggleRule('${ruleId}')">${rule.isEnabled ? 'নিষ্ক্রিয় করুন' : 'সক্রিয় করুন'}</button><button class="pro-btn rule-btn delete-btn" onclick="deleteRule('${ruleId}')">ডিলিট</button></div>`;
         listContainer.appendChild(card);
       }
