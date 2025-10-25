@@ -1,21 +1,23 @@
-অবশ্যই! আপনার অনুরোধ অনুযায়ী, আমি "Scenes" (দৃশ্য) মুছে ফেলার অপশন যোগ করেছি। এখন প্রতিটি দৃশ্যের পাশে একটি করে ডিলিট আইকন থাকবে, যেটিতে ক্লিক করে আপনি সহজেই যেকোনো দৃশ্য মুছে ফেলতে পারবেন।
+<!-- {{{{{{{[ v18.7 index.html ]}}}}}}}
+ 
 
-নিচে আপনার জন্য সম্পূর্ণ আপডেট করা কোডটি দেওয়া হলো। এই কোডে নতুন ডিলিট ফাংশনালিটি অন্তর্ভুক্ত করা হয়েছে।
+অবশ্যই, আমি আপনার অনুরোধটি বুঝতে পেরেছি। আপনি দৃশ্য (Scenes) চালানো বা মোছা এবং অন্যান্য সমস্ত ডিলিট অপশনের জন্য পাসওয়ার্ড ভেরিফিকেশন যোগ করতে চান।
 
-### **নতুন কী কী পরিবর্তন করা হয়েছে:**
+আমি আপনার `index.html` ফাইলটি আপডেট করেছি। এখন থেকে কোনো দৃশ্য (scene) চালানো বা মোছা, কোনো ডিভাইস বা রিলে মোছা, অথবা কোনো কাস্টম পেজ মোছার আগে একটি পাসওয়ার্ড ইনপুট বক্স আসবে। সঠিক পাসওয়ার্ড দিলেই কাজটি সম্পন্ন হবে।
 
-*   **ডিলিট আইকন:** "কন্ট্রোল প্যানেল" ট্যাবে প্রতিটি দৃশ্যের (Scene) বাটনের পাশে একটি করে ডিলিট আইকন (<i class="fas fa-trash-alt"></i>) যোগ করা হয়েছে।
-*   **ডিলিট ফাংশন:** একটি নতুন JavaScript ফাংশন `deleteScene()` তৈরি করা হয়েছে, যা আপনাকে দৃশ্য মুছে ফেলার আগে নিশ্চিত করতে বলবে (Confirmation alert)।
-*   **Firebase ইন্টিগ্রেশন:** আপনি কনফার্ম করলে, দৃশ্যটি আপনার Firebase ডেটাবেস থেকে স্থায়ীভাবে মুছে যাবে।
-*   **অডিট লগ:** কোনো দৃশ্য মুছে ফেলা হলে, সেই কার্যকলাপের একটি রেকর্ড "অডিট লগ" (Audit Log) ট্যাবে সংরক্ষিত থাকবে, যাতে আপনি ট্র্যাক রাখতে পারেন।
+### **কী পরিবর্তন করা হয়েছে:**
 
----
+*   **HTML:** একটি নতুন, সাধারণ ব্যবহারযোগ্য পাসওয়ার্ড মোডাল (`actionPasswordModal`) যোগ করা হয়েছে, যা সব ধরনের ডিলিট এবং দৃশ্য (Scene) চালানোর কাজের জন্য ব্যবহৃত হবে।
+*   **JavaScript:**
+    *   একটি নতুন ফাংশন `promptForActionPassword()` তৈরি করা হয়েছে। এই ফাংশনটি একটি কাজ (যেমন ডিলিট বা সিন চালানো) করার আগে পাসওয়ার্ড চায়।
+    *   `executeScene()`, `deleteScene()`, `deleteDevice()`, `deleteRelay()`, এবং `deleteCustomPage()` ফাংশনগুলোকে আপডেট করা হয়েছে যাতে তারা `confirm()` ডায়ালগের পরিবর্তে নতুন পাসওয়ার্ড মোডালটি ব্যবহার করে।
+    *   সঠিক পাসওয়ার্ড (`123`) দিলেই কেবল কাজটি সম্পন্ন হবে।
 
-### **চূড়ান্ত এবং সম্পূর্ণ HTML কোড (v18.7)**
+### **চূড়ান্ত এবং সম্পূর্ণ HTML কোড (v18.8)**
 
-আপনাকে শুধু এই সম্পূর্ণ কোডটি কপি করে আপনার `index.html` ফাইলে প্রতিস্থাপন করতে হবে।
+আপনাকে শুধু এই সম্পূর্ণ কোডটি কপি করে আপনার `index.html` ফাইলে প্রতিস্থাপন করতে হবে। এরপর আপনার সব সুরক্ষিত অপারেশন পাসওয়ার্ড দ্বারা নিয়ন্ত্রিত হবে।
 
-```html
+```html -->
 <!DOCTYPE html>
 <html lang="bn">
 <head>
@@ -649,9 +651,9 @@
     }
 
    .timer-status {
-    font-size: 01.5rem;
-    color: #3dff00;
-    text-shadow: 0 0 5px #a01616;
+    font-size: 0.8rem; /* ফন্ট সাইজ সামঞ্জস্য করা হয়েছে */
+    color: #aaeec4;
+    text-shadow: 0 0 5px #106300;
     font-weight: 500;
     text-align: center;
     padding: 5px;
@@ -1592,6 +1594,7 @@
         display: flex;
         align-items: center;
     }
+    /* ★★★ পরিবর্তিত: তারিখ ও সময়ের জন্য স্টাইল ★★★ */
     .device-time-info {
         font-size: 0.8rem;
         opacity: 0.8;
@@ -1599,6 +1602,14 @@
     }
     .device-time-info span {
         display: block;
+    }
+    .device-time-info .fa-calendar-alt {
+        color: var(--secondary-color);
+        margin-right: 5px;
+    }
+    .device-time-info .fa-clock {
+        color: var(--info-color);
+        margin-right: 5px;
     }
     .toggle-switch-body {
         width: 100%;
@@ -3188,6 +3199,23 @@
   </div>
 </div>
 
+<!-- ★★★ নতুন: সাধারণ অ্যাকশন পাসওয়ার্ড মোডাল ★★★ -->
+<div id="actionPasswordModal" class="password-modal-container">
+  <div class="password-modal-box">
+    <h3 id="action-modal-title">অ্যাকশন নিশ্চিত করুন</h3>
+    <p id="action-modal-description">এই কাজটি সম্পন্ন করতে আপনার অপারেটিং পাসওয়ার্ড দিন।</p>
+    <div class="password-input-group">
+      <input type="password" id="actionPasswordInput" placeholder="অপারেটিং পাসওয়ার্ড" autocomplete="off">
+    </div>
+    <div class="password-error-message" id="actionPasswordError"></div>
+    <div class="password-modal-buttons">
+      <button class="pro-btn modal-btn cancel-btn" onclick="cancelAction()">বাতিল</button>
+      <button class="pro-btn modal-btn confirm-btn" onclick="verifyAndExecuteAction()">নিশ্চিত করুন</button>
+    </div>
+  </div>
+</div>
+
+
 <!-- টাইমার সেটিং মোডাল -->
 <div id="timerModal" class="password-modal-container">
   <div class="timer-modal-box">
@@ -3361,13 +3389,14 @@ function loginWithFirebase() {
                 appContainer.style.animation = "fadeIn 0.5s ease forwards";
                 
                 // সফল লগইনের পর প্রয়োজনীয় সব ফাংশন কল করা হচ্ছে
-                setupFirebaseListeners(); // ★★★ পরিবর্তিত: এখন একটি প্রধান ফাংশন সব লিসেনার সেট করবে
+                setupFirebaseListeners();
                 initializeCharts();
                 loadThemePreference();
                 loadBackgroundPreference();
                 initEnergyCharts();
                 initAdvancedEnergyChart();
                 setInterval(updateAllTimerDisplays, 1000);
+                setInterval(updateAllDateTimeDisplays, 1000); // ★★★ নতুন: প্রতি সেকেন্ডে তারিখ ও সময় আপডেট
                 updateTriggerOptions();
                 initializeNotifications();
 
@@ -3423,12 +3452,13 @@ function logout() {
   
   // অটোমেশন রুল ও ডেটা সংরক্ষণের জন্য ভেরিয়েবল
   let currentEnergyData = {};
-  let currentDeviceStates = {}; // ★★★ এখন এটি একটি প্রধান লিসেনার দ্বারা আপডেট হবে
+  let currentDeviceStates = {};
   let automationRules = {};
-  // ★★★ রিলের কাস্টম নাম সংরক্ষণের জন্য ভেরিয়েবল ★★★
   let relayNames = {};
-  // ★★★ নতুন: কাস্টম পেজ এডিট করার জন্য গ্লোবাল ভ্যারিয়েবল ★★★
   let currentPageToEdit = null;
+
+  // ★★★ নতুন: অ্যাকশন কনফার্মেশন এর জন্য ভেরিয়েবল ★★★
+  let actionToConfirmCallback = null;
 
 
   // ইমেজ মোডাল ফাংশন
@@ -3489,23 +3519,19 @@ function logout() {
 
   // পেইজ পরিবর্তন ফাংশন
   function showPage(pageId) {
-    // সকল ট্যাব থেকে 'active' ক্লাস মুছে ফেলা হচ্ছে
     document.querySelectorAll('.nav-tabs .nav-tab').forEach(tab => {
       tab.classList.remove('active');
     });
     
-    // যে ট্যাবে ক্লিক করা হয়েছে, সেটিতে 'active' ক্লাস যোগ করা হচ্ছে
-    const activeTab = document.querySelector(`.nav-tab[onclick="showPage('${pageId}')"]`);
+    const activeTab = document.querySelector(`.nav-tab[onclick*="'${pageId}'"]`);
     if(activeTab) {
         activeTab.classList.add('active');
     }
     
-    // সকল পেইজ লুকিয়ে রাখা হচ্ছে
     document.querySelectorAll('.device-page').forEach(page => {
       page.classList.remove('active');
     });
     
-    // নির্দিষ্ট পেইজটি দেখানো হচ্ছে
     const activePage = document.getElementById(pageId);
     if(activePage){
         activePage.classList.add('active');
@@ -3516,7 +3542,6 @@ function logout() {
     }
   }
   
-  // ★★★ পরিবর্তিত: রিলে কন্ট্রোল ফাংশনে অডিট লগ যুক্ত করা হয়েছে ★★★
   function controlRelay(device, relay, element) {
     const state = element.checked;
     console.log(`Controlling ${device}/${relay} to ${state}`);
@@ -3529,13 +3554,10 @@ function logout() {
     const logMessage = `${device} এর ${relayCustomName} ${state ? 'চালু' : 'বন্ধ'} করা হয়েছে`;
     addLogEntry(device, logMessage, state ? 'success' : 'error');
 
-    // অডিট লগের জন্য টেক্সট তৈরি
     const auditActionText = `ডিভাইস ${device.replace('device', '')}-এর '${relayCustomName}' ${state ? 'চালু' : 'বন্ধ'} করেছেন।`;
     logAuditEvent(auditActionText);
   }
 
-
-  // ★★★ পরিবর্তিত: ডিভাইস কন্ট্রোল ফাংশনে অডিট লগ যুক্ত করা হয়েছে ★★★
   function controlDevice(device, load, state) {
     const stateText = state === 1 ? 'চালু' : (state === 2 ? 'সতর্কতা মোডে' : 'বন্ধ');
     const logMessage = `${device} এর ${load} ${stateText} করা হয়েছে`;
@@ -3546,12 +3568,10 @@ function logout() {
     
     addLogEntry(device, logMessage, state === 1 ? 'success' : state === 2 ? 'warning' : 'error');
     
-    // অডিট লগের জন্য টেক্সট
     const auditActionText = `ডিভাইস ${device.replace('device', '')}-এর '${load}' ${stateText} সেট করেছেন।`;
     logAuditEvent(auditActionText);
   }
 
-  // লগ এন্ট্রি যোগ করার ফাংশন
   function addLogEntry(device, message, type) {
     const logIdMap = {
       'device1': 'device1-logs',
@@ -3582,7 +3602,6 @@ function logout() {
     }
   }
 
-  // ডিভাইস চার্ট ইনিশিয়ালাইজ করার ফাংশন
   function initializeCharts() {
     for(let i = 1; i <= 4; i++) {
       const ctx = document.getElementById(`device${i}-chart`).getContext('2d');
@@ -3604,7 +3623,6 @@ function logout() {
           responsive: true,
           plugins: {
             legend: {
-              // Color will be set by global defaults
             }
           }
         }
@@ -3612,7 +3630,6 @@ function logout() {
     }
   }
   
-  // ★★★ নতুন: এই ফাংশনটি এখন একটি সেন্ট্রাল লিসেনার থেকে কল হবে ★★★
   function updateDeviceStatusPages(allDevicesData) {
       for (const deviceKey in allDevicesData) {
           const data = allDevicesData[deviceKey];
@@ -3663,8 +3680,6 @@ function logout() {
       }
   }
 
-
-  // ★★★ পরিবর্তিত: থিম টগল ফাংশন ★★★
   function toggleTheme() {
     const body = document.body;
     const themeToggle = document.getElementById('theme-toggle');
@@ -3672,25 +3687,21 @@ function logout() {
     if(themeToggle.checked) {
         body.classList.add('light-theme');
         localStorage.setItem('theme', 'light');
-        // চার্টের রঙ আপডেট করা
         Chart.defaults.color = '#2c3e50';
         Chart.defaults.borderColor = 'rgba(0, 0, 0, 0.1)';
     } else {
         body.classList.remove('light-theme');
         localStorage.setItem('theme', 'dark');
-        // চার্টের রঙ আপডেট করা
         Chart.defaults.color = '#FFFFFF';
         Chart.defaults.borderColor = 'rgba(255, 255, 255, 0.1)';
     }
 
-    // সমস্ত চার্ট আপডেট করা
     const allCharts = [...Object.values(deviceCharts), ...Object.values(energyCharts), advancedEnergyChart];
     allCharts.forEach(chart => {
         if(chart) chart.update();
     });
   }
 
-  // ★★★ পরিবর্তিত: থিম প্রিফারেন্স লোড করার ফাংশন ★★★
   function loadThemePreference() {
     const savedTheme = localStorage.getItem('theme') || 'dark';
     const themeToggle = document.getElementById('theme-toggle');
@@ -3698,21 +3709,18 @@ function logout() {
     if(savedTheme === 'light') {
         document.body.classList.add('light-theme');
         themeToggle.checked = true;
-        // চার্টের জন্য ডিফল্ট রঙ সেট করা
-        Chart.defaults.color = '#2c3e50'; // লাইট থিমের জন্য কালো রঙ
-        Chart.defaults.borderColor = 'rgba(0, 0, 0, 0.1)'; // গ্রিডের জন্য হালকা কালো
+        Chart.defaults.color = '#2c3e50';
+        Chart.defaults.borderColor = 'rgba(0, 0, 0, 0.1)';
     } else {
         document.body.classList.remove('light-theme');
         themeToggle.checked = false;
-        // চার্টের জন্য ডিফল্ট রঙ সেট করা
-        Chart.defaults.color = '#FFFFFF'; // ডার্ক থিমের জন্য সাদা রঙ
-        Chart.defaults.borderColor = 'rgba(255, 255, 255, 0.1)'; // গ্রিডের জন্য হালকা সাদা
+        Chart.defaults.color = '#FFFFFF';
+        Chart.defaults.borderColor = 'rgba(255, 255, 255, 0.1)';
     }
     
     themeToggle.addEventListener('change', toggleTheme);
   }
   
-  // --- ব্যাকগ্রাউন্ড ম্যানেজমেন্ট ফাংশন ---
   function changeBackground() {
     currentBackgroundIndex = (currentBackgroundIndex + 1) % totalBackgrounds;
     applyBackground(currentBackgroundIndex);
@@ -3734,7 +3742,6 @@ function logout() {
     applyBackground(indexToApply);
   }
 
-  // এনার্জি চার্ট ইনিশিয়ালাইজ করার ফাংশন
   function initEnergyCharts() {
     const chartsToInit = {
         'voltageChart': 'voltage-chart',
@@ -3766,16 +3773,12 @@ function logout() {
     });
   }
 
-  // ★★★ পরিবর্তিত: চার্ট অপশন ফাংশন ★★★
   function getChartOptions() {
     return {
         responsive: true,
-        // No need to specify colors here, they will use Chart.js global defaults
     };
   }
 
-
-  // এনার্জি ডাটা আপডেট করার ফাংশন
   function updateEnergyData(data) {
     currentEnergyData = data;
 
@@ -3875,10 +3878,43 @@ function logout() {
     relayOperationContext = null;
   }
   
+  // ★★★ নতুন: সাধারণ অ্যাকশন পাসওয়ার্ড ফাংশন ★★★
+  function promptForActionPassword(title, description, callback) {
+      document.getElementById('action-modal-title').textContent = title;
+      document.getElementById('action-modal-description').textContent = description;
+      actionToConfirmCallback = callback;
+      document.getElementById('actionPasswordModal').style.display = 'flex';
+      document.getElementById('actionPasswordInput').focus();
+      document.getElementById('actionPasswordError').textContent = '';
+  }
+
+  function verifyAndExecuteAction() {
+      const inputPassword = document.getElementById('actionPasswordInput').value;
+      if (inputPassword === correctOperatingPassword) {
+          if (typeof actionToConfirmCallback === 'function') {
+              actionToConfirmCallback();
+          }
+          cancelAction(); // Close modal on success
+      } else {
+          const errorEl = document.getElementById('actionPasswordError');
+          errorEl.textContent = '❌ ভুল অপারেটিং পাসওয়ার্ড!';
+          const modalBox = document.querySelector('#actionPasswordModal .password-modal-box');
+          modalBox.classList.add('shake-animation');
+          setTimeout(() => { modalBox.classList.remove('shake-animation'); }, 500);
+      }
+      document.getElementById('actionPasswordInput').value = '';
+  }
+
+  function cancelAction() {
+      document.getElementById('actionPasswordModal').style.display = 'none';
+      document.getElementById('actionPasswordInput').value = '';
+      actionToConfirmCallback = null;
+  }
+
+
   function updateAllTimerDisplays() {
       for (const timerKey in allTimersData) {
           const timerData = allTimersData[timerKey];
-          // ★★★ পরিবর্তিত: আইডি এখন ডিভাইস এবং রিলে উভয়ই ব্যবহার করে
           const statusElement = document.getElementById(`timer-status-${timerData.device}-${timerData.relay}`);
           if (statusElement) {
               if (timerData.enabled) {
@@ -3927,22 +3963,23 @@ function logout() {
       };
   }
 
-  function openTimerModal(deviceId, relayId) {
-      const timerKey = `${deviceId}-${relayId}`;
-      timerOperationContext = timerKey;
-      const timerData = allTimersData[timerKey] || {};
-      
-      const customName = (relayNames[deviceId] && relayNames[deviceId][relayId]) ? relayNames[deviceId][relayId] : `${deviceId} - ${relayId}`;
-      document.getElementById('timer-modal-title').textContent = `${customName} - টাইমার সেটিংস`;
-      
-      document.getElementById('timer-online-time').value = timerData.online || '00:00:00';
-      document.getElementById('timer-offline-time').value = timerData.offline || '00:00:00';
-      
-      const enabledBtn = document.getElementById('timer-enabled-btn');
-      updateEnabledButton(btn, !!timerData.enabled);
+    function openTimerModal(deviceId, relayId) {
+        const timerKey = `${deviceId}-${relayId}`;
+        timerOperationContext = timerKey;
+        const timerData = allTimersData[timerKey] || {};
+        
+        const customName = (relayNames[deviceId] && relayNames[deviceId][relayId]) ? relayNames[deviceId][relayId] : `${deviceId} - ${relayId}`;
+        document.getElementById('timer-modal-title').textContent = `${customName} - টাইমার সেটিংস`;
+        
+        document.getElementById('timer-online-time').value = timerData.online || '00:00:00';
+        document.getElementById('timer-offline-time').value = timerData.offline || '00:00:00';
+        
+        const enabledBtn = document.getElementById('timer-enabled-btn');
+        updateEnabledButton(enabledBtn, !!timerData.enabled);
 
-      document.getElementById('timerModal').style.display = 'flex';
-  }
+        document.getElementById('timerModal').style.display = 'flex';
+    }
+
 
   function updateEnabledButton(btn, isEnabled) {
       btn.textContent = isEnabled ? 'সক্রিয়' : 'নিষ্ক্রিয়';
@@ -3963,7 +4000,6 @@ function logout() {
       timerOperationContext = null;
   }
   
-  // ★★★ পরিবর্তিত: টাইমার সেটিংসে অডিট লগ যুক্ত করা হয়েছে ★★★
   function saveTimerSettings() {
       const password = document.getElementById('timerPasswordInput').value;
       if (password !== correctOperatingPassword) {
@@ -3985,15 +4021,14 @@ function logout() {
               enabled: isEnabled,
               online: onlineTime,
               offline: offlineTime,
-              device: deviceId, // device এবং relay যোগ করা হয়েছে
+              device: deviceId,
               relay: relayId
           };
           
-          database.ref('timers/' + timerOperationContext).set(updates) // .update() এর পরিবর্তে .set() ব্যবহার করা ভালো
+          database.ref('timers/' + timerOperationContext).set(updates)
               .then(() => {
                   console.log('Timer settings saved successfully!');
                   
-                  // অডিট লগ তৈরি
                   const auditActionText = `'${timerOperationContext}' এর জন্য টাইমার সেটিংস পরিবর্তন করেছেন। স্ট্যাটাস: ${isEnabled ? 'সক্রিয়' : 'নিষ্ক্রিয়'}, অন-টাইম: ${onlineTime}, অফ-টাইম: ${offlineTime}।`;
                   logAuditEvent(auditActionText);
                   
@@ -4091,10 +4126,7 @@ function logout() {
     win.focus();
     setTimeout(() => { win.print(); win.close(); }, 500);
   }
-
-  // --- ★★★ নতুন এবং পরিবর্তিত: নোটিফিকেশন, অটোমেশন এবং ইন্টেলিজেন্স ফাংশন ★★★ ---
   
-  // অন-স্ক্রিন টোস্ট নোটিফিকেশন দেখানোর ফাংশন
   function showToast(message, type = 'info') {
     const container = document.getElementById('toast-container');
     const toast = document.createElement('div');
@@ -4112,7 +4144,6 @@ function logout() {
     }, 5000);
   }
 
-  // ব্রাউজার নোটিফিকেশন দেখানোর ফাংশন
   function displayNotification(title, body) {
       if ('Notification' in window && Notification.permission === 'granted') {
           navigator.serviceWorker.ready.then(registration => {
@@ -4125,7 +4156,6 @@ function logout() {
       }
   }
 
-  // নোটিফিকেশন সিস্টেম চালু এবং অনুমতি চাওয়ার ফাংশন
   function initializeNotifications() {
       messaging.onMessage((payload) => {
           console.log('Message received. ', payload);
@@ -4154,10 +4184,9 @@ function logout() {
       }
   }
 
-  // অ্যানোমালি বা অস্বাভাবিকতা শনাক্তকরণ
   function checkForAnomalies(power) {
     const alertDiv = document.getElementById('anomaly-alert');
-    const powerThreshold = 5000; // ওয়াট
+    const powerThreshold = 5000;
 
     if (power > powerThreshold) {
       const message = `অস্বাভাবিকভাবে উচ্চ পাওয়ার (${power.toFixed(0)} W) ব্যবহার শনাক্ত হয়েছে।`;
@@ -4168,7 +4197,6 @@ function logout() {
     }
   }
   
-  // ★★★ নতুন: একটি রিলে ড্রপডাউন পপুলেট করার জন্য হেল্পার ফাংশন ★★★
   function populateRelayDropdown(deviceSelectId, relaySelectId) {
       const deviceSelect = document.getElementById(deviceSelectId);
       const relaySelect = document.getElementById(relaySelectId);
@@ -4200,14 +4228,12 @@ function logout() {
       }
   }
 
-  // ★★★ নতুন: অটোমেশন ফর্মের সমস্ত ড্রপডাউন আপডেট করার জন্য প্রধান ফাংশন ★★★
   function updateAutomationFormOptions() {
     const devices = currentDeviceStates ? Object.keys(currentDeviceStates).sort((a, b) => parseInt(a.replace('device', '')) - parseInt(b.replace('device', ''))) : [];
     const actionDeviceSelect = document.getElementById('action-device');
 
     if (!actionDeviceSelect) return;
 
-    // 'THEN' সেকশনের ডিভাইস ড্রপডাউন পপুলেট করা
     const currentActionDevice = actionDeviceSelect.value;
     actionDeviceSelect.innerHTML = '';
     devices.forEach(deviceId => {
@@ -4221,15 +4247,12 @@ function logout() {
         actionDeviceSelect.value = currentActionDevice;
     }
 
-    // নির্বাচিত ডিভাইসের উপর ভিত্তি করে রিলে ড্রপডাউন পপুলেট করা
     populateRelayDropdown('action-device', 'action-relay');
     
-    // 'IF' সেকশনের অপশনগুলোও আপডেট করা
     updateTriggerOptions();
   }
 
 
-  // ★★★ পরিবর্তিত: অটোমেশন রুল বিল্ডারের অপশন আপডেট ফাংশন (এখন সম্পূর্ণ ডাইনামিক) ★★★
   function updateTriggerOptions() {
     const source = document.getElementById('trigger-source').value;
     const container = document.getElementById('trigger-options-container');
@@ -4277,7 +4300,6 @@ function logout() {
         <div class="form-group">
           <label for="trigger-relay">রিলে/লোড</label>
           <select id="trigger-relay">
-            <!-- অপশনগুলো populateRelayDropdown দ্বারা তৈরি হবে -->
           </select>
         </div>
         <div class="form-group">
@@ -4291,20 +4313,16 @@ function logout() {
     }
     container.innerHTML = html;
     
-    // যদি উৎস 'device' হয়, তাহলে রিলে ড্রপডাউনটি সাথে সাথে পপুলেট করা
     if (source === 'device' && devices.length > 0) {
         populateRelayDropdown('trigger-device', 'trigger-relay');
     }
   }
 
   
-  // নোটিফিকেশন বার্তা বক্স দেখানো/লুকানোর জন্য ইভেন্ট লিসেনার
   document.getElementById('send-notification-checkbox').addEventListener('change', function() {
     document.getElementById('notification-message-group').style.display = this.checked ? 'flex' : 'none';
   });
 
-
-  // ★★★ পরিবর্তিত: অটোমেশন রুলে অডিট লগ যুক্ত করা হয়েছে এবং ফায়ারবেস স্ট্রাকচার অনুযায়ী পরিবর্তন করা হয়েছে ★★★
   function saveAutomationRule(event) {
     event.preventDefault();
     const sendNotification = document.getElementById('send-notification-checkbox').checked;
@@ -4330,14 +4348,12 @@ function logout() {
     } else if (rule.triggerSource === 'device') {
       rule.triggerDevice = document.getElementById('trigger-device').value;
       rule.triggerRelay = document.getElementById('trigger-relay').value;
-      // *** পরিবর্তন: 'triggerCondition' এর পরিবর্তে 'triggerState' ব্যবহার করা হচ্ছে ***
       rule.triggerState = document.getElementById('trigger-condition').value === 'true';
     }
 
     database.ref('automationRules').push(rule)
       .then(() => {
         showToast('অটোমেশন রুল সফলভাবে সংরক্ষিত হয়েছে!', 'success');
-        // অডিট লগ
         logAuditEvent(`নতুন অটোমেশন রুল '${rule.name}' তৈরি করেছেন।`);
         document.querySelector('.rule-builder-form').reset();
         document.getElementById('notification-message-group').style.display = 'none';
@@ -4345,7 +4361,6 @@ function logout() {
       .catch(error => console.error("রুল সংরক্ষণ করতে সমস্যা হয়েছে: ", error));
   }
   
-  // রুল সক্রিয় বা নিষ্ক্রিয় করা
   function toggleRule(ruleId) {
     const rule = automationRules[ruleId];
     const newState = !rule.isEnabled;
@@ -4354,24 +4369,24 @@ function logout() {
     });
   }
 
-  // রুল ডিলিট করা
   function deleteRule(ruleId) {
-    if (confirm('আপনি কি সত্যিই এই রুলটি মুছে ফেলতে চান?')) {
-      const ruleName = automationRules[ruleId].name;
-      database.ref(`automationRules/${ruleId}`).remove().then(() => {
-          logAuditEvent(`'${ruleName}' রুলটি মুছে ফেলেছেন।`);
-      });
-    }
+    const ruleName = automationRules[ruleId].name;
+    promptForActionPassword(
+      'রুল মুছুন',
+      `আপনি কি সত্যিই "${ruleName}" রুলটি মুছে ফেলতে চান?`,
+      () => {
+        database.ref(`automationRules/${ruleId}`).remove().then(() => {
+            logAuditEvent(`'${ruleName}' রুলটি মুছে ফেলেছেন।`);
+        });
+      }
+    );
   }
   
-  // একটি নোটিফিকেশন ট্রিগার করার ফাংশন
   function triggerNotification(title, body) {
       showToast(body, 'info');
       displayNotification(title, body);
   }
 
-
-  // ★★★ মূল অটোমেশন ইঞ্জিন (পরিবর্তিত এবং সংশোধিত) ★★★
   function checkAutomationRules(source, data) {
     const now = new Date();
     const currentTime = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
@@ -4381,7 +4396,6 @@ function logout() {
       const rule = automationRules[ruleId];
       if (!rule.isEnabled) continue;
 
-      // রেট লিমিটিং: একই রুল ৩০ সেকেন্ডের মধ্যে একাধিকবার কার্যকর হবে না
       if (nowTimestamp - (rule.lastFired || 0) < 30000) continue;
 
       let triggerMet = false;
@@ -4421,14 +4435,12 @@ function logout() {
         const logMessage = `অটোমেশন "${rule.name}" অনুযায়ী ${rule.actionDevice} এর ${rule.actionRelay} ${rule.actionState ? 'ON' : 'OFF'} করা হয়েছে।`;
         addLogEntry(rule.actionDevice.replace('device','device'), logMessage, 'info');
         
-        // ★★★ নতুন: অটোমেশন কার্যকর হলে অডিট লগ তৈরি ★★★
         logAuditEvent(logMessage, "সিস্টেম অটোমেশন");
       }
     }
   }
   setInterval(() => checkAutomationRules('time', {}), 60000);
   
-  // ★★★ নতুন: রিলের নাম পরিবর্তন করার ফাংশন ★★★
   function editRelayName(deviceId, relayId) {
       const currentName = (relayNames[deviceId] && relayNames[deviceId][relayId]) ? relayNames[deviceId][relayId] : relayId;
       const newName = prompt(`'${currentName}' এর জন্য নতুন নাম দিন:`, currentName);
@@ -4445,57 +4457,53 @@ function logout() {
               });
       }
   }
-
-  // ★★★ সংশোধিত: দৃশ্য (Scenes) এর জন্য ফাংশন ★★★
+  
+  // ★★★ পরিবর্তিত: পাসওয়ার্ড ভেরিফিকেশন যোগ করা হয়েছে ★★★
   function executeScene(sceneId, actions, sceneName) {
-      if (!confirm(`আপনি কি "${sceneName}" দৃশ্যটি কার্যকর করতে চান?`)) return;
+    promptForActionPassword(
+      `'${sceneName}' দৃশ্যটি চালান`,
+      `আপনি কি সত্যিই "${sceneName}" দৃশ্যটি কার্যকর করতে চান?`,
+      () => {
+        const updates = {};
+        if (Array.isArray(actions)) {
+            actions.forEach(action => {
+                const path = `devices/${action.device}/${action.relay}`;
+                updates[path] = action.state;
+            });
+        } else {
+            console.warn("Executing a scene with a deprecated format. Please re-save it.");
+            for(const path in actions) {
+                updates[path] = actions[path];
+            }
+        }
 
-      const updates = {};
-      
-      // নতুন অ্যারে ফরম্যাটের জন্য লজিক
-      if (Array.isArray(actions)) {
-          actions.forEach(action => {
-              const path = `devices/${action.device}/${action.relay}`;
-              updates[path] = action.state;
+        if (Object.keys(updates).length === 0) {
+            showToast("এই দৃশ্যে কোনো অ্যাকশন সেট করা নেই।", "warning");
+            return;
+        }
+
+        database.ref().update(updates)
+          .then(() => {
+              showToast(`"${sceneName}" দৃশ্য সফলভাবে কার্যকর হয়েছে।`, 'success');
+              logAuditEvent(`"${sceneName}" দৃশ্যটি কার্যকর করেছেন।`);
+          })
+          .catch(error => {
+              showToast("দৃশ্য কার্যকর করতে সমস্যা হয়েছে।", "error");
+              console.error("Scene execution failed:", error);
           });
-      } else {
-          // পুরানো অবজেক্ট ফরম্যাটের জন্য ফলব্যাক (যদি প্রয়োজন হয়)
-          console.warn("Executing a scene with a deprecated format. Please re-save it.");
-          for(const path in actions) {
-              updates[path] = actions[path];
-          }
       }
-
-      if (Object.keys(updates).length === 0) {
-          showToast("এই দৃশ্যে কোনো অ্যাকশন সেট করা নেই।", "warning");
-          return;
-      }
-
-      database.ref().update(updates)
-        .then(() => {
-            showToast(`"${sceneName}" দৃশ্য সফলভাবে কার্যকর হয়েছে।`, 'success');
-            logAuditEvent(`"${sceneName}" দৃশ্যটি কার্যকর করেছেন।`);
-        })
-        .catch(error => {
-            showToast("দৃশ্য কার্যকর করতে সমস্যা হয়েছে।", "error");
-            console.error("Scene execution failed:", error);
-        });
+    );
   }
 
-
-  // ★★★ সংশোধিত: openSceneModal ফাংশন ★★★
   function openSceneModal() {
       const listContainer = document.getElementById('scene-relay-list-container');
-      let htmlContent = ''; // একটি স্ট্রিং-এ পুরো HTML তৈরি করা হবে
+      let htmlContent = '';
 
-      // ডিভাইসগুলোর নাম অনুযায়ী সাজানো (device1, device2, etc.)
       const sortedDeviceIds = Object.keys(currentDeviceStates).sort((a, b) => 
           parseInt(a.replace('device', '')) - parseInt(b.replace('device', ''))
       );
 
-      // প্রতিটি ডিভাইসের জন্য গ্রুপ তৈরি করা
       sortedDeviceIds.forEach(deviceId => {
-          // ডিভাইস হেডার যোগ করা
           htmlContent += `<div class="scene-device-header">${deviceId.replace('device', 'ডিভাইস ')}</div>`;
 
           const relays = Object.keys(currentDeviceStates[deviceId])
@@ -4505,7 +4513,6 @@ function logout() {
           relays.forEach(relayId => {
               const relayCustomName = (relayNames[deviceId]?.[relayId]) || relayId.replace('relay', 'রিলে ');
               
-              // রিলে আইটেম যোগ করা
               htmlContent += `
                   <div class="scene-relay-item">
                       <span>${relayCustomName}</span>
@@ -4519,7 +4526,6 @@ function logout() {
           });
       });
       
-      // সবশেষে কন্টেইনারে HTML যুক্ত করা
       listContainer.innerHTML = htmlContent;
 
       document.getElementById('sceneModal').style.display = 'flex';
@@ -4532,32 +4538,28 @@ function logout() {
     document.getElementById('scene-error-message').textContent = '';
   }
 
-  // ★★★ সংশোধিত এবং উন্নত: saveScene ফাংশন ★★★
   async function saveScene() {
     const saveButton = document.querySelector('#sceneModal .confirm-btn');
     const errorEl = document.getElementById('scene-error-message');
     const originalButtonText = "সংরক্ষণ করুন";
     
-    // 1. Clear previous state and disable button
     errorEl.textContent = '';
     saveButton.disabled = true;
     saveButton.textContent = 'সংরক্ষণ করা হচ্ছে...';
 
     try {
-        // 2. Validation
         const sceneName = document.getElementById('scene-name').value;
         if (!sceneName || sceneName.trim() === '') {
             throw new Error('দৃশ্যের একটি নাম দিন।');
         }
 
-        const actions = []; // ★★★ ডেটা স্ট্রাকচার পরিবর্তন: অ্যারে ব্যবহার করা হচ্ছে
+        const actions = [];
         const selects = document.querySelectorAll('.scene-action-select');
         selects.forEach(select => {
             if (select.value !== 'ignore') {
                 const device = select.dataset.device;
                 const relay = select.dataset.relay;
                 if (device && relay) {
-                    // একটি অবজেক্ট হিসেবে অ্যাকশন যোগ করা
                     actions.push({
                         device: device,
                         relay: relay,
@@ -4573,52 +4575,74 @@ function logout() {
 
         const newScene = {
             name: sceneName,
-            actions: actions // নতুন অ্যারে এখানে সেট করা হচ্ছে
+            actions: actions
         };
 
-        // 3. Firebase Operation
         await database.ref('scenes').push(newScene);
 
-        // 4. Success Handling
         showToast('নতুন দৃশ্য সফলভাবে তৈরি হয়েছে!', 'success');
         logAuditEvent(`নতুন দৃশ্য '${sceneName}' তৈরি করেছেন।`);
         closeSceneModal();
 
     } catch (error) {
-        // 5. Error Handling
         console.error("Error saving scene:", error);
         showToast('দৃশ্য তৈরি করতে সমস্যা হয়েছে।', 'error');
         errorEl.textContent = `ত্রুটি: ${error.message}`;
     } finally {
-        // 6. ALWAYS reset the button state
         saveButton.disabled = false;
         saveButton.textContent = originalButtonText;
     }
   }
 
-  // ★★★ নতুন: দৃশ্য ডিলিট করার ফাংশন ★★★
+  // ★★★ পরিবর্তিত: পাসওয়ার্ড ভেরিফিকেশন যোগ করা হয়েছে ★★★
   function deleteScene(sceneId, sceneName) {
-      if (confirm(`আপনি কি "${sceneName}" দৃশ্যটি স্থায়ীভাবে মুছে ফেলতে চান?`)) {
-          database.ref(`scenes/${sceneId}`).remove()
-              .then(() => {
-                  showToast(`'${sceneName}' দৃশ্যটি সফলভাবে মুছে ফেলা হয়েছে।`, 'success');
-                  logAuditEvent(`দৃশ্য '${sceneName}' মুছে ফেলেছেন।`);
-              })
-              .catch(error => {
-                  showToast("দৃশ্যটি মুছতে সমস্যা হয়েছে।", "error");
-                  console.error("Delete scene error:", error);
-              });
-      }
+      promptForActionPassword(
+        'দৃশ্য মুছুন',
+        `আপনি কি "${sceneName}" দৃশ্যটি স্থায়ীভাবে মুছে ফেলতে চান?`,
+        () => {
+            database.ref(`scenes/${sceneId}`).remove()
+                .then(() => {
+                    showToast(`'${sceneName}' দৃশ্যটি সফলভাবে মুছে ফেলা হয়েছে।`, 'success');
+                    logAuditEvent(`দৃশ্য '${sceneName}' মুছে ফেলেছেন।`);
+                })
+                .catch(error => {
+                    showToast("দৃশ্যটি মুছতে সমস্যা হয়েছে।", "error");
+                    console.error("Delete scene error:", error);
+                });
+        }
+      );
+  }
+
+  // ★★★ নতুন: তারিখ ও সময় আপডেট করার ফাংশন ★★★
+  function updateAllDateTimeDisplays() {
+      const now = new Date();
+      // তারিখ ফরম্যাট: DD-MM-YYYY
+      const dateOptions = { day: '2-digit', month: '2-digit', year: 'numeric' };
+      const formattedDate = now.toLocaleDateString('en-GB', dateOptions).replace(/\//g, '-');
+      // সময় ফরম্যাট: HH:MM:SS (24-ঘন্টা)
+      const timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
+      const formattedTime = now.toLocaleTimeString('en-GB', timeOptions);
+
+      // DOM থেকে সমস্ত তারিখ ও সময়ের এলিমেন্ট কোয়েরি করা
+      const dateElements = document.querySelectorAll('[id^="date-"]');
+      const timeElements = document.querySelectorAll('[id^="time-"]');
+
+      // প্রতিটি এলিমেন্টের কন্টেন্ট আপডেট করা
+      dateElements.forEach(el => {
+          el.innerHTML = `<i class="fas fa-calendar-alt"></i> ${formattedDate}`;
+      });
+      timeElements.forEach(el => {
+          el.innerHTML = `<i class="fas fa-clock"></i> ${formattedTime}`;
+      });
   }
 
 
-  // ★★★ নতুন: ডাইনামিক কন্ট্রোল প্যানেল রেন্ডার করার ফাংশন ★★★
+  // ★★★ পরিবর্তিত: renderControlPanel ফাংশনে তারিখ ও সময় যুক্ত করা হয়েছে ★★★
   function renderControlPanel(devicesData, currentRelayNames) {
       const container = document.getElementById('control-panel-container');
       if (!container) return;
-      container.innerHTML = ''; // প্রতিবার আপডেটের আগে কন্টেইনার খালি করা
+      container.innerHTML = '';
 
-      // ডিভাইসের নাম অনুযায়ী সাজানো (যেমন: device1, device2, device10)
       const sortedDeviceIds = Object.keys(devicesData).sort((a, b) => {
           return parseInt(a.replace('device', '')) - parseInt(b.replace('device', ''));
       });
@@ -4656,9 +4680,14 @@ function logout() {
                               <i class="fas fa-pencil-alt edit-relay-name-icon" onclick="editRelayName('${deviceId}', '${relayId}')" title="নাম পরিবর্তন করুন"></i>
                               <i class="fas fa-trash-alt delete-icon" onclick="deleteRelay('${deviceId}', '${relayId}')" title="এই রিলেটি মুছুন"></i>
                           </span>
+                          <!-- ★★★ নতুন: তারিখ এবং সময় প্রদর্শনের জন্য div ★★★ -->
+                          <div class="device-time-info">
+                            <span id="date-${deviceId}-${relayId}"><i class="fas fa-calendar-alt"></i> --/--/----</span>
+                            <span id="time-${deviceId}-${relayId}"><i class="fas fa-clock"></i> --:--:--</span>
+                          </div>
                       </div>
                       <div class="toggle-switch-body">
-                          <div class="timer-status" id="${timerStatusId}">টাইমার সেট করা নেই</div>
+                          <div class="timer-status" id="${timerStatusId}">টাইমার স্ট্যাটাস লোড হচ্ছে...</div>
                       </div>
                       <div class="toggle-switch-footer">
                           <button class="pro-btn timer-btn" onclick="openTimerModal('${deviceId}', '${relayId}')">⏲️ টাইমার</button>
@@ -4681,17 +4710,20 @@ function logout() {
           deviceSection.innerHTML = sectionHTML;
           container.appendChild(deviceSection);
       }
-      updateAllTimerDisplays(); // রেন্ডার করার পর টাইমার স্ট্যাটাস আপডেট
+      updateAllTimerDisplays();
+      updateAllDateTimeDisplays(); // ★★★ নতুন: প্যানেল রেন্ডারের পর সময় আপডেট
   }
   
-  // ★★★ নতুন: ডিভাইস মুছে ফেলার ফাংশন ★★★
+  // ★★★ পরিবর্তিত: পাসওয়ার্ড ভেরিফিকেশন যোগ করা হয়েছে ★★★
   function deleteDevice(deviceId) {
-    if (confirm(`আপনি কি সত্যিই '${deviceId}' এবং এর সমস্ত রিলে মুছে ফেলতে চান?\nএই কাজটি ফিরিয়ে আনা যাবে না!`)) {
+    promptForActionPassword(
+      'ডিভাইস মুছুন',
+      `আপনি কি সত্যিই '${deviceId}' এবং এর সমস্ত রিলে মুছে ফেলতে চান? এই কাজটি ফিরিয়ে আনা যাবে না!`,
+      () => {
         const updates = {};
         updates[`/devices/${deviceId}`] = null;
         updates[`/device_metadata/${deviceId}`] = null;
 
-        // সম্পর্কিত টাইমারগুলো খুঁজে মুছে ফেলা হচ্ছে
         database.ref('timers').orderByKey().startAt(deviceId).endAt(deviceId + '\uf8ff').once('value', snapshot => {
             const timersToDelete = snapshot.val();
             if (timersToDelete) {
@@ -4700,7 +4732,6 @@ function logout() {
                 }
             }
 
-            // সমস্ত ডিলিট অপারেশন একসাথে চালানো হচ্ছে
             database.ref().update(updates)
                 .then(() => {
                     showToast(`'${deviceId}' ডিভাইসটি সফলভাবে মুছে ফেলা হয়েছে।`, 'success');
@@ -4711,37 +4742,40 @@ function logout() {
                     console.error("Delete device error:", error);
                 });
         });
-    }
+      }
+    );
   }
 
-  // ★★★ নতুন: রিলে মুছে ফেলার ফাংশন ★★★
+  // ★★★ পরিবর্তিত: পাসওয়ার্ড ভেরিফিকেশন যোগ করা হয়েছে ★★★
   function deleteRelay(deviceId, relayId) {
       const customName = (relayNames[deviceId] && relayNames[deviceId][relayId]) ? relayNames[deviceId][relayId] : relayId;
-      if (confirm(`আপনি কি সত্যিই '${customName}' রিলেটি '${deviceId}' থেকে মুছে ফেলতে চান?`)) {
-          const updates = {};
-          updates[`/devices/${deviceId}/${relayId}`] = null; // null ব্যবহার করে ডেটা মোছা হয়
-          updates[`/device_metadata/${deviceId}/relay_names/${relayId}`] = null;
-          updates[`/timers/${deviceId}-${relayId}`] = null;
+      promptForActionPassword(
+        'রিলে মুছুন',
+        `আপনি কি সত্যিই '${customName}' রিলেটি '${deviceId}' থেকে মুছে ফেলতে চান?`,
+        () => {
+            const updates = {};
+            updates[`/devices/${deviceId}/${relayId}`] = null;
+            updates[`/device_metadata/${deviceId}/relay_names/${relayId}`] = null;
+            updates[`/timers/${deviceId}-${relayId}`] = null;
 
-          database.ref().update(updates)
-              .then(() => {
-                  showToast(`'${customName}' রিলেটি সফলভাবে মুছে ফেলা হয়েছে।`, 'success');
-                  logAuditEvent(`'${deviceId}' থেকে '${customName}' রিলেটি মুছে ফেলেছেন।`);
-              })
-              .catch(error => {
-                  showToast("রিলেটি মুছতে সমস্যা হয়েছে।", "error");
-                  console.error("Delete relay error:", error);
-              });
-      }
+            database.ref().update(updates)
+                .then(() => {
+                    showToast(`'${customName}' রিলেটি সফলভাবে মুছে ফেলা হয়েছে।`, 'success');
+                    logAuditEvent(`'${deviceId}' থেকে '${customName}' রিলেটি মুছে ফেলেছেন।`);
+                })
+                .catch(error => {
+                    showToast("রিলেটি মুছতে সমস্যা হয়েছে।", "error");
+                    console.error("Delete relay error:", error);
+                });
+        }
+      );
   }
 
 
-  // ★★★ নতুন: নতুন ডিভাইস যোগ করার ফাংশন ★★★
   function addNewDevice() {
       const newDeviceName = prompt("নতুন ডিভাইসের নাম দিন (যেমন: device5):");
       if (newDeviceName && newDeviceName.trim() !== "") {
           const deviceId = newDeviceName.trim();
-          // চেক করা হচ্ছে যে এই নামে ডিভাইস আগে থেকেই আছে কিনা
           if (currentDeviceStates[deviceId]) {
               alert("এই নামের ডিভাইস আগে থেকেই আছে!");
               return;
@@ -4763,7 +4797,6 @@ function logout() {
       }
   }
 
-  // ★★★ নতুন: নতুন রিলে যোগ করার ফাংশন ★★★
   function addNewRelay(deviceId) {
       const deviceData = currentDeviceStates[deviceId] || {};
       let maxRelayNum = 0;
@@ -4794,25 +4827,21 @@ function logout() {
   }
 
 
-  // ★★★ একটি প্রধান ফাংশন যা সব ডেটা লিসেনার সেট আপ করবে ★★★
   function setupFirebaseListeners() {
-    // 1. ডিভাইস মেটাডেটা (রিলের নাম) লোড করা
     database.ref('device_metadata').on('value', snapshot => {
         const metadata = snapshot.val() || {};
-        relayNames = {}; // রিসেট
+        relayNames = {};
         for (const deviceId in metadata) {
             if (metadata[deviceId].relay_names) {
                 relayNames[deviceId] = metadata[deviceId].relay_names;
             }
         }
-        // রিলের নাম লোড হওয়ার পর কন্ট্রোল প্যানেল এবং অটোমেশন ফর্ম পুনরায় রেন্ডার করা
         if (currentDeviceStates && Object.keys(currentDeviceStates).length > 0) {
             renderControlPanel(currentDeviceStates, relayNames);
             updateAutomationFormOptions();
         }
     });
 
-    // 2. সব ডিভাইসের স্টেট লোড করা (প্রধান লিসেনার)
     database.ref('devices').on('value', snapshot => {
         const allDevicesData = snapshot.val();
         if (allDevicesData) {
@@ -4823,7 +4852,6 @@ function logout() {
             updateDeviceStatusPages(allDevicesData);
             updateAutomationFormOptions();
             
-            // ★★★ বাগ ফিক্স: শুধুমাত্র পরিবর্তিত ডিভাইসের জন্য অটোমেশন চেক ★★★
             for (const deviceId in allDevicesData) {
                 if (JSON.stringify(oldDeviceStates[deviceId]) !== JSON.stringify(allDevicesData[deviceId])) {
                     checkAutomationRules('device', {
@@ -4834,7 +4862,6 @@ function logout() {
             }
 
         } else {
-            // যখন সব ডিভাইস মুছে ফেলা হয়
             currentDeviceStates = {};
             renderControlPanel({}, relayNames);
             updateDeviceStatusPages({});
@@ -4842,13 +4869,11 @@ function logout() {
         }
     });
 
-    // 3. এনার্জি মনিটরিং ডেটা
     database.ref('energymonitoring').on('value', snapshot => {
         const data = snapshot.val();
         if (data) updateEnergyData(data);
     });
 
-    // 4. এনার্জি হিস্ট্রি
     database.ref('energyHistory').limitToLast(1000).on('value', snapshot => {
         const data = snapshot.val();
         if (data) {
@@ -4859,13 +4884,11 @@ function logout() {
         }
     });
 
-    // 5. টাইমার ডেটা
     database.ref('timers').on('value', snapshot => {
         allTimersData = snapshot.val() || {};
         updateAllTimerDisplays();
     });
 
-    // 6. অটোমেশন রুল
     database.ref('automationRules').on('value', snapshot => {
       automationRules = snapshot.val() || {};
       const listContainer = document.getElementById('automation-rule-list');
@@ -4879,7 +4902,6 @@ function logout() {
         const card = document.createElement('div');
         card.className = `rule-card ${rule.isEnabled ? '' : 'disabled'}`;
         
-        // ★★★ বাগ ফিক্স: রুলের বিবরণে কাস্টম নাম ব্যবহার করা ★★★
         let description = `<strong>${rule.name}:</strong> `;
         if (rule.triggerSource === 'energy') { 
             description += `যদি <strong>${rule.triggerMetric}</strong> এর মান <strong>${rule.triggerCondition} ${rule.triggerValue}</strong> হয়, `; 
@@ -4902,10 +4924,8 @@ function logout() {
       }
     });
 
-    // 7. অডিট লগ
     loadAuditLog();
 
-    // 8. সিস্টেম স্ট্যাটাস
     database.ref('system_status/device1').on('value', snapshot => {
         const data = snapshot.val();
         if (data) {
@@ -4924,11 +4944,9 @@ function logout() {
         }
     });
 
-    // 9. দৃশ্য (Scenes)
     database.ref('scenes').on('value', snapshot => {
         const scenes = snapshot.val() || {};
         const container = document.getElementById('scene-buttons-container');
-        // পুরানো সব দৃশ্য মুছে নতুন করে যোগ করা হচ্ছে
         container.innerHTML = '<button class="pro-btn create-scene-btn" onclick="openSceneModal()"><i class="fas fa-plus"></i> নতুন দৃশ্য তৈরি করুন</button>';
         
         for (const sceneId in scenes) {
@@ -4942,19 +4960,16 @@ function logout() {
                 </button>
                 <i class="fas fa-trash-alt delete-scene-icon" title="এই দৃশ্যটি মুছুন" onclick="deleteScene('${sceneId}', '${scene.name}')"></i>
             `;
-            // 'নতুন দৃশ্য' বাটনের আগে নতুন দৃশ্যটি যুক্ত করা
             container.insertBefore(sceneItemContainer, container.querySelector('.create-scene-btn'));
         }
     });
 
     
-    // ★★★ নতুন: কাস্টম পেজ লিসেনার ★★★
     database.ref('custom_pages').on('value', snapshot => {
         const pagesData = snapshot.val() || {};
         renderCustomPagesFromFirebase(pagesData);
     });
 }
-// ★★★ পরিবর্তিত: অডিট লগ ফাংশন এখন ডিভাইস এবং ইউজার লগ উভয়ই দেখায় ★★★
   function loadAuditLog() {
     const logListContainer = document.getElementById('audit-log-list');
     const userLogRef = database.ref('auditLog').limitToLast(100);
@@ -5002,11 +5017,6 @@ function logout() {
     });
   }
 
-  // ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
-  // ★★★ নতুন: কাস্টম পেজ ম্যানেজমেন্টের জন্য সকল নতুন ফাংশন এখানে ★★★
-  // ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
-
-    // নতুন পেজ তৈরির মোডাল খোলা এবং বন্ধ করার ফাংশন
     function openAddPageModal() {
         document.getElementById('addPageModal').style.display = 'flex';
         document.getElementById('new-page-name').focus();
@@ -5018,7 +5028,6 @@ function logout() {
         document.getElementById('add-page-error').textContent = '';
     }
 
-    // নতুন পেজের নাম Firebase-এ সংরক্ষণ করার ফাংশন
     function saveNewPage() {
         const pageName = document.getElementById('new-page-name').value.trim();
         if (!pageName) {
@@ -5028,22 +5037,20 @@ function logout() {
 
         const newPageData = {
             name: pageName,
-            components: [] // প্রাথমিকভাবে কোনো উপাদান ছাড়া পেজ তৈরি হবে
+            components: []
         };
 
         const newPageRef = database.ref('custom_pages').push(newPageData);
         logAuditEvent(`একটি নতুন কাস্টম পেজ '${pageName}' তৈরি করেছেন।`);
         closeAddPageModal();
-        openPageEditorModal(newPageRef.key, pageName, new Event('click')); // পেজ তৈরির পরেই এডিটর খোলা হচ্ছে
+        openPageEditorModal(newPageRef.key, pageName, new Event('click'));
     }
     
-    // পেজ এডিটর মোডাল খোলা এবং বন্ধ করার ফাংশন
     function openPageEditorModal(pageId, pageName, event) {
-        if(event) event.stopPropagation(); // ট্যাবে ক্লিক করলে যেন showPage() কল না হয়
+        if(event) event.stopPropagation();
         currentPageToEdit = pageId;
         document.getElementById('page-editor-title').textContent = `'${pageName}' পেজটি এডিট করুন`;
 
-        // বর্তমানে সংরক্ষিত উপাদানগুলো লোড করা হচ্ছে
         database.ref(`custom_pages/${pageId}/components`).once('value', snapshot => {
             const currentComponents = snapshot.val() || [];
             const editorContent = document.getElementById('page-editor-content');
@@ -5057,7 +5064,6 @@ function logout() {
         currentPageToEdit = null;
     }
 
-    // পেজ এডিটরে চেকবক্সসহ এইচটিএমএল তৈরি করার ফাংশন
     function generateComponentSelectorHTML(currentComponents = []) {
         let html = '';
         const isChecked = (comp) => currentComponents.some(c => JSON.stringify(c) === JSON.stringify(comp));
@@ -5093,7 +5099,6 @@ function logout() {
         return html;
     }
     
-    // পেজের জন্য নির্বাচিত উপাদানগুলো Firebase-এ সংরক্ষণ করার ফাংশন
     function savePageComponents() {
         if (!currentPageToEdit) return;
 
@@ -5114,33 +5119,33 @@ function logout() {
             });
     }
 
-    // একটি কাস্টম পেজ ডিলিট করার ফাংশন
+    // ★★★ পরিবর্তিত: পাসওয়ার্ড ভেরিফিকেশন যোগ করা হয়েছে ★★★
     function deleteCustomPage(pageId, pageName, event) {
         event.stopPropagation();
-        if (confirm(`আপনি কি সত্যিই '${pageName}' পেজটি মুছে ফেলতে চান?`)) {
-            database.ref(`custom_pages/${pageId}`).remove()
-                .then(() => {
-                    showToast(`'${pageName}' পেজটি মুছে ফেলা হয়েছে।`, 'success');
-                    logAuditEvent(`কাস্টম পেজ '${pageName}' মুছে ফেলেছেন।`);
-                    // প্রথম পেজটি দেখানোর জন্য
-                    showPage('page1'); 
-                })
-                .catch(err => console.error("Page delete error:", err));
-        }
+        promptForActionPassword(
+          'পেজ মুছুন',
+          `আপনি কি সত্যিই '${pageName}' পেজটি মুছে ফেলতে চান?`,
+          () => {
+              database.ref(`custom_pages/${pageId}`).remove()
+                  .then(() => {
+                      showToast(`'${pageName}' পেজটি মুছে ফেলা হয়েছে।`, 'success');
+                      logAuditEvent(`কাস্টম পেজ '${pageName}' মুছে ফেলেছেন।`);
+                      showPage('page1'); 
+                  })
+                  .catch(err => console.error("Page delete error:", err));
+          }
+        );
     }
 
-    // Firebase থেকে ডেটা নিয়ে কাস্টম পেজ ও ট্যাব তৈরি করার মূল ফাংশন
     function renderCustomPagesFromFirebase(pagesData) {
         const navContainer = document.getElementById('nav-tabs-container');
         const pagesContainer = document.getElementById('dynamic-pages-container');
         
-        // পুরানো কাস্টম পেজ ও ট্যাবগুলো মুছে ফেলা হচ্ছে
         document.querySelectorAll('.custom-page-tab, .custom-page').forEach(el => el.remove());
         
         for (const pageId in pagesData) {
             const page = pagesData[pageId];
             
-            // 1. নেভিগেশন ট্যাব তৈরি করা
             const navTab = document.createElement('div');
             navTab.className = 'nav-tab custom-page-tab';
             navTab.setAttribute('onclick', `showPage('custom_page_${pageId}')`);
@@ -5153,18 +5158,15 @@ function logout() {
             `;
             navContainer.insertBefore(navTab, document.getElementById('add-new-page-btn'));
 
-            // 2. পেজের কন্টেইনার তৈরি করা
             const pageContainer = document.createElement('main');
             pageContainer.id = `custom_page_${pageId}`;
             pageContainer.className = 'device-page custom-page';
             
-            // 3. পেজের কন্টেন্ট রেন্ডার করা
             renderDynamicPageContent(pageContainer, page.components || []);
             pagesContainer.appendChild(pageContainer);
         }
     }
     
-    // একটি ডাইনামিক পেজের কন্টেন্ট তৈরি করার ফাংশন
     function renderDynamicPageContent(container, components) {
         container.innerHTML = `<div class="dynamic-page-grid"></div>`;
         const grid = container.querySelector('.dynamic-page-grid');
@@ -5191,22 +5193,20 @@ function logout() {
                     elementToClone = document.querySelector('#page5 .energy-graphs');
                     break;
                 case 'advanced_graph':
-                    elementToClone = document.getElementById('page6'); // সম্পূর্ণ পেইজ ক্লোন করা হচ্ছে
+                    elementToClone = document.getElementById('page6');
                     break;
                 case 'control_panel':
-                     elementToClone = document.getElementById('page8'); // সম্পূর্ণ পেইজ ক্লোন করা হচ্ছে
+                     elementToClone = document.getElementById('page8');
                     break;
             }
 
             if (elementToClone) {
                 const clonedNode = elementToClone.cloneNode(true);
                 
-                // যদি ক্লোন করা নোডে canvas থাকে, তাহলে সেটির জন্য নতুন চার্ট তৈরি করতে হবে
                 clonedNode.querySelectorAll('canvas').forEach(canvas => {
                     const originalId = canvas.id;
                     const newId = `clone_${originalId}_${container.id}`;
                     canvas.id = newId;
-                    // এখানে চার্ট পুনরায় ইনিশিয়ালাইজ করার লজিক যোগ করতে হবে
                 });
 
                 grid.appendChild(clonedNode);
@@ -5214,8 +5214,6 @@ function logout() {
         });
     }
 
-
-  // এন্টার কী প্রেস ইভেন্ট লিসেনার
   function handleLoginKeyPress(event) {
     if (event.key === "Enter") {
         loginWithFirebase();
@@ -5230,8 +5228,11 @@ function logout() {
   document.getElementById("timerPasswordInput").addEventListener("keypress", function(event) {
     if (event.key === "Enter") saveTimerSettings();
   });
+  // ★★★ নতুন: সাধারণ অ্যাকশন মোডালের জন্য Enter কী প্রেস হ্যান্ডলার ★★★
+  document.getElementById("actionPasswordInput").addEventListener("keypress", function(event) {
+      if (event.key === "Enter") verifyAndExecuteAction();
+  });
 
-  // ★★★ নতুন: অটোমেশন ফর্মের ডিভাইস ড্রপডাউনে ইভেন্ট লিসেনার যোগ করা ★★★
   document.getElementById('action-device').addEventListener('change', () => {
       populateRelayDropdown('action-device', 'action-relay');
   });
