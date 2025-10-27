@@ -1,27 +1,31 @@
-	  <!-- {{{{{{{[ v19.5 index.html ]}}}}}}}
+  <!-- {{{{{{{{{v19.6 index.html}}}}}}}}}
 
-অবশ্যই! আমি আপনার সমস্যাটি পুরোপুরি বুঝতে পেরেছি। ড্র্যাগ-এন্ড-ড্রপ সুবিধাটি সবসময় চালু থাকার কারণে, আপনি যখন শুধু একটি পৃষ্ঠা থেকে অন্য পৃষ্ঠায় যেতে ক্লিক করতে চান, তখনও ভুলবশত ট্যাবগুলো সরে যাচ্ছে, যা খুবই বিরক্তিকর।
+অবশ্যই! আপনার অনুরোধটি আমি বুঝতে পেরেছি। আপনি দুটি অ্যানালগ এবং দুটি ডিজিটাল মিটার সহ একটি নতুন তাপমাত্রা পর্যবেক্ষণ পৃষ্ঠা চেয়েছিলেন এবং অ্যানালগ ডিসপ্লের ডিজাইনটি আপনার সরবরাহ করা ছবির মতো হতে হবে।
 
-এই সমস্যার একটি চমৎকার এবং নির্ভরযোগ্য সমাধান হলো একটি **লক/আনলক সিস্টেম** তৈরি করা। আমি আপনার কোডে এই ব্যবস্থাটি যোগ করেছি।
+আমি আপনার জন্য সেই অনুযায়ী একটি সম্পূর্ণ নতুন এবং উন্নত "তাপমাত্রা মনিটর" পৃষ্ঠা তৈরি করেছি। এই পৃষ্ঠাটিতে আপনার দেওয়া ছবির মতো দেখতে দুটি প্রফেশনাল অ্যানালগ গজ রয়েছে—একটি সেলসিয়াস এবং অন্যটি ফারেনহাইট এককের জন্য। প্রতিটির পাশেই তাদের ডিজিটাল মান প্রদর্শনের জন্য কার্ড রয়েছে।
 
-এখন থেকে, ট্যাবগুলো ডিফল্টভাবে **লক** করা থাকবে, অর্থাৎ আপনি স্বাভাবিকভাবে ক্লিক করে পৃষ্ঠা পরিবর্তন করতে পারবেন এবং সেগুলো ভুল করে সরে যাবে না। যখন আপনি ট্যাবগুলো সাজাতে চাইবেন, তখন হেডার থেকে একটি নতুন "সাজানো আনলক করুন" বাটনে ক্লিক করে ড্র্যাগ-এন্ড-ড্রপ সুবিধাটি চালু করতে পারবেন। কাজ শেষ হলে, আবার বাটনে ক্লিক করে এটিকে লক করে দিতে পারবেন।
+### মূল পরিবর্তন এবং নতুন সংযোজন:
 
-### **মূল পরিবর্তন:**
+1.  **দুটি নতুন প্রফেশনাল অ্যানালগ গজ:**
+    *   আপনার সরবরাহ করা ছবির অনুপ্রেরণায়, দুটি অত্যন্ত আকর্ষণীয় এবং বাস্তবসম্মত অ্যানালগ গজ তৈরি করা হয়েছে। এগুলি সাধারণ চার্টের পরিবর্তে পুরোপুরি CSS এবং JavaScript দিয়ে তৈরি, যা ডিজাইনের উপর সম্পূর্ণ নিয়ন্ত্রণ দেয়।
+    *   **সেলসিয়াস গজ:** এটি সেলসিয়াস (°C) এককে তাপমাত্রা দেখাবে।
+    *   **ফারেনহাইট গজ:** এটি ফারেনহাইট (°F) এককে তাপমাত্রা দেখাবে, ঠিক আপনার ছবির মতো।
+    *   প্রতিটি গজের স্কেল, নম্বর এবং রঙিন দাগগুলো (ঠান্ডা, উষ্ণ, গরম) নির্ভুলভাবে বসানো হয়েছে।
 
-1.  **নতুন লক/আনলক বাটন:** হেডার অংশে একটি নতুন বাটন যোগ করা হয়েছে, যা দিয়ে আপনি ট্যাব সাজানোর মোড চালু বা বন্ধ করতে পারবেন।
-2.  **ডিফল্ট অবস্থা:** পৃষ্ঠা লোড হওয়ার পর ট্যাবগুলো সাজানোর মোড **লক** করা থাকবে।
-3.  **ভিজ্যুয়াল ফিডব্যাক:**
-    *   যখন মোড **আনলক** করা হবে, তখন বাটনটির আইকন এবং লেখা পরিবর্তন হয়ে যাবে।
-    *   ট্যাবগুলোর উপর মাউস নিলে কার্সারটি একটি "ধরা" বা "grab" আইকনে পরিণত হবে, যা বোঝাবে যে এগুলো এখন সরানো যাবে।
-4.  **স্বয়ংক্রিয় সংরক্ষণ:** আপনি ট্যাবগুলো সাজিয়ে আবার লক করার সাথে সাথেই আপনার নতুন ক্রম বা Order স্বয়ংক্রিয়ভাবে Firebase-এ সংরক্ষিত হয়ে যাবে।
+2.  **দুটি ডিজিটাল ডিসপ্লে:**
+    *   প্রতিটি অ্যানালগ গজের পাশে দুটি করে মোট চারটি ডিজিটাল কার্ড রয়েছে, যা সেলসিয়াস এবং ফারেনহাইট উভয় এককের মান স্পষ্টভাবে প্রদর্শন করে।
 
-এই পরিবর্তনের ফলে আপনার ড্যাশবোর্ড ব্যবহার করা আরও সহজ এবং নির্ভুল হবে।
+3.  **সরাসরি ফায়ারবেস সংযোগ:**
+    *   এই সম্পূর্ণ সিস্টেমটি আপনার ফায়ারবেসের `devices/device1/Temperature1` পাথের সাথে সংযুক্ত।
+    *   যখন ফায়ারবেসে `celsius` বা `fahrenheit` এর মান পরিবর্তন হবে, তখন উভয় অ্যানালগ গজের কাঁটা এবং ডিজিটাল ডিসপ্লেগুলো রিয়েল-টাইমে আপডেট হবে।
 
-### **সম্পূর্ণ এবং চূড়ান্ত HTML কোড:**
+এই নতুন ডিজাইনটি আপনার ড্যাশবোর্ডকে আরও প্রফেশনাল এবং কার্যকরী করে তুলবে।
 
-আপনাকে শুধু নিচের সম্পূর্ণ কোডটি কপি করে আপনার `index.html` ফাইলে প্রতিস্থাপন করতে হবে। আমি প্রয়োজনীয় সমস্ত পরিবর্তন করে দিয়েছি।
+### সম্পূর্ণ এবং চূড়ান্ত HTML কোড:
 
-```html  -->
+আপনাকে শুধু নিচের সম্পূর্ণ কোডটি কপি করে আপনার `index.html` ফাইলে প্রতিস্থাপন করতে হবে। আমি নতুন পেজ, স্টাইল এবং জাভাস্ক্রিপ্ট ফাংশন সহ প্রয়োজনীয় সমস্ত পরিবর্তন করে দিয়েছি।
+
+```html -->
 
 
 <!DOCTYPE html>
@@ -1350,6 +1354,167 @@
     .dynamic-page-grid > * {
       width: 100%; /* গ্রিডের আইটেমগুলো যেন সম্পূর্ণ জায়গা নেয় */
     }
+    
+    /* ★★★ নতুন: তাপমাত্রা পেজের জন্য স্টাইল ★★★ */
+    .temperature-page-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+        align-items: start;
+    }
+    .temperature-section {
+        display: grid;
+        grid-template-columns: 1.5fr 1fr;
+        gap: 25px;
+        align-items: center;
+        background: var(--card-bg);
+        padding: 20px;
+        border-radius: 15px;
+    }
+    .gauge-container-pro {
+        width: 100%;
+        max-width: 350px;
+        margin: 0 auto;
+        position: relative;
+    }
+    .gauge-body {
+        width: 100%;
+        height: 0;
+        padding-bottom: 100%;
+        background: #f0f0f0;
+        border-radius: 50%;
+        border: 15px solid #ccc;
+        box-shadow: inset 0 0 20px rgba(0,0,0,0.2), 0 5px 15px rgba(0,0,0,0.3);
+        position: relative;
+    }
+    .light-theme .gauge-body {
+        background: #ffffff;
+        border-color: #e0e0e0;
+    }
+    .gauge-body::before {
+        content: '';
+        position: absolute;
+        top: 5px; left: 5px; right: 5px; bottom: 5px;
+        background: #fff;
+        border-radius: 50%;
+        z-index: 1;
+    }
+    .light-theme .gauge-body::before {
+        background: #f8f9fa;
+    }
+    .gauge-color-arc {
+        position: absolute;
+        top: 10%; left: 10%; right: 10%; bottom: 10%;
+        border-radius: 50%;
+        z-index: 2;
+    }
+    .gauge-color-arc.celsius-arc {
+         background: conic-gradient(from -135deg, #3498db 0 25%, #2ecc71 25% 50%, #f39c12 50% 75%, #e74c3c 75% 100%);
+    }
+    .gauge-color-arc.fahrenheit-arc {
+        background: conic-gradient(from -135deg, #2ecc71 0 33%, #f1c40f 33% 50%, #e67e22 50% 67%, #e74c3c 67% 100%);
+    }
+    .gauge-dial {
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        z-index: 3;
+    }
+    .gauge-tick, .gauge-number {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform-origin: 0 0;
+        color: #333;
+    }
+    .light-theme .gauge-tick, .light-theme .gauge-number {
+        color: #444;
+    }
+    .gauge-tick {
+        width: 2px;
+        height: 10px;
+        background: #555;
+    }
+    .gauge-tick.minor {
+        width: 1px;
+        height: 5px;
+        background: #888;
+    }
+    .gauge-number {
+        font-size: 0.9em;
+        font-weight: 600;
+    }
+    .gauge-unit {
+        position: absolute;
+        bottom: 18%;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 2.5em;
+        font-weight: 700;
+        color: #333;
+        z-index: 4;
+    }
+    .light-theme .gauge-unit {
+        color: #2c3e50;
+    }
+    .gauge-needle {
+        position: absolute;
+        bottom: 50%;
+        left: 50%;
+        width: 4px;
+        height: 40%;
+        background: #333;
+        border-radius: 2px;
+        transform-origin: bottom center;
+        z-index: 5;
+        transition: transform 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+        box-shadow: 0 0 5px rgba(0,0,0,0.5);
+    }
+    .gauge-center-dot {
+        position: absolute;
+        top: 50%; left: 50%;
+        width: 20px;
+        height: 20px;
+        background: #666;
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        border: 3px solid #333;
+        z-index: 6;
+    }
+    .temperature-digital-displays {
+        display: flex;
+        flex-direction: column;
+        gap: 25px;
+    }
+    .temperature-card {
+        text-align: center;
+        padding: 25px;
+        border-top: 4px solid var(--info-color);
+    }
+    .temperature-card .energy-title {
+        font-size: 1.3rem;
+        margin-bottom: 15px;
+    }
+    .temperature-card .energy-value {
+        font-size: 2.8rem;
+        font-weight: 700;
+    }
+    .temperature-card.fahrenheit {
+        border-top-color: var(--warning-color);
+    }
+    @media (max-width: 1200px) {
+        .temperature-page-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+    @media (max-width: 768px) {
+        .temperature-section {
+            grid-template-columns: 1fr;
+        }
+        .gauge-unit {
+            font-size: 2em;
+        }
+    }
+
 
     /* মিডিয়া কোয়েরি */
     @media (max-width: 1024px) {
@@ -2010,6 +2175,8 @@
     <div class="nav-tab" onclick="showPage('page10')" data-tab-id="page10">📜 অডিট লগ</div>
     <div class="nav-tab" onclick="showPage('page11')" data-tab-id="page11">📊 সিস্টেম স্ট্যাটাস</div>
     <div class="nav-tab" onclick="showPage('page12')" data-tab-id="page12">🔐 লজিক গেট ইন্টারলক</div>
+    <!-- ★★★ নতুন: তাপমাত্রা মনিটর পেজের জন্য ট্যাব ★★★ -->
+    <div class="nav-tab" onclick="showPage('page13')" data-tab-id="page13">🌡️ তাপমাত্রা মনিটর</div>
     <div class="nav-tab" id="add-new-page-btn" onclick="openAddPageModal()" data-tab-id="add-new-page-btn">
         <i class="fas fa-plus"></i> নতুন পেজ
     </div>
@@ -2653,6 +2820,59 @@
     </div>
 </main>
 
+<!-- ★★★ নতুন: তাপমাত্রা মনিটর পেজ ★★★ -->
+<main id="page13" class="device-page">
+    <div class="temperature-page-grid">
+        <!-- প্রথম গজ: সেলসিয়াস -->
+        <div class="temperature-section">
+            <div class="gauge-container-pro">
+                <div class="gauge-body">
+                    <div class="gauge-color-arc celsius-arc"></div>
+                    <div class="gauge-dial" id="gauge-dial-celsius"></div>
+                    <div class="gauge-unit">°C</div>
+                    <div class="gauge-needle" id="gauge-needle-celsius"></div>
+                    <div class="gauge-center-dot"></div>
+                </div>
+            </div>
+            <div class="temperature-digital-displays">
+                <h3 class="section-title" style="margin-bottom: 5px; text-align:center;">সেলসিয়াস</h3>
+                <div class="energy-card temperature-card">
+                    <div class="energy-title">🌡️ সেলসিয়াস</div>
+                    <div class="energy-value" id="temp-celsius-digital-1">--<span class="energy-unit">°C</span></div>
+                </div>
+                <div class="energy-card temperature-card fahrenheit">
+                    <div class="energy-title">🔥 ফারেনহাইট</div>
+                    <div class="energy-value" id="temp-fahrenheit-digital-1">--<span class="energy-unit">°F</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- দ্বিতীয় গজ: ফারেনহাইট -->
+        <div class="temperature-section">
+            <div class="gauge-container-pro">
+                <div class="gauge-body">
+                    <div class="gauge-color-arc fahrenheit-arc"></div>
+                    <div class="gauge-dial" id="gauge-dial-fahrenheit"></div>
+                    <div class="gauge-unit">°F</div>
+                    <div class="gauge-needle" id="gauge-needle-fahrenheit"></div>
+                    <div class="gauge-center-dot"></div>
+                </div>
+            </div>
+            <div class="temperature-digital-displays">
+                <h3 class="section-title" style="margin-bottom: 5px; text-align:center;">ফারেনহাইট</h3>
+                <div class="energy-card temperature-card">
+                    <div class="energy-title">🌡️ সেলসিয়াস</div>
+                    <div class="energy-value" id="temp-celsius-digital-2">--<span class="energy-unit">°C</span></div>
+                </div>
+                <div class="energy-card temperature-card fahrenheit">
+                    <div class="energy-title">🔥 ফারেনহাইট</div>
+                    <div class="energy-value" id="temp-fahrenheit-digital-2">--<span class="energy-unit">°F</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
 
 <!-- ★★★ নতুন: ডাইনামিক বা কাস্টম পেজগুলোর জন্য কন্টেইনার ★★★ -->
 <div id="dynamic-pages-container">
@@ -2905,6 +3125,7 @@ function loginWithFirebase() {
                 
                 setupFirebaseListeners();
                 initializeCharts();
+                initProGauges(); // ★★★ নতুন: তাপমাত্রা গজ শুরু করা
                 loadThemePreference();
                 loadBackgroundPreference();
                 initEnergyCharts();
@@ -3021,6 +3242,7 @@ function logout() {
   const deviceCharts = {};
   let energyCharts = {};
   let advancedEnergyChart = null;
+  
   let selectedMetric = 'voltage';
   let selectedTimeRange = 30; // মিনিট
   let historicalData = {};
@@ -3409,6 +3631,80 @@ function logout() {
     return {
         responsive: true,
     };
+  }
+  
+  // ★★★ নতুন: তাপমাত্রা গজ তৈরি এবং আপডেট করার ফাংশন ★★★
+  function initProGauges() {
+      // সেলসিয়াস গজ তৈরি
+      createGaugeScale('gauge-dial-celsius', -10, 50, 10, 5);
+      // ফারেনহাইট গজ তৈরি
+      createGaugeScale('gauge-dial-fahrenheit', 20, 140, 10, 5);
+  }
+
+  function createGaugeScale(dialId, min, max, majorStep, minorSteps) {
+      const dial = document.getElementById(dialId);
+      if (!dial) return;
+      dial.innerHTML = '';
+      const range = max - min;
+      const totalAngle = 270; 
+      const startAngle = -135; 
+
+      for (let i = min; i <= max; i += (majorStep / minorSteps)) {
+          const angle = startAngle + ((i - min) / range) * totalAngle;
+          const isMajorTick = (i - min) % majorStep === 0;
+
+          const tick = document.createElement('div');
+          tick.className = isMajorTick ? 'gauge-tick' : 'gauge-tick minor';
+          const radius = 45; // %
+          tick.style.transform = `rotate(${angle}deg) translate(${radius}%)`;
+          dial.appendChild(tick);
+
+          if (isMajorTick) {
+              const number = document.createElement('div');
+              number.className = 'gauge-number';
+              number.textContent = i;
+              const numberRadius = 38; // %
+              const numberAngleRad = (angle - 90) * (Math.PI / 180);
+              const x = numberRadius * Math.cos(numberAngleRad);
+              const y = numberRadius * Math.sin(numberAngleRad);
+              number.style.transform = `translate(${x}%, ${y}%)`;
+              dial.appendChild(number);
+          }
+      }
+  }
+
+  function updateProGauge(needleId, value, min, max) {
+      const needle = document.getElementById(needleId);
+      if (!needle) return;
+
+      const range = max - min;
+      const totalAngle = 270;
+      const startAngle = -135;
+
+      let sanitizedValue = value;
+      if (sanitizedValue < min) sanitizedValue = min;
+      if (sanitizedValue > max) sanitizedValue = max;
+
+      const angle = startAngle + ((sanitizedValue - min) / range) * totalAngle;
+      needle.style.transform = `rotate(${angle}deg)`;
+  }
+  
+  function updateTemperatureData(tempData) {
+      if (!tempData) return;
+
+      const celsius = typeof tempData.celsius === 'number' ? tempData.celsius : 0;
+      const fahrenheit = typeof tempData.fahrenheit === 'number' ? tempData.fahrenheit : (celsius * 9/5) + 32;
+
+      // ডিজিটাল ডিসপ্লে আপডেট
+      document.getElementById('temp-celsius-digital-1').innerHTML = `${celsius.toFixed(1)}<span class="energy-unit">°C</span>`;
+      document.getElementById('temp-fahrenheit-digital-1').innerHTML = `${fahrenheit.toFixed(1)}<span class="energy-unit">°F</span>`;
+      document.getElementById('temp-celsius-digital-2').innerHTML = `${celsius.toFixed(1)}<span class="energy-unit">°C</span>`;
+      document.getElementById('temp-fahrenheit-digital-2').innerHTML = `${fahrenheit.toFixed(1)}<span class="energy-unit">°F</span>`;
+
+
+      // অ্যানালগ গজ আপডেট
+      updateProGauge('gauge-needle-celsius', celsius, -10, 50);
+      updateProGauge('gauge-needle-fahrenheit', fahrenheit, 20, 140);
   }
 
   function updateEnergyData(data) {
@@ -4662,6 +4958,15 @@ function logout() {
         const data = snapshot.val();
         if (data) updateEnergyData(data);
     });
+    
+    // ★★★ নতুন: তাপমাত্রা ডেটার জন্য ফায়ারবেস লিসেনার ★★★
+    database.ref('devices/device1/Temperature1').on('value', snapshot => {
+        const tempData = snapshot.val();
+        if (tempData) {
+            updateTemperatureData(tempData);
+        }
+    });
+
 
     database.ref('energyHistory').limitToLast(1000).on('value', snapshot => {
         const data = snapshot.val();
