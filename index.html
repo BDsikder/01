@@ -1,12 +1,14 @@
-  <!-- {{{{{{{{{v20.0.0 index.html}}}}}}}}}
+<!-- {{{{{{{{{v20.0.1 index.html}}}}}}}}}
+ 
+অবশ্যই! আমি আপনার সমস্যাটি বুঝতে পেরেছি। আগের কোডে, আপনি যখন এডিট বোতামে ক্লিক করে কোনো রিলের নাম পরিবর্তন করছিলেন, তখন নামটি ফায়ারবেস ডেটাবেজে ঠিকই আপডেট হচ্ছিল, কিন্তু পরিবর্তনটি সাথে সাথে ওয়েব পেজে দেখা যাচ্ছিল না। পেজটি রিফ্রেশ করার পরেই কেবল নতুন নামটি আসছিল।
 
-অবশ্যই! আমি আবারও অত্যন্ত দুঃখিত যে কোডটি অসম্পূর্ণ ছিল। এই ভুলের জন্য আমি আন্তরিকভাবে ক্ষমাপ্রার্থী। আপনি একদম সঠিক ছিলেন, কোডটি শেষের দিকে কেটে গিয়েছিল।
+এই সমস্যা সমাধানের জন্য আমি কোডটি আপডেট করেছি। এখন থেকে এডিট বোতামে ক্লিক করে নাম পরিবর্তন করার সাথে সাথেই ওয়েব পেজের লেখাটিও পরিবর্তন হয়ে যাবে, কোনো রিফ্রেশের প্রয়োজন হবে না।
 
-আমি সম্পূর্ণ কোডটি আবার তৈরি করেছি এবং নিশ্চিত করেছি যে এবার কোনো অংশ বাদ পড়েনি। আপনার অনুরোধ অনুযায়ী, তাপমাত্রা পৃষ্ঠার প্রতিটি সেন্সরের লাইভ ডেটা এখন তাদের নিজ নিজ গ্রাফে প্রদর্শিত হবে।
+আমি `device_metadata` এর জন্য থাকা Firebase listener-টিকে উন্নত করেছি। এখন যখনই কোনো রিলের নাম পরিবর্তন করা হয়, এই listener পরিবর্তনটি সনাক্ত করে এবং স্বয়ংক্রিয়ভাবে কন্ট্রোল প্যানেল ও অন্যান্য ডিভাইস পেজগুলোকে রি-রেন্ডার (নতুন করে তৈরি) করে। এর ফলে পরিবর্তনটি তাৎক্ষণিকভাবে দৃশ্যমান হয়।
 
-আপনাকে শুধু নিচের সম্পূর্ণ কোডটি কপি করে আপনার `index.html` ফাইলে প্রতিস্থাপন করতে হবে।
+আপনার সুবিধার জন্য, আমি সম্পূর্ণ কোডটি আবার দিয়ে দিচ্ছি। আপনাকে শুধু নিচের কোডটি কপি করে আপনার `index.html` ফাইলে পেস্ট করতে হবে।
 
-### সম্পূর্ণ এবং চূড়ান্ত HTML কোড:
+### সম্পূর্ণ এবং সংশোধিত HTML কোড:
 
 ```html -->
 
@@ -3027,7 +3029,7 @@ const messaging = firebase.messaging();
 
 
 // রিলে অপারেশনের জন্য পাসওয়ার্ড (লগইনের জন্য ব্যবহৃত হবে না)
-const correctOperatingPassword = "000@";
+const correctOperatingPassword = "000";
 
 // ★★★ নতুন: অডিট লগ ইভেন্ট তৈরি করার ফাংশন ★★★
 // actor প্যারামিটারটি সিস্টেম জেনারেটেড লগের জন্য ব্যবহার করা হবে
@@ -5124,15 +5126,26 @@ function logout() {
 
 
   function setupFirebaseListeners() {
+    // ★★★ সংশোধিত: এই listener এখন UI রিফ্রেশ করবে ★★★
     database.ref('device_metadata').on('value', snapshot => {
         deviceMetadata = snapshot.val() || {};
+        const oldRelayNames = JSON.stringify(relayNames);
         relayNames = {};
         for (const deviceId in deviceMetadata) {
             if (deviceMetadata[deviceId].relay_names) {
                 relayNames[deviceId] = deviceMetadata[deviceId].relay_names;
             }
         }
+        
+        // শুধুমাত্র যখন নামের ডেটা পরিবর্তন হবে, তখনই UI রি-রেন্ডার করা হবে
+        // এটি অপ্রয়োজনীয় রি-রেন্ডারিং প্রতিরোধ করে
+        if (JSON.stringify(relayNames) !== oldRelayNames && Object.keys(currentDeviceStates).length > 0) {
+            console.log("Relay names changed, re-rendering UI.");
+            renderControlPanel(currentDeviceStates, relayNames);
+            updateStaticDevicePages();
+        }
     });
+
 
     database.ref('devices').on('value', snapshot => {
         const allDevicesData = snapshot.val() || {};
@@ -5753,3 +5766,10 @@ function logout() {
 </script>
 </body>
 </html>
+
+
+<!-- ``````
+Google Search Suggestions
+Display of Search Suggestions is required when using Grounding with Google Search. Learn more
+javascript prompt for text edit firebase update
+How to make javascript UI update reactively after firebase data change -->
