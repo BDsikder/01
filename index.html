@@ -1,18 +1,13 @@
-<!-- {{{{{{{{{v20.0.1 index.html}}}}}}}}}
+ <!-- {{{{{{{{ v20.0.5 index.html }}}}}}}}
  
-অবশ্যই! আমি আপনার সমস্যাটি বুঝতে পেরেছি। আগের কোডে, আপনি যখন এডিট বোতামে ক্লিক করে কোনো রিলের নাম পরিবর্তন করছিলেন, তখন নামটি ফায়ারবেস ডেটাবেজে ঠিকই আপডেট হচ্ছিল, কিন্তু পরিবর্তনটি সাথে সাথে ওয়েব পেজে দেখা যাচ্ছিল না। পেজটি রিফ্রেশ করার পরেই কেবল নতুন নামটি আসছিল।
 
-এই সমস্যা সমাধানের জন্য আমি কোডটি আপডেট করেছি। এখন থেকে এডিট বোতামে ক্লিক করে নাম পরিবর্তন করার সাথে সাথেই ওয়েব পেজের লেখাটিও পরিবর্তন হয়ে যাবে, কোনো রিফ্রেশের প্রয়োজন হবে না।
+অবশ্যই। আপনার অনুরোধ অনুযায়ী, আমি চূড়ান্ত এবং সম্পূর্ণ কোডটি নিচে আবার প্রদান করছি। এই কোডে নেভিগেশন ট্যাবের জন্য রঙিন, অ্যানিমেটেড এবং সুন্দর নকশার আইকন যুক্ত করা হয়েছে।
 
-আমি `device_metadata` এর জন্য থাকা Firebase listener-টিকে উন্নত করেছি। এখন যখনই কোনো রিলের নাম পরিবর্তন করা হয়, এই listener পরিবর্তনটি সনাক্ত করে এবং স্বয়ংক্রিয়ভাবে কন্ট্রোল প্যানেল ও অন্যান্য ডিভাইস পেজগুলোকে রি-রেন্ডার (নতুন করে তৈরি) করে। এর ফলে পরিবর্তনটি তাৎক্ষণিকভাবে দৃশ্যমান হয়।
+আপনাকে শুধু এই কোডটি কপি করে আপনার `index.html` ফাইলে পেস্ট করতে হবে এবং `notification.mp3` নামের একটি অডিও ফাইল আপনার `index.html` ফাইলের পাশে রাখতে হবে।
 
-আপনার সুবিধার জন্য, আমি সম্পূর্ণ কোডটি আবার দিয়ে দিচ্ছি। আপনাকে শুধু নিচের কোডটি কপি করে আপনার `index.html` ফাইলে পেস্ট করতে হবে।
-
-### সম্পূর্ণ এবং সংশোধিত HTML কোড:
+### চূড়ান্ত এবং সম্পূর্ণ HTML কোড:
 
 ```html -->
-
-
 <!DOCTYPE html>
 <html lang="bn">
 <head>
@@ -20,10 +15,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>BISNU IoT ডিভাইস কন্ট্রোল প্যানেল</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <!-- ★★★ নতুন: ড্র্যাগ-এন্ড-ড্রপ সুবিধার জন্য SortableJS লাইব্রেরি যোগ করা হয়েছে ★★★ -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300;400;600;700&display=swap" rel="stylesheet">
-  <!-- Font Awesome আইকন যোগ করা হয়েছে -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     /* --- CSS ভ্যারিয়েবল সংজ্ঞা --- */
@@ -557,6 +550,41 @@
       box-shadow: 0 0 15px rgba(52, 152, 219, 0.5);
       color: white;
       transform: scale(1.05);
+    }
+
+    /* --- ★★★ নতুন: নেভিগেশন ট্যাব আইকন এবং অ্যানিমেশন ★★★ --- */
+    @keyframes nav-icon-anim {
+      0% { transform: scale(1) rotate(0deg); }
+      25% { transform: scale(1.3) rotate(-15deg); }
+      50% { transform: scale(1.3) rotate(15deg); }
+      75% { transform: scale(1.3) rotate(-15deg); }
+      100% { transform: scale(1) rotate(0deg); }
+    }
+    
+    .nav-tab i {
+      margin-right: 10px;
+      font-size: 1.1rem;
+      transition: all 0.4s ease-in-out;
+    }
+
+    .nav-tab:hover i, .nav-tab:active i {
+      animation: nav-icon-anim 0.6s ease-in-out;
+    }
+    
+    /* ★★★ নতুন: হোভার এবং সক্রিয় ট্যাবের জন্য রঙিন আইকন ★★★ */
+    .nav-tab:hover i {
+      background: linear-gradient(45deg, var(--secondary-color), var(--accent-color), var(--warning-color));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .nav-tab.active i {
+      transform: scale(1.1);
+      background: linear-gradient(60deg, #ffffff, var(--success-color), var(--info-color));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
     }
 
     /* ★★★ নতুন: ট্যাব ড্র্যাগ করার সময় ভিজ্যুয়াল ফিডব্যাকের জন্য স্টাইল ★★★ */
@@ -2181,29 +2209,28 @@
     </div>
   </header>
   
-  <!-- ★★★ পরিবর্তিত: নেভিগেশন বারে data-tab-id যোগ করা হয়েছে ★★★ -->
+  <!-- ★★★ পরিবর্তিত: নেভিগেশন বারে আইকন যুক্ত করা হয়েছে ★★★ -->
   <nav class="nav-tabs" id="nav-tabs-container">
-    <div class="nav-tab active" onclick="showPage('page1')" data-tab-id="page1">ডিভাইস ১</div>
-    <div class="nav-tab" onclick="showPage('page2')" data-tab-id="page2">ডিভাইস ২</div>
-    <div class="nav-tab" onclick="showPage('page3')" data-tab-id="page3">ডিভাইস ৩</div>
-    <div class="nav-tab" onclick="showPage('page4')" data-tab-id="page4">ডিভাইস ৪</div>
-    <div class="nav-tab" onclick="showPage('page5')" data-tab-id="page5">এনার্জি মনিটর</div>
-    <div class="nav-tab" onclick="showPage('page6')" data-tab-id="page6">এডভান্সড গ্রাফ</div>
-    <div class="nav-tab" onclick="showPage('page7')" data-tab-id="page7">Diagram Note File</div>
-    <div class="nav-tab" onclick="showPage('page8')" data-tab-id="page8">কন্ট্রোল প্যানেল</div>
-    <div class="nav-tab" onclick="showPage('page9')" data-tab-id="page9">অটোমেশন ও অ্যালার্ট</div>
-    <div class="nav-tab" onclick="showPage('page10')" data-tab-id="page10">📜 অডিট লগ</div>
-    <div class="nav-tab" onclick="showPage('page11')" data-tab-id="page11">📊 সিস্টেম স্ট্যাটাস</div>
-    <div class="nav-tab" onclick="showPage('page12')" data-tab-id="page12">🔐 লজিক গেট ইন্টারলক</div>
-    <!-- ★★★ নতুন: তাপমাত্রা মনিটর পেজের জন্য ট্যাব ★★★ -->
-    <div class="nav-tab" onclick="showPage('page13')" data-tab-id="page13">🌡️ তাপমাত্রা মনিটর</div>
+    <div class="nav-tab" onclick="showPage('page1')" data-tab-id="page1"><i class="fas fa-server"></i> ডিভাইস ১</div>
+    <div class="nav-tab" onclick="showPage('page2')" data-tab-id="page2"><i class="fas fa-server"></i> ডিভাইস ২</div>
+    <div class="nav-tab" onclick="showPage('page3')" data-tab-id="page3"><i class="fas fa-server"></i> ডিভাইস ৩</div>
+    <div class="nav-tab" onclick="showPage('page4')" data-tab-id="page4"><i class="fas fa-server"></i> ডিভাইস ৪</div>
+    <div class="nav-tab" onclick="showPage('page5')" data-tab-id="page5"><i class="fas fa-bolt"></i> এনার্জি মনিটর</div>
+    <div class="nav-tab" onclick="showPage('page6')" data-tab-id="page6"><i class="fas fa-chart-line"></i> এডভান্সড গ্রাফ</div>
+    <div class="nav-tab" onclick="showPage('page7')" data-tab-id="page7"><i class="fas fa-file-alt"></i> Diagram Note File</div>
+    <div class="nav-tab" onclick="showPage('page8')" data-tab-id="page8"><i class="fas fa-sliders-h"></i> কন্ট্রোল প্যানেল</div>
+    <div class="nav-tab" onclick="showPage('page9')" data-tab-id="page9"><i class="fas fa-robot"></i> অটোমেশন ও অ্যালার্ট</div>
+    <div class="nav-tab" onclick="showPage('page10')" data-tab-id="page10"><i class="fas fa-history"></i> অডিট লগ</div>
+    <div class="nav-tab" onclick="showPage('page11')" data-tab-id="page11"><i class="fas fa-info-circle"></i> সিস্টেম স্ট্যাটাস</div>
+    <div class="nav-tab" onclick="showPage('page12')" data-tab-id="page12"><i class="fas fa-project-diagram"></i> লজিক গেট ইন্টারলক</div>
+    <div class="nav-tab" onclick="showPage('page13')" data-tab-id="page13"><i class="fas fa-thermometer-half"></i> তাপমাত্রা মনিটর</div>
     <div class="nav-tab" id="add-new-page-btn" onclick="openAddPageModal()" data-tab-id="add-new-page-btn">
         <i class="fas fa-plus"></i> নতুন পেজ
     </div>
   </nav>
 
   <!-- ডিভাইস ১ পেইজ -->
-  <main id="page1" class="device-page active">
+  <main id="page1" class="device-page">
     <section class="device-status-summary" id="device1-summary">
       <div class="status-item">
         <div class="status-count" id="d1-active-count">0</div>
@@ -2999,6 +3026,11 @@
   </div>
 </div>
 
+<!-- ★★★ নতুন: নোটিফিকেশন সাউন্ডের জন্য অডিও এলিমেন্ট ★★★ -->
+<audio id="notification-sound" preload="auto">
+  <source src="notification.mp3" type="audio/mpeg">
+  আপনার ব্রাউজার অডিও সমর্থন করে না।
+</audio>
 
 
 <!-- Firebase SDK -->
@@ -3015,7 +3047,7 @@ const firebaseConfig = {
   authDomain: "home-server-346b6.firebaseapp.com",
   databaseURL: "https://home-server-346b6-default-rtdb.firebaseio.com",
   projectId: "home-server-346b6",
-  storageBucket: "home-server-346b6.firebasestorage.app",
+  storageBucket: "home-server-346b6.appspot.com",
   messagingSenderId: "531234227336",
   appId: "1:531234227336:web:f57f700dd6baaed4358b3d",
   measurementId: "G-QDWVP34FSX"
@@ -3094,6 +3126,27 @@ function loginWithFirebase() {
             console.log("লগইন সফল:", userCredential.user.email);
             
             logAuditEvent("সিস্টেমে সফলভাবে লগইন করেছেন।");
+            
+            // ★★★ নতুন: ব্রাউজারের অটো-প্লে নীতি আনলক করার জন্য ★★★
+            const notificationSound = document.getElementById('notification-sound');
+            if (notificationSound) {
+                notificationSound.muted = true; // প্রথমে মিউট করুন
+                const playPromise = notificationSound.play();
+
+                if (playPromise !== undefined) {
+                    playPromise.then(_ => {
+                        // প্লে সফল হয়েছে, এখন পজ করুন এবং পরবর্তী ব্যবহারের জন্য প্রস্তুত করুন
+                        notificationSound.pause();
+                        notificationSound.currentTime = 0;
+                        notificationSound.muted = false; // আনমিউট করুন
+                        console.log("Audio context unlocked.");
+                    }).catch(error => {
+                        console.error("Audio unlock failed:", error);
+                        // ব্যর্থ হলেও, পরবর্তী চেষ্টা সফল হতে পারে
+                        notificationSound.muted = false;
+                    });
+                }
+            }
 
             const loginContainer = document.getElementById("login-screen");
             const appContainer = document.getElementById("app");
@@ -3315,7 +3368,8 @@ function logout() {
       tab.classList.remove('active');
     });
     
-    const activeTab = document.querySelector(`.nav-tab[data-tab-id*="${pageId.replace('custom_page_','') }"]`);
+    // ★★★ সংশোধিত লাইন: সুনির্দিষ্ট ম্যাচিং এর জন্য '*' সরিয়ে '=' ব্যবহার করা হয়েছে ★★★
+    const activeTab = document.querySelector(`.nav-tab[data-tab-id="${pageId}"]`);
     if(activeTab) {
         activeTab.classList.add('active');
     }
@@ -4012,21 +4066,31 @@ function logout() {
     setTimeout(() => { win.print(); win.close(); }, 500);
   }
   
+  // ★★★ পরিবর্তিত: সাউন্ড যোগ করা হয়েছে ★★★
   function showToast(message, type = 'info') {
-    const container = document.getElementById('toast-container');
-    const toast = document.createElement('div');
-    toast.className = `toast-message ${type}`;
-    
-    let icon = 'ℹ️';
-    if (type === 'success') icon = '✅';
-    if (type === 'error') icon = '❌';
+      const notificationSound = document.getElementById('notification-sound');
+      if (notificationSound) {
+          notificationSound.currentTime = 0; // প্রতিবার শুরু থেকে প্লে করার জন্য
+          notificationSound.play().catch(error => {
+              // ব্রাউজার দ্বারা অটো-প্লে ব্লক করা হলে কনসোলে লগ দেখাবে
+              console.log("Notification sound could not be played automatically:", error);
+          });
+      }
 
-    toast.innerHTML = `${icon} ${message}`;
-    container.appendChild(toast);
-    
-    setTimeout(() => {
-      toast.remove();
-    }, 5000);
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = `toast-message ${type}`;
+      
+      let icon = 'ℹ️';
+      if (type === 'success') icon = '✅';
+      if (type === 'error') icon = '❌';
+
+      toast.innerHTML = `${icon} ${message}`;
+      container.appendChild(toast);
+      
+      setTimeout(() => {
+        toast.remove();
+      }, 5000);
   }
 
   function displayNotification(title, body) {
@@ -4837,17 +4901,28 @@ function logout() {
       }
   }
 
+  // ★★★ সংশোধিত ফাংশন: সাজানোর পর প্রথম ট্যাবটি সক্রিয় করবে ★★★
   function loadAndApplyTabOrder() {
       const user = auth.currentUser;
-      if (!user) {
+      const container = document.getElementById('nav-tabs-container');
+      
+      const applyDefaultView = () => {
           initTabSorting();
+          // DOM-এ থাকা প্রথম ট্যাবটি খুঁজুন এবং সক্রিয় করুন
+          const firstTab = container.querySelector('.nav-tab');
+          if (firstTab && firstTab.dataset.tabId) {
+              showPage(firstTab.dataset.tabId);
+          }
+      };
+      
+      if (!user) {
+          applyDefaultView();
           return;
       };
 
       database.ref(`ui_settings/${user.uid}/tabOrder`).once('value', snapshot => {
           const order = snapshot.val();
           if (order && Array.isArray(order)) {
-              const container = document.getElementById('nav-tabs-container');
               const tabs = {};
               Array.from(container.children).forEach(tab => {
                   if (tab.dataset.tabId) {
@@ -4866,7 +4941,7 @@ function logout() {
                   container.appendChild(tabs[tabId]);
               }
           }
-          initTabSorting();
+          applyDefaultView();
       });
   }
 
@@ -5506,7 +5581,7 @@ function logout() {
             navContainer.insertBefore(navTab, document.getElementById('add-new-page-btn'));
 
             const pageContainer = document.createElement('main');
-            pageContainer.id = `custom_page_${pageId}`; // ★★★ সংশোধিত লাইন ★★★
+            pageContainer.id = `custom_page_${pageId}`;
             pageContainer.className = 'device-page custom-page';
             
             renderDynamicPageContent(pageContainer, page.components || []);
@@ -5766,10 +5841,3 @@ function logout() {
 </script>
 </body>
 </html>
-
-
-<!-- ``````
-Google Search Suggestions
-Display of Search Suggestions is required when using Grounding with Google Search. Learn more
-javascript prompt for text edit firebase update
-How to make javascript UI update reactively after firebase data change -->
