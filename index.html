@@ -1,11 +1,8 @@
- <!-- {{{{{{{{ v20.0.5 index.html }}}}}}}}
+<!-- {{{{{{{{{v20.0.6 index}}}}}}}}}
  
 
-অবশ্যই। আপনার অনুরোধ অনুযায়ী, আমি চূড়ান্ত এবং সম্পূর্ণ কোডটি নিচে আবার প্রদান করছি। এই কোডে নেভিগেশন ট্যাবের জন্য রঙিন, অ্যানিমেটেড এবং সুন্দর নকশার আইকন যুক্ত করা হয়েছে।
 
-আপনাকে শুধু এই কোডটি কপি করে আপনার `index.html` ফাইলে পেস্ট করতে হবে এবং `notification.mp3` নামের একটি অডিও ফাইল আপনার `index.html` ফাইলের পাশে রাখতে হবে।
-
-### চূড়ান্ত এবং সম্পূর্ণ HTML কোড:
+অবশ্যই। আপনার অনুরোধ অনুযায়ী, সম্পূর্ণ HTML ফাইলটি শুরু থেকে শেষ পর্যন্ত নিচে দেওয়া হলো।
 
 ```html -->
 <!DOCTYPE html>
@@ -4967,6 +4964,9 @@ function logout() {
             const sensorValues = sensorsData[sensorId];
             const sensorMeta = metadata[sensorId] || { name: sensorId };
 
+            const celsiusValue = sensorValues.celsius_value || 0;
+            const fahrenheitValue = sensorValues.fahrenheit_value || 0;
+
             const groupContainer = document.createElement('div');
             groupContainer.className = 'temperature-group-container';
 
@@ -4994,7 +4994,7 @@ function logout() {
                             <div class="energy-card temperature-card">
                                 <div class="energy-title">🌡️ সেলসিয়াস</div>
                                 <div class="energy-value" id="temp-digital-celsius-${sensorId}">
-                                    ${(sensorValues.celsius || 0).toFixed(1)}<span class="energy-unit">°C</span>
+                                    ${celsiusValue.toFixed(1)}<span class="energy-unit">°C</span>
                                 </div>
                             </div>
                         </div>
@@ -5014,7 +5014,7 @@ function logout() {
                             <div class="energy-card temperature-card fahrenheit">
                                 <div class="energy-title">🔥 ফারেনহাইট</div>
                                 <div class="energy-value" id="temp-digital-fahrenheit-${sensorId}">
-                                    ${(sensorValues.fahrenheit || 0).toFixed(1)}<span class="energy-unit">°F</span>
+                                    ${fahrenheitValue.toFixed(1)}<span class="energy-unit">°F</span>
                                 </div>
                             </div>
                         </div>
@@ -5030,12 +5030,12 @@ function logout() {
             
             setTimeout(() => {
                 createGaugeScale(`gauge-dial-celsius-${sensorId}`, -10, 50, 10, 5);
-                updateProGauge(`gauge-needle-celsius-${sensorId}`, sensorValues.celsius || 0, -10, 50);
+                updateProGauge(`gauge-needle-celsius-${sensorId}`, celsiusValue, -10, 50);
                 
                 createGaugeScale(`gauge-dial-fahrenheit-${sensorId}`, 20, 140, 20, 4);
-                updateProGauge(`gauge-needle-fahrenheit-${sensorId}`, sensorValues.fahrenheit || 0, 20, 140);
+                updateProGauge(`gauge-needle-fahrenheit-${sensorId}`, fahrenheitValue, 20, 140);
 
-                initSensorHistoricalChart(sensorId); // প্রতিটির জন্য গ্রাফ তৈরি
+                initSensorHistoricalChart(sensorId);
             }, 0);
         });
     }
@@ -5045,14 +5045,14 @@ function logout() {
         for (const sensorId in sensorsData) {
             const sensorValues = sensorsData[sensorId];
             
-            const celsiusValue = sensorValues.celsius || 0;
+            const celsiusValue = sensorValues.celsius_value || 0;
             const celsiusDisplay = document.getElementById(`temp-digital-celsius-${sensorId}`);
             if (celsiusDisplay) {
                 celsiusDisplay.innerHTML = `${celsiusValue.toFixed(1)}<span class="energy-unit">°C</span>`;
             }
             updateProGauge(`gauge-needle-celsius-${sensorId}`, celsiusValue, -10, 50);
 
-            const fahrenheitValue = sensorValues.fahrenheit || 0;
+            const fahrenheitValue = sensorValues.fahrenheit_value || 0;
             const fahrenheitDisplay = document.getElementById(`temp-digital-fahrenheit-${sensorId}`);
             if (fahrenheitDisplay) {
                 fahrenheitDisplay.innerHTML = `${fahrenheitValue.toFixed(1)}<span class="energy-unit">°F</span>`;
@@ -5061,6 +5061,7 @@ function logout() {
         }
     }
 
+    // ★★★ সংশোধিত ফাংশন ★★★
     function addNewTemperatureSensor() {
         const name = prompt("নতুন সেন্সর গ্রুপের নাম দিন:");
         if (!name || name.trim() === "") return;
@@ -5069,20 +5070,23 @@ function logout() {
             'নতুন সেন্সর গ্রুপ যোগ করুন',
             `আপনি কি '${name}' নামে একটি নতুন সেন্সর গ্রুপ যোগ করতে চান?`,
             () => {
-                database.ref('devices').once('value', snapshot => {
+                const devicesRef = database.ref('devices');
+                devicesRef.once('value', snapshot => {
                     const devices = snapshot.val() || {};
                     let maxNum = 0;
                     Object.keys(devices).forEach(key => {
                         if (key.startsWith('temperature')) {
-                            const num = parseInt(key.replace('temperature', ''));
+                            const num = parseInt(key.replace('temperature', ''), 10);
                             if (!isNaN(num) && num > maxNum) maxNum = num;
                         }
                     });
                     const newSensorId = `temperature${maxNum + 1}`;
 
                     const updates = {};
-                    updates[`/devices/${newSensorId}/celsius`] = 0;
-                    updates[`/devices/${newSensorId}/fahrenheit`] = 32;
+                    updates[`/devices/${newSensorId}/celsius`] = "0.0°C";
+                    updates[`/devices/${newSensorId}/celsius_value`] = 0;
+                    updates[`/devices/${newSensorId}/fahrenheit`] = "32.0°F";
+                    updates[`/devices/${newSensorId}/fahrenheit_value`] = 32;
                     updates[`/device_metadata/${newSensorId}/name`] = name.trim();
                     
                     database.ref().update(updates)
@@ -5116,6 +5120,7 @@ function logout() {
                 const updates = {};
                 updates[`/devices/${sensorId}`] = null;
                 updates[`/device_metadata/${sensorId}`] = null;
+                updates[`/temperature_history/${sensorId}`] = null; // ইতিহাসও মুছে ফেলা হচ্ছে
 
                 database.ref().update(updates)
                     .then(() => {
@@ -5126,7 +5131,6 @@ function logout() {
         );
     }
 
-    // ★★★ পরিবর্তিত: প্রতিটি সেন্সরের জন্য স্বতন্ত্র গ্রাফ ইনিশিয়ালাইজেশন এবং লাইভ আপডেট ★★★
     function initSensorHistoricalChart(sensorId) {
         const canvas = document.getElementById(`history-chart-${sensorId}`);
         if (!canvas) return;
@@ -5153,7 +5157,6 @@ function logout() {
             }
         });
 
-        // শুধুমাত্র একবার পুরানো ডেটা লোড করা হচ্ছে
         database.ref(`temperature_history/${sensorId}`).limitToLast(20).once('value', snapshot => {
             const historyData = snapshot.val();
             const chart = sensorHistoricalCharts[sensorId];
@@ -5165,8 +5168,8 @@ function logout() {
                 for(const key in historyData) {
                     const entry = historyData[key];
                     labels.push(new Date(entry.timestamp).toLocaleTimeString('bn-BD'));
-                    celsiusData.push(entry.celsius);
-                    fahrenheitData.push(entry.fahrenheit);
+                    celsiusData.push(entry.celsius_value);
+                    fahrenheitData.push(entry.fahrenheit_value);
                 }
                 chart.data.labels = labels;
                 chart.data.datasets[0].data = celsiusData;
@@ -5176,20 +5179,19 @@ function logout() {
         });
     }
 
-    // ★★★ নতুন: লাইভ টেম্পারেচার ডেটা গ্রাফে যোগ করার ফাংশন ★★★
     function updateLiveDataOnSensorChart(sensorId, values) {
         const chart = sensorHistoricalCharts[sensorId];
-        if (!chart || values.celsius === undefined || values.fahrenheit === undefined) {
+        if (!chart || values.celsius_value === undefined || values.fahrenheit_value === undefined) {
             return; 
         }
 
         const label = new Date().toLocaleTimeString('bn-BD', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 
         chart.data.labels.push(label);
-        chart.data.datasets[0].data.push(values.celsius);
-        chart.data.datasets[1].data.push(values.fahrenheit);
+        chart.data.datasets[0].data.push(values.celsius_value);
+        chart.data.datasets[1].data.push(values.fahrenheit_value);
 
-        const maxDataPoints = 30; // গ্রাফে সর্বোচ্চ ৩০টি ডেটা পয়েন্ট দেখাবে
+        const maxDataPoints = 30;
         if (chart.data.labels.length > maxDataPoints) {
             chart.data.labels.shift();
             chart.data.datasets.forEach(dataset => {
@@ -5201,7 +5203,6 @@ function logout() {
 
 
   function setupFirebaseListeners() {
-    // ★★★ সংশোধিত: এই listener এখন UI রিফ্রেশ করবে ★★★
     database.ref('device_metadata').on('value', snapshot => {
         deviceMetadata = snapshot.val() || {};
         const oldRelayNames = JSON.stringify(relayNames);
@@ -5212,8 +5213,6 @@ function logout() {
             }
         }
         
-        // শুধুমাত্র যখন নামের ডেটা পরিবর্তন হবে, তখনই UI রি-রেন্ডার করা হবে
-        // এটি অপ্রয়োজনীয় রি-রেন্ডারিং প্রতিরোধ করে
         if (JSON.stringify(relayNames) !== oldRelayNames && Object.keys(currentDeviceStates).length > 0) {
             console.log("Relay names changed, re-rendering UI.");
             renderControlPanel(currentDeviceStates, relayNames);
@@ -5243,16 +5242,13 @@ function logout() {
         populateLogicGateRelaySelectors();
         evaluateLogicGateRules(currentDeviceStates);
 
-        // --- ★★★ পরিবর্তিত তাপমাত্রা সেন্সর হ্যান্ডলিং ★★★ ---
         const existingSensorIds = Object.keys(sensorHistoricalCharts);
         const newSensorIds = Object.keys(temperatureSensors);
 
-        // যদি সেন্সর যোগ বা حذف করা হয়, তবেই পুরো UI রি-রেন্ডার হবে
         if (JSON.stringify(existingSensorIds.sort()) !== JSON.stringify(newSensorIds.sort())) {
             renderTemperatureSensors(temperatureSensors, deviceMetadata);
         }
 
-        // প্রতিটি আপডেটে গজ এবং লাইভ গ্রাফ আপডেট হবে
         updateAllGauges(temperatureSensors);
         for (const sensorId in temperatureSensors) {
             updateLiveDataOnSensorChart(sensorId, temperatureSensors[sensorId]);
