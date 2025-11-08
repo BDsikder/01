@@ -1,7 +1,5 @@
-<!-- {{{{{{{{{v20.0.6 index}}}}}}}}}
+<!-- {{{{{{{v20.06 index.html}}}}}}}
  
-
-
 অবশ্যই। আপনার অনুরোধ অনুযায়ী, সম্পূর্ণ HTML ফাইলটি শুরু থেকে শেষ পর্যন্ত নিচে দেওয়া হলো।
 
 ```html -->
@@ -3689,11 +3687,18 @@ function logout() {
               const number = document.createElement('div');
               number.className = 'gauge-number';
               number.textContent = i;
-              const numberRadius = 38; // %
-              const numberAngleRad = (angle - 90) * (Math.PI / 180);
-              const x = numberRadius * Math.cos(numberAngleRad);
-              const y = numberRadius * Math.sin(numberAngleRad);
-              number.style.transform = `translate(${x}%, ${y}%)`;
+              const numberRadius = 41; // Place numbers just inside the gauge body
+              
+              // Convert CSS rotation angle to standard math angle in radians for trigonometry
+              const angleRad = (angle - 90) * (Math.PI / 180);
+              
+              // Calculate the center position of the number element (in %)
+              const xPos = 50 + numberRadius * Math.cos(angleRad);
+              const yPos = 50 + numberRadius * Math.sin(angleRad);
+              
+              number.style.left = `${xPos}%`;
+              number.style.top = `${yPos}%`;
+              
               dial.appendChild(number);
           }
       }
