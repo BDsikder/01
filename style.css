@@ -154,7 +154,7 @@ body.bg-10::before { background-image: url('10background image.jpg'); }
   height: 100%;
   object-fit: contain;
   animation: 20000ms linear -221.503ms infinite normal none running rotate, 0s ease-in-out infinite normal none running pulse;
-  filter: drop-shadow(0 0 15px rgba(52, 152, 219, 0.7));
+  filter: drop-shadow(0 0 -1px rgba(52, 152, 219, 0.7));
 }
 
 .login-logo-ring {
@@ -316,7 +316,7 @@ body.bg-10::before { background-image: url('10background image.jpg'); }
   height: 100%;
   object-fit: contain;
   animation: 20000ms linear -221.503ms infinite normal none running rotate, 0s ease-in-out infinite normal none running pulse;
-  filter: drop-shadow(0 0 15px rgba(52, 152, 219, 0.7));
+  filter: drop-shadow(0 0 -1px rgba(52, 152, 219, 0.7));
 }
 .app-logo-ring {
   position: absolute;
@@ -1263,4 +1263,5 @@ margin-top: 5px;
     padding: 5px 0;
     border-bottom: 1px solid rgba(255,255,255,0.1);
 }
+
 .linked-rule-dropdown div:last-child { border-bottom: none; }
