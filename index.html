@@ -1,0 +1,542 @@
+<!-- অবশ্যই, আপনার অনুরোধ অনুযায়ী সম্পূর্ণ কোডটিকে **৫টি আলাদা ফাইলে** ভাগ করা হয়েছে: `index.html`, `style.css`, `script.js`, `manifest.json`, এবং `sw.js`।
+
+নিচে ফাইলগুলো দেওয়া হলো। আপনি আপনার প্রজেক্ট ফোল্ডারে এই নামে ফাইলগুলো তৈরি করে কোডগুলো পেস্ট করুন।
+
+### 1. index.html
+এই ফাইলে মূল স্ট্রাকচার এবং এক্সটার্নাল লিংকগুলো যুক্ত করা হয়েছে।
+
+```html -->
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BISNU IoT ডিভাইস কন্ট্রোল প্যানেল</title>
+  
+  <!-- PWA Manifest Link -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#2c3e50">
+  <link rel="apple-touch-icon" href="Bisnu.png">
+
+  <!-- External CSS Link -->
+  <link rel="stylesheet" href="style.css">
+
+  <!-- External Libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-0">
+
+<!-- লক স্ক্রিন -->
+<div class="login-container" id="login-screen">
+  <div class="login-particles" id="particles"></div>
+  <div class="login-logo-container">
+    <img src="Bisnu.png" class="login-logo" alt="BISNU IoT Logo">
+    <div class="login-logo-ring"></div>
+    <div class="login-logo-ring"></div>
+    <div class="login-logo-ring"></div>
+  </div>
+  
+  <div class="login-box form-active" id="login-box">
+    <div class="login-box-inner">
+      <h2>BISNU IoT কন্ট্রোল প্যানেল</h2>
+      <div class="input-group"> <input type="email" id="email" placeholder="ইমেল লিখুন" autocomplete="email"> </div>
+      <div class="input-group"> <input type="password" id="password" placeholder="পাসওয়ার্ড লিখুন" autocomplete="current-password"> </div>
+      <button class="action-btn" onclick="loginWithFirebase()">লগইন করুন</button>
+      <div class="error-message" id="login-error"></div>
+      <div class="form-switcher"> আপনার কোনো একাউন্ট নেই? <a onclick="openRegistrationSecurityModal()">রেজিস্টার করুন</a> </div>
+    </div>
+  </div>
+
+  <div class="registration-box" id="registration-box">
+    <div class="login-box-inner">
+      <h2>নতুন একাউন্ট তৈরি করুন</h2>
+      <div class="input-group"> <input type="text" id="register-username" placeholder="ব্যবহারকারীর নাম" autocomplete="username"> </div>
+      <div class="input-group"> <input type="email" id="register-email" placeholder="ইমেল লিখুন" autocomplete="email"> </div>
+      <div class="input-group"> <input type="password" id="register-password" placeholder="পাসওয়ার্ড লিখুন" autocomplete="new-password"> </div>
+      <div class="input-group"> <input type="password" id="confirm-password" placeholder="পাসওয়ার্ড নিশ্চিত করুন" autocomplete="new-password"> </div>
+      <button class="action-btn" onclick="registerWithFirebase()">রেজিস্টার করুন</button>
+      <div class="error-message" id="register-error"></div>
+      <div class="form-switcher"> ইতিমধ্যে একাউন্ট আছে? <a onclick="toggleForms()">লগইন করুন</a> </div>
+    </div>
+  </div>
+</div>
+
+<!-- মূল অ্যাপ্লিকেশন -->
+<div id="app">
+  <header class="dashboard-header">
+    <div class="app-logo-container">
+      <img src="Bisnu.png" class="app-logo" alt="BISNU IoT Logo">
+      <div class="app-logo-ring"></div>
+      <div class="app-logo-ring"></div>
+      <div class="app-logo-ring"></div>
+    </div>
+    <h1 class="dashboard-title">IoT ডিভাইস মনিটরিং সিস্টেম</h1>
+    <div class="header-controls">
+      <label class="theme-toggle">
+        <input type="checkbox" id="theme-toggle">
+        <span class="theme-slider"></span>
+        <span class="theme-icon sun-icon">☀️</span>
+        <span class="theme-icon moon-icon">🌙</span>
+      </label>
+      <button id="toggle-sort-btn" class="pro-btn sort-lock-btn" onclick="toggleTabSorting()"> <i class="fas fa-lock"></i> সাজানো লক করুন </button>
+      <button id="notification-btn" class="pro-btn notification-btn" onclick="requestNotificationPermission()">🔔 নোটিফিকেশন চালু করুন</button>
+      <button class="pro-btn background-btn" onclick="changeBackground()">🖼️ ব্যাকগ্রাউন্ড</button>
+      <button class="pro-btn logout-btn" onclick="logout()">লগআউট</button>
+    </div>
+  </header>
+  
+  <nav class="nav-tabs" id="nav-tabs-container">
+    <div class="nav-tab" onclick="showPage('page1')" data-tab-id="page1"><i class="fas fa-server"></i> ডিভাইস ১</div>
+    <div class="nav-tab" onclick="showPage('page2')" data-tab-id="page2"><i class="fas fa-server"></i> ডিভাইস ২</div>
+    <div class="nav-tab" onclick="showPage('page3')" data-tab-id="page3"><i class="fas fa-server"></i> ডিভাইস ৩</div>
+    <div class="nav-tab" onclick="showPage('page4')" data-tab-id="page4"><i class="fas fa-server"></i> ডিভাইস ৪</div>
+    <div class="nav-tab" onclick="showPage('page5')" data-tab-id="page5"><i class="fas fa-bolt"></i> এনার্জি মনিটর</div>
+    <div class="nav-tab" onclick="showPage('page6')" data-tab-id="page6"><i class="fas fa-chart-line"></i> এডভান্সড গ্রাফ</div>
+    <div class="nav-tab" onclick="showPage('page7')" data-tab-id="page7"><i class="fas fa-file-alt"></i> Diagram Note File</div>
+    <div class="nav-tab" onclick="showPage('page8')" data-tab-id="page8"><i class="fas fa-sliders-h"></i> কন্ট্রোল প্যানেল</div>
+    <div class="nav-tab" onclick="showPage('page9')" data-tab-id="page9"><i class="fas fa-robot"></i> অটোমেশন ও অ্যালার্ট</div>
+    <div class="nav-tab" onclick="showPage('page10')" data-tab-id="page10"><i class="fas fa-history"></i> অডিট লগ</div>
+    <div class="nav-tab" onclick="showPage('page11')" data-tab-id="page11"><i class="fas fa-info-circle"></i> সিস্টেম স্ট্যাটাস</div>
+    <div class="nav-tab" onclick="showPage('page12')" data-tab-id="page12"><i class="fas fa-project-diagram"></i> লজিক গেট ইন্টারলক</div>
+    <div class="nav-tab" onclick="showPage('page13')" data-tab-id="page13"><i class="fas fa-thermometer-half"></i> তাপমাত্রা মনিটর</div>
+    <div class="nav-tab" id="add-new-page-btn" onclick="openAddPageModal()" data-tab-id="add-new-page-btn"> <i class="fas fa-plus"></i> নতুন পেজ </div>
+  </nav>
+
+  <!-- ডিভাইস ১ পেইজ -->
+  <main id="page1" class="device-page" data-component-id="device1_data">
+    <section class="device-status-summary" id="device1-summary">
+      <div class="status-item"><div class="status-count" id="d1-active-count">0</div><div class="status-label">এক্টিভ</div></div>
+      <div class="status-item"><div class="status-count" id="d1-inactive-count">0</div><div class="status-label">ইনএক্টিভ</div></div>
+      <div class="status-item"><div class="status-count" id="d1-warning-count">0</div><div class="status-label">সতর্কতা</div></div>
+      <div class="status-item"><div class="status-count" id="d1-total-count">0</div><div class="status-label">মোট লোড</div></div>
+    </section>
+    <section class="device-cards" id="device1-cards-container"></section>
+    <div class="add-new-btn-container">
+      <button class="pro-btn btn-info" onclick="addNewLoadToDevice('device1')" style="width: 100%; padding: 12px; font-size: 1rem;"><i class="fas fa-plus-circle"></i> নতুন লোড যোগ করুন</button>
+    </div>
+    <section class="analytics-section">
+      <div class="chart-container">
+        <div class="section-header">
+          <h3 class="section-title">ডিভাইস ১ স্ট্যাটাস গ্রাফ</h3>
+          <i class="fas fa-cog path-config-icon" title="Path Configuration" onclick="openPathSelector('device1_data', event)"></i>
+        </div>
+        <canvas id="device1-chart"></canvas>
+      </div>
+      <div class="log-container"> <h3 class="section-title">ডিভাইস ১ লগ</h3> <div class="log-list" id="device1-logs"></div> </div>
+    </section>
+  </main>
+
+  <!-- ডিভাইস ২ পেইজ -->
+  <main id="page2" class="device-page" data-component-id="device2_data">
+    <section class="device-status-summary" id="device2-summary">
+      <div class="status-item"><div class="status-count" id="d2-active-count">0</div><div class="status-label">এক্টিভ</div></div>
+      <div class="status-item"><div class="status-count" id="d2-inactive-count">0</div><div class="status-label">ইনএক্টিভ</div></div>
+      <div class="status-item"><div class="status-count" id="d2-warning-count">0</div><div class="status-label">সতর্কতা</div></div>
+      <div class="status-item"><div class="status-count" id="d2-total-count">0</div><div class="status-label">মোট লোড</div></div>
+    </section>
+    <section class="device-cards" id="device2-cards-container"></section>
+    <div class="add-new-btn-container">
+      <button class="pro-btn btn-info" onclick="addNewLoadToDevice('device2')" style="width: 100%; padding: 12px; font-size: 1rem;"><i class="fas fa-plus-circle"></i> নতুন লোড যোগ করুন</button>
+    </div>
+    <section class="analytics-section">
+      <div class="chart-container">
+        <div class="section-header">
+          <h3 class="section-title">ডিভাইস ২ স্ট্যাটাস গ্রাফ</h3>
+          <i class="fas fa-cog path-config-icon" title="Path Configuration" onclick="openPathSelector('device2_data', event)"></i>
+        </div>
+        <canvas id="device2-chart"></canvas>
+      </div>
+      <div class="log-container"><h3 class="section-title">ডিভাইস ২ লগ</h3><div class="log-list" id="device2-logs"></div></div>
+    </section>
+  </main>
+
+  <!-- ডিভাইস ৩ পেইজ -->
+  <main id="page3" class="device-page" data-component-id="device3_data">
+    <section class="device-status-summary" id="device3-summary">
+      <div class="status-item"><div class="status-count" id="d3-active-count">0</div><div class="status-label">এক্টিভ</div></div>
+      <div class="status-item"><div class="status-count" id="d3-inactive-count">0</div><div class="status-label">ইনএক্টিভ</div></div>
+      <div class="status-item"><div class="status-count" id="d3-warning-count">0</div><div class="status-label">সতর্কতা</div></div>
+      <div class="status-item"><div class="status-count" id="d3-total-count">0</div><div class="status-label">মোট লোড</div></div>
+    </section>
+    <section class="device-cards" id="device3-cards-container"></section>
+    <div class="add-new-btn-container">
+      <button class="pro-btn btn-info" onclick="addNewLoadToDevice('device3')" style="width: 100%; padding: 12px; font-size: 1rem;"><i class="fas fa-plus-circle"></i> নতুন লোড যোগ করুন</button>
+    </div>
+    <section class="analytics-section">
+      <div class="chart-container">
+        <div class="section-header">
+            <h3 class="section-title">ডিভাইস ৩ স্ট্যাটাস গ্রাফ</h3>
+            <i class="fas fa-cog path-config-icon" title="Path Configuration" onclick="openPathSelector('device3_data', event)"></i>
+        </div>
+        <canvas id="device3-chart"></canvas>
+      </div>
+      <div class="log-container"><h3 class="section-title">ডিভাইস ৩ লগ</h3><div class="log-list" id="device3-logs"></div></div>
+    </section>
+  </main>
+  
+  <!-- ডিভাইস ৪ পেইজ -->
+  <main id="page4" class="device-page" data-component-id="device4_data">
+    <section class="device-status-summary" id="device4-summary">
+      <div class="status-item"><div class="status-count" id="d4-active-count">0</div><div class="status-label">এক্টিভ</div></div>
+      <div class="status-item"><div class="status-count" id="d4-inactive-count">0</div><div class="status-label">ইনএক্টিভ</div></div>
+      <div class="status-item"><div class="status-count" id="d4-warning-count">0</div><div class="status-label">সতর্কতা</div></div>
+      <div class="status-item"><div class="status-count" id="d4-total-count">0</div><div class="status-label">মোট লোড</div></div>
+    </section>
+    <section class="device-cards" id="device4-cards-container"></section>
+    <div class="add-new-btn-container">
+      <button class="pro-btn btn-info" onclick="addNewLoadToDevice('device4')" style="width: 100%; padding: 12px; font-size: 1rem;"><i class="fas fa-plus-circle"></i> নতুন লোড যোগ করুন</button>
+    </div>
+    <section class="analytics-section">
+      <div class="chart-container">
+        <div class="section-header">
+            <h3 class="section-title">ডিভাইস ৪ স্ট্যাটাস গ্রাফ</h3>
+            <i class="fas fa-cog path-config-icon" title="Path Configuration" onclick="openPathSelector('device4_data', event)"></i>
+        </div>
+        <canvas id="device4-chart"></canvas>
+      </div>
+      <div class="log-container"><h3 class="section-title">ডিভাইস ৪ লগ</h3><div class="log-list" id="device4-logs"></div></div>
+    </section>
+  </main>
+  
+  <!-- এনার্জি মনিটরিং পেইজ -->
+  <main id="page5" class="device-page" data-component-id="energymonitoring_root">
+    <section class="energy-metrics">
+      <div class="energy-card voltage-card"><div class="energy-title">⚡ ভোল্টেজ</div><div class="energy-value" id="voltage-value">-- <span class="energy-unit">V</span></div></div>
+      <div class="energy-card current-card"><div class="energy-title">🔌 কারেন্ট</div><div class="energy-value" id="current-value">-- <span class="energy-unit">A</span></div></div>
+      <div class="energy-card power-card"><div class="energy-title">💡 পাওয়ার</div><div class="energy-value" id="power-value">-- <span class="energy-unit">W</span></div></div>
+      <div class="energy-card energy-card-main"><div class="energy-title">🔋 এনার্জি</div><div class="energy-value" id="energy-value">-- <span class="energy-unit">kWh</span></div></div>
+      <div class="energy-card frequency-card"><div class="energy-title">⏱️ ফ্রিকোয়েন্সি</div><div class="energy-value" id="frequency-value">-- <span class="energy-unit">Hz</span></div></div>
+      <div class="energy-card power-factor-card"><div class="energy-title">📊 পাওয়ার ফ্যাক্টর</div><div class="energy-value" id="power-factor-value">-- <span class="energy-unit"></span></div></div>
+      <div class="energy-card active-power-card"><div class="energy-title">🔆 অ্যাক্টিভ পাওয়ার</div><div class="energy-value" id="active-power-value">-- <span class="energy-unit">W</span></div></div>
+      <div class="energy-card reactive-power-card"><div class="energy-title">🌀 রিঅ্যাক্টিভ পাওয়ার</div><div class="energy-value" id="reactive-power-value">-- <span class="energy-unit">VAR</span></div></div>
+      <div class="energy-card units-card"><div class="energy-title">✔️ ব্যবহৃত ইউনিট</div><div class="energy-value" id="units-value">-- <span class="energy-unit">Units</span></div></div>
+      <div class="energy-card cost-card"><div class="energy-title">💰 দৈনিক খরচ</div><div class="energy-value" id="daily-cost-value">-- <span class="energy-unit">BDT</span></div></div>
+      <div class="energy-card timestamp-card"><div class="energy-title">🕒 টাইমস্ট্যাম্প</div><div class="energy-value" id="timestamp-value" style="font-size: 1.2rem; font-weight: 500;">--</div></div>
+    </section>
+    <section class="intelligence-section">
+      <div class="section-header">
+        <h3 class="intelligence-title">🧠 ইন্টেলিজেন্স ইনসাইটস</h3>
+        <i class="fas fa-cog path-config-icon" title="Path Configuration" onclick="openPathSelector('energymonitoring_root', event)"></i>
+      </div>
+      <div id="anomaly-alert"><p>সিস্টেম স্বাভাবিকভাবে চলছে। কোনো অস্বাভাবিকতা শনাক্ত হয়নি।</p></div>
+    </section>
+    <section class="energy-graphs">
+      <div class="graph-container"><h3 class="graph-title">ভোল্টেজ ট্রেন্ড</h3><canvas id="voltage-chart"></canvas></div>
+      <div class="graph-container"><h3 class="graph-title">কারেন্ট ট্রেন্ড</h3><canvas id="current-chart"></canvas></div>
+      <div class="graph-container"><h3 class="graph-title">পাওয়ার ট্রেন্ড</h3><canvas id="power-chart"></canvas></div>
+      <div class="graph-container"><h3 class="graph-title">এনার্জি কনজাম্পশন</h3><canvas id="energy-chart"></canvas></div>
+    </section>
+  </main>
+
+  <!-- এডভান্সড এনার্জি মনিটরিং পেইজ -->
+  <main id="page6" class="device-page" data-component-id="energymonitoring_history">
+    <div class="time-selection">
+      <button class="time-btn active" onclick="changeTimeRange(30)">৩০ মিনিট</button>
+      <button class="time-btn" onclick="changeTimeRange(60)">১ ঘন্টা</button>
+      <button class="time-btn" onclick="changeTimeRange(180)">৩ ঘন্টা</button>
+      <button class="time-btn" onclick="changeTimeRange(360)">৬ ঘন্টা</button>
+      <button class="time-btn" onclick="changeTimeRange(720)">১২ ঘন্টা</button>
+    </div>
+    <div class="metric-selection">
+      <div class="metric-card selected" onclick="selectMetric('voltage')"><div class="metric-title"><span class="metric-icon">⚡</span> ভোল্টেজ</div><div class="metric-description">ভোল্টেজের পরিবর্তন পর্যবেক্ষণ করুন</div></div>
+      <div class="metric-card" onclick="selectMetric('current')"><div class="metric-title"><span class="metric-icon">🔌</span> কারেন্ট</div><div class="metric-description">কারেন্টের প্রবাহ বিশ্লেষণ করুন</div></div>
+      <div class="metric-card" onclick="selectMetric('power')"><div class="metric-title"><span class="metric-icon">💡</span> পাওয়ার</div><div class="metric-description">পাওয়ার ব্যবহারের ট্রেন্ড দেখুন</div></div>
+      <div class="metric-card" onclick="selectMetric('energy')"><div class="metric-title"><span class="metric-icon">🔋</span> এনার্জি</div><div class="metric-description">এনার্জি খরচের হিসাব দেখুন</div></div>
+      <div class="metric-card" onclick="selectMetric('frequency')"><div class="metric-title"><span class="metric-icon">⏱️</span> ফ্রিকোয়েন্সি</div><div class="metric-description">ফ্রিকোয়েন্সির স্থিতিশীলতা পরীক্ষা করুন</div></div>
+      <div class="metric-card" onclick="selectMetric('powerFactor')"><div class="metric-title"><span class="metric-icon">📊</span> পাওয়ার ফ্যাক্টর</div><div class="metric-description">পাওয়ার ফ্যাক্টরের মান বিশ্লেষণ করুন</div></div>
+      <div class="metric-card" onclick="selectMetric('activePower')"><div class="metric-title"><span class="metric-icon">🔆</span> অ্যাক্টিভ পাওয়ার</div><div class="metric-description">রিয়েল পাওয়ার ব্যবহার দেখুন</div></div>
+      <div class="metric-card" onclick="selectMetric('reactivePower')"><div class="metric-title"><span class="metric-icon">🌀</span> রিঅ্যাক্টিভ পাওয়ার</div><div class="metric-description">রিঅ্যাক্টিভ পাওয়ার ট্রেন্ড</div></div>
+    </div>
+    <section class="advanced-graph-container">
+      <div class="graph-header">
+        <h3 class="graph-title" id="advanced-graph-title">ভোল্টেজ ট্রেন্ড (৩০ মিনিট)</h3>
+        <div class="graph-controls">
+          <button class="graph-btn" onclick="downloadGraphData()">ডাটা ডাউনলোড</button>
+          <button class="graph-btn" onclick="printGraph()">প্রিন্ট</button>
+          <i class="fas fa-cog path-config-icon" title="Path Configuration" onclick="openPathSelector('energymonitoring_history', event)"></i>
+        </div>
+      </div>
+      <canvas id="advanced-energy-chart"></canvas>
+      <div class="no-data-message" id="no-data-message" style="display: none;">নির্বাচিত সময় রেঞ্জে কোনো ডাটা পাওয়া যায়নি</div>
+    </section>
+  </main>
+  
+  <!-- Diagram Note File পেইজ -->
+  <main id="page7" class="device-page">
+    <section class="notes-container">
+      <h2 class="note-title">Diagram Note File</h2>
+      <p class="note-paragraph">এই পৃষ্ঠাটি আমাদের প্রকল্পের জন্য গুরুত্বপূর্ণ নোট এবং ডকুমেন্টেশন সংরক্ষণ করতে ব্যবহৃত হবে। এখানে আপনি প্রকল্পের বিভিন্ন ডায়াগ্রাম, নোট এবং গুরুত্বপূর্ণ তথ্য পাবেন যা প্রকল্পের উন্নয়ন এবং রক্ষণাবেক্ষণের জন্য প্রয়োজনীয়।</p>
+      <div class="note-letter"><div class="note-letter-title">গুরুত্বপূর্ণ নোট #1</div><div class="note-letter-content">প্রকল্পের সার্কিট ডায়াগ্রামটি নিচে দেওয়া হয়েছে। দয়া করে নিশ্চিত করুন যে সমস্ত সংযোগ সঠিকভাবে করা হয়েছে এবং প্রতিটি কম্পোনেন্ট সঠিকভাবে স্থাপন করা হয়েছে। সার্কিট ডায়াগ্রামে কোন পরিবর্তন প্রয়োজন হলে দয়া করে টিম লিডারকে জানান।</div></div>
+      <div class="note-images">
+        <div class="note-image" onclick="openImageModal('electrical-single-line-diagram-4.jpg', 'প্রকল্পের সার্কিট ডায়াগ্রাম')"><img src="electrical-single-line-diagram-4.jpg" alt="সার্কিট ডায়াগ্রাম"><div class="note-image-caption">প্রকল্পের সার্কিট ডায়াগ্রাম</div></div>
+        <div class="note-image" onclick="openImageModal('6005990.jpg', 'সিস্টেম ফ্লো চার্ট')"><img src="6005990.jpg" alt="ফ্লো চার্ট"><div class="note-image-caption">সিস্টেম ফ্লো চার্ট</div></div>
+      </div>
+      <h3 class="note-subtitle">প্রকল্পের মূল বৈশিষ্ট্য</h3><p class="note-paragraph">
+        1. রিয়েল-টাইম ডিভাইস মনিটরিং<br>2. এনার্জি কনজাম্পশন ট্র্যাকিং<br>
+        3. রিমোট কন্ট্রোল সক্ষমতা<br>
+        4. ডেটা ভিজুয়ালাইজেশন<br>
+        5. মাল্টি-ডিভাইস সাপোর্ট</p>
+
+      <div class="note-letter"><div class="note-letter-title">গুরুত্বপূর্ণ নোট 
+        #2</div><div class="note-letter-content">সিস্টেম আপডেটের সময় নিচের সতর্কতাগুলো মেনে চলুন:<br>- আপডেট করার আগে ব্যাকআপ নিন<br>- প্রোডাকশন সিস্টেমে সরাসরি আপডেট করবেন না<br>- পরিবর্তন করার আগে টিমের সাথে আলোচনা করুন<br>- সমস্ত পরিবর্তন ডকুমেন্ট করুন</div></div>
+      <h3 class="note-subtitle">সিস্টেম আর্কিটেকচার</h3><p class="note-paragraph">আমাদের সিস্টেমটি তিনটি মূল অংশ নিয়ে গঠিত:<br>1. IoT ডিভাইস - ডাটা কালেকশন এবং একচুয়েশন<br>2. ক্লাউড সার্ভার - ডাটা প্রসেসিং এবং স্টোরেজ<br>3. ওয়েব ইন্টারফেস - ইউজার ইন্টারঅ্যাকশন</p>
+      <div class="note-images"><div class="note-image" onclick="openImageModal('https://i.ibb.co/5KJZ0Lm/system-architecture.jpg', 'সিস্টেম আর্কিটেকচার ডায়াগ্রাম')"><img src="https://i.ibb.co/5KJZ0Lm/system-architecture.jpg" alt="সিস্টেম আর্কিটেকচার"><div class="note-image-caption">সিস্টেম আর্কিটেকচার ডায়াগ্রাম</div></div></div>
+      <h3 class="note-subtitle">ভবিষ্যতের উন্নয়ন পরিকল্পনা</h3><p class="note-paragraph">- মোবাইল অ্যাপ্লিকেশন সংযোজন<br>- AI-ভিত্তিক এনার্জি অপ্টিমাইজেশন<br>- মাল্টি-ইউজার সাপোর্ট<br>- অ্যাডভান্সড রিপোর্টিং সিস্টেম<br>- থার্ড-পার্টি ইন্টিগ্রেশন</p>
+    </section>
+  </main>
+
+  <!-- কন্ট্রোল প্যানেল পেইজ -->
+  <main id="page8" class="device-page">
+    <section class="control-section" id="page-component-scenes" data-component-id="scenes">
+      <div class="section-header">
+        <h2 class="control-section-title">দৃশ্য (Scenes)</h2>
+        <i class="fas fa-cog path-config-icon" title="Path Configuration" onclick="openPathSelector('scenes', event)"></i>
+      </div>
+      <div class="scene-buttons" id="scene-buttons-container"><button class="pro-btn create-scene-btn" onclick="openSceneModal()"><i class="fas fa-plus"></i> নতুন দৃশ্য তৈরি করুন</button></div>
+    </section>
+    <div id="control-panel-container"></div>
+    <div class="add-new-btn-container"><button class="pro-btn btn-info" onclick="addNewDevice()" style="width: 100%; padding: 15px; font-size: 1.2rem;"><i class="fas fa-plus-circle"></i> নতুন ডিভাইস যোগ করুন</button></div>
+  </main>
+
+  <!-- অটোমেশন ও অ্যালার্ট পেইজ -->
+  <main id="page9" class="device-page" data-component-id="automation_rules">
+    <div class="automation-grid">
+      <div class="automation-container">
+        <div class="section-header">
+          <h2 class="section-title">নতুন অটোমেশন বা অ্যালার্ট তৈরি করুন</h2>
+          <i class="fas fa-cog path-config-icon" title="Path Configuration" onclick="openPathSelector('automation_rules', event)"></i>
+        </div>
+        <div class="rule-builder-card">
+          <form class="rule-builder-form" onsubmit="saveAutomationRule(event)" id="automation-rule-form">
+            <div class="form-group"><label for="rule-name">রুলের নাম</label><input type="text" id="rule-name" placeholder="যেমন: সন্ধ্যায় লাইট অন" required></div>
+            <div class="rule-condition-box">
+              <div class="rule-part if-part">IF (যদি)</div>
+              <div class="form-group"><label for="trigger-source">ট্রিগারের উৎস</label><select id="trigger-source" onchange="updateTriggerOptions()"><option value="energy">এনার্জি মনিটর</option><option value="time">সময়</option><option value="device">অন্য ডিভাইস</option></select></div>
+              <div id="trigger-options-container"></div>
+            </div>
+            <div class="rule-action-box">
+              <div class="rule-part then-part">THEN (তবে)</div>
+              <div class="form-group"><label for="action-device">ডিভাইস</label><select id="action-device"></select></div>
+              <div class="form-group"><label for="action-relay">রিলে/লোড</label><select id="action-relay"></select></div>
+              <div class="form-group"><label for="action-state">অ্যাকশন</label><select id="action-state"><option value="true">ON করুন</option><option value="false">OFF করুন</option></select></div>
+            </div>
+            <div class="notification-toggle-group"><input type="checkbox" id="send-notification-checkbox" style="width: auto;"><label for="send-notification-checkbox">এর সাথে একটি নোটিফিকেশন পাঠান</label></div>
+            <div class="form-group" id="notification-message-group" style="display: none;"><label for="notification-message">নোটিফিকেশন বার্তা</label><textarea id="notification-message" placeholder="আপনার কাস্টম বার্তা এখানে লিখুন..."></textarea></div>
+            <div style="display: flex; gap: 10px; margin-top: 15px;">
+                <button type="submit" class="pro-btn btn-on" style="flex: 1;">💾 রুল সংরক্ষণ করুন</button>
+                <button type="button" class="pro-btn cancel-btn" onclick="cancelEditAutomation()" style="display: none;" id="cancel-automation-edit-btn">বাতিল</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="automation-container">
+        <h2 class="section-title">সক্রিয় অটোমেশন ও অ্যালার্ট সমূহ</h2>
+        <div class="rule-list" id="automation-rule-list"><p>কোনো অটোমেশন রুল এখনো তৈরি করা হয়নি।</p></div>
+      </div>
+    </div>
+  </main>
+
+  <!-- অডিট লগ পেইজ -->
+  <main id="page10" class="device-page">
+    <section class="audit-log-container" id="page-component-audit-log" data-component-id="audit_log">
+      <div class="section-header">
+        <h2 class="section-title">সম্পূর্ণ কার্যকলাপের লগ</h2>
+        <i class="fas fa-cog path-config-icon" title="Path Configuration" onclick="openPathSelector('audit_log', event)"></i>
+      </div>
+      <div class="audit-log-list" id="audit-log-list"><p>কোনো কার্যকলাপের লগ পাওয়া যায়নি...</p></div>
+    </section>
+  </main>
+
+  <!-- সিস্টেম স্ট্যাটাস পেইজ -->
+  <main id="page11" class="device-page">
+    <section class="status-dashboard" id="page-component-system-status" data-component-id="system_status">
+      <div class="section-header">
+        <h2 class="section-title">সিস্টেম ডায়াগনস্টিক্স ড্যাশবোর্ড</h2>
+        <i class="fas fa-cog path-config-icon" title="Path Configuration" onclick="openPathSelector('system_status', event)"></i>
+      </div>
+      <div class="status-dashboard-grid">
+        <div class="status-card"><div class="status-card-title"><i class="fas fa-wifi"></i> WiFi কানেকশন</div><div class="status-card-value" id="status-wifi">অজানা</div><div class="status-indicator" id="indicator-wifi"></div></div>
+        <div class="status-card"><div class="status-card-title"><i class="fas fa-cloud"></i> Firebase কানেকশন</div><div class="status-card-value" id="status-firebase">অজানা</div><div class="status-indicator" id="indicator-firebase"></div></div>
+        <div class="status-card"><div class="status-card-title"><i class="fas fa-microchip"></i> Mega কানেকশন</div><div class="status-card-value" id="status-mega">অজানা</div><div class="status-indicator" id="indicator-mega"></div></div>
+        <div class="status-card"><div class="status-card-title"><i class="fas fa-power-off"></i> সিস্টেম আপটাইম</div><div class="status-card-value" id="status-uptime">--</div></div>
+        <div class="status-card"><div class="status-card-title"><i class="fas fa-sd-card"></i> SD কার্ড স্ট্যাটাস</div><div class="status-card-value" id="status-sd-card">অজানা</div><div class="status-indicator" id="indicator-sd-card"></div></div>
+        <div class="status-card"><div class="status-card-title"><i class="fas fa-memory"></i> র‍্যাম ব্যবহার</div><div class="status-card-value" id="status-ram-usage">--%</div><div class="ram-progress-bar"><div class="ram-progress-fill" id="ram-progress-fill"></div></div></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- লজিক গেট ইন্টারলক পেজ -->
+  <main id="page12" class="device-page" data-component-id="logic_gate_rules">
+    <div class="automation-grid">
+        <div class="automation-container">
+            <div class="section-header">
+                <h2 class="section-title">নতুন লজিক গেট রুল তৈরি করুন</h2>
+                <i class="fas fa-cog path-config-icon" title="Path Configuration" onclick="openPathSelector('logic_gate_rules', event)"></i>
+            </div>
+            <div class="rule-builder-card">
+                <form class="rule-builder-form" onsubmit="saveLogicGateRule(event)" id="logic-gate-form">
+                    <div class="form-group">
+                        <label for="logic-rule-name">রুলের নাম</label>
+                        <input type="text" id="logic-rule-name" placeholder="যেমন: পাম্প সেফটি ইন্টারলক" required>
+                    </div>
+                    <div class="logic-equation-builder">
+                        <!-- INPUTS COLUMN -->
+                        <div class="logic-column logic-inputs-column">
+                            <div class="rule-part if-part">ইনপুট</div>
+                            <div id="logic-inputs-list">
+                                <!-- ইনপুট গ্রুপগুলো এখানে ডাইনামিকভাবে যুক্ত হবে -->
+                            </div>
+                            <button type="button" class="pro-btn btn-info add-logic-input-btn" onclick="addLogicInput()">
+                                <i class="fas fa-plus"></i> নতুন ইনপুট যোগ করুন
+                            </button>
+                        </div>
+                
+                        <!-- GATE COLUMN -->
+                        <div class="logic-column logic-gate-column">
+                            <div class="form-group gate-selector">
+                                <label for="logic-gate-type">লজিক গেট</label>
+                                <select id="logic-gate-type">
+                                    <option value="AND">AND</option>
+                                    <option value="OR">OR</option>
+                                    <option value="NAND">NAND</option>
+                                    <option value="NOR">NOR</option>
+                                    <option value="XOR">XOR</option>
+                                    <option value="XNOR">XNOR</option>
+                                </select>
+                            </div>
+                        </div>
+                
+                        <!-- OUTPUT COLUMN -->
+                        <div class="logic-column logic-output-column">
+                            <div class="rule-part then-part">আউটপুট</div>
+                            <div class="form-group">
+                                <label for="logic-output-device">আউটপুট ডিভাইস</label>
+                                <select id="logic-output-device"></select>
+                            </div>
+                            <div class="form-group">
+                                <label for="logic-output-relay">আউটপুট রিলে</label>
+                                <select id="logic-output-relay"></select>
+                            </div>
+                            <div class="form-group">
+                                <label for="logic-output-state">অ্যাকশন</label>
+                                <select id="logic-output-state">
+                                    <option value="true">ON করুন</option>
+                                    <option value="false">OFF করুন</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 10px; margin-top: 15px;">
+                        <button type="submit" class="pro-btn btn-on" style="flex: 1;">💾 রুল সংরক্ষণ করুন</button>
+                        <button type="button" class="pro-btn cancel-btn" onclick="cancelEditLogicGate()" style="display: none;" id="cancel-logic-edit-btn">বাতিল</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="automation-container">
+            <h2 class="section-title">সক্রিয় ইন্টারলক রুল সমূহ</h2>
+            <div class="rule-list" id="logic-gate-rule-list"><p>কোনো ইন্টারলক রুল এখনো তৈরি করা হয়নি।</p></div>
+        </div>
+    </div>
+  </main>
+
+  <!-- তাপমাত্রা মনিটর পেজ -->
+  <main id="page13" class="device-page" data-component-id="temperature_data">
+    <div class="section-header">
+        <h2 class="section-title">তাপমাত্রা মনিটরিং ড্যাশবোর্ড</h2>
+        <i class="fas fa-cog path-config-icon" title="Path Configuration" onclick="openPathSelector('temperature_data', event)"></i>
+    </div>
+    <div class="temperature-page-grid" id="temperature-sensors-container"></div>
+    <div class="add-new-btn-container"><button class="pro-btn btn-info" onclick="addNewTemperatureSensor()" style="width: 100%; padding: 12px; font-size: 1rem;"><i class="fas fa-plus-circle"></i> নতুন সেন্সর যোগ করুন</button></div>
+  </main>
+
+  <!-- কাস্টম পেজগুলোর জন্য কন্টেইনার -->
+  <div id="dynamic-pages-container"></div>
+</div>
+
+<!-- টোস্ট নোটিফিকেশন কন্টেইনার -->
+<div class="toast-container" id="toast-container"></div>
+
+<!-- ইমেজ ভিউয়ার মোডাল -->
+<div id="imageModal" class="image-modal">
+  <span class="close-modal" onclick="closeImageModal()">&times;</span>
+  <div class="modal-content"><img id="modalImage" class="modal-image" src="" alt=""><div id="modalCaption" class="modal-caption"></div></div>
+</div>
+
+<!-- রিলে পাসওয়ার্ড ভেরিফিকেশন মোডাল -->
+<div id="relayPasswordModal" class="password-modal-container">
+  <div class="password-modal-box"><h3>অপারেশন নিশ্চিত করুন</h3><p>এই রিলেটি অপারেট করতে দয়া করে পাসওয়ার্ড দিন।</p><div class="password-input-group"><input type="password" id="relayPasswordInput" placeholder="অপারেটিং পাসওয়ার্ড" autocomplete="off"></div><div class="password-error-message" id="relayPasswordError"></div><div class="password-modal-buttons"><button class="pro-btn modal-btn cancel-btn" onclick="cancelRelayOperation()">বাতিল</button><button class="pro-btn modal-btn confirm-btn" onclick="verifyAndOperateRelay()">নিশ্চিত করুন</button></div></div>
+</div>
+
+<!-- সাধারণ অ্যাকশন পাসওয়ার্ড মোডাল -->
+<div id="actionPasswordModal" class="password-modal-container">
+  <div class="password-modal-box"><h3 id="action-modal-title">অ্যাকশন নিশ্চিত করুন</h3><p id="action-modal-description">এই কাজটি সম্পন্ন করতে আপনার অপারেটিং পাসওয়ার্ড দিন।</p><div class="password-input-group"><input type="password" id="actionPasswordInput" placeholder="অপারেটিং পাসওয়ার্ড" autocomplete="off"></div><div class="password-error-message" id="actionPasswordError"></div><div class="password-modal-buttons"><button class="pro-btn modal-btn cancel-btn" onclick="cancelAction()">বাতিল</button><button class="pro-btn modal-btn confirm-btn" onclick="verifyAndExecuteAction()">নিশ্চিত করুন</button></div></div>
+</div>
+
+<!-- রেজিস্ট্রেশন সিকিউরিটি মোডাল -->
+<div id="registrationSecurityModal" class="password-modal-container">
+  <div class="password-modal-box">
+    <h3>অ্যাডমিন ভেরিফিকেশন</h3>
+    <p>নতুন একাউন্ট তৈরি করতে অ্যাডমিন পাসওয়ার্ড দিন।</p>
+    <div class="password-input-group">
+      <input type="password" id="regSecurityInput" placeholder="পাসওয়ার্ড লিখুন" autocomplete="off">
+    </div>
+    <div class="password-error-message" id="regSecurityError"></div>
+    <div class="password-modal-buttons">
+      <button class="pro-btn modal-btn cancel-btn" onclick="closeRegistrationSecurityModal()">বাতিল</button>
+      <button class="pro-btn modal-btn confirm-btn" onclick="checkRegistrationSecurity()">নিশ্চিত করুন</button>
+    </div>
+  </div>
+</div>
+
+<!-- টাইমার সেটিং মোডাল -->
+<div id="timerModal" class="password-modal-container">
+  <div class="timer-modal-box"><h3 id="timer-modal-title">টাইমার সেটিংস</h3><div class="timer-form"><div class="timer-row"><label>টাইমার স্ট্যাটাস</label><button id="timer-enabled-btn" class="modal-btn disabled" onclick="toggleTimerEnabled()">নিষ্ক্রিয়</button></div><div class="timer-row"><label for="timer-online-time">অনলাইন হওয়ার সময়</label><input type="time" id="timer-online-time" class="timer-time-input" step="1"></div><div class="timer-row"><label for="timer-offline-time">অফলাইন হওয়ার সময়</label><input type="time" id="timer-offline-time" class="timer-time-input" step="1"></div><div class="timer-row" style="display:none;"><label for="timer-relay-select">কোন রিলে কন্ট্রোল হবে?</label><select id="timer-relay-select" class="timer-select"></select></div></div><p class="timer-note">পরিবর্তনগুলো সংরক্ষণ করতে আপনার অপারেটিং পাসওয়ার্ড প্রয়োজন হবে।</p><div class="password-input-group"><input type="password" id="timerPasswordInput" placeholder="অপারেটিং পাসওয়ার্ড" autocomplete="off"></div><div class="password-error-message" id="timerPasswordError"></div><div class="password-modal-buttons"><button class="pro-btn modal-btn cancel-btn" onclick="closeTimerModal()">বাতিল</button><button class="pro-btn modal-btn confirm-btn" onclick="saveTimerSettings()">সংরক্ষণ করুন</button></div></div>
+</div>
+
+<!-- দৃশ্য (Scene) তৈরির মোডাল -->
+<div id="sceneModal" class="password-modal-container">
+  <div class="scene-modal-box"><h3>নতুন দৃশ্য তৈরি করুন</h3><div class="form-group" style="text-align: left;"><label for="scene-name">দৃশ্যের নাম</label><input type="text" id="scene-name" placeholder="যেমন: গুড নাইট" style="width: 100%;"></div><div class="scene-relay-list" id="scene-relay-list-container"></div><div class="password-error-message" id="scene-error-message"></div><div class="password-modal-buttons"><button class="pro-btn modal-btn cancel-btn" onclick="closeSceneModal()">বাতিল</button><button class="pro-btn modal-btn confirm-btn" onclick="saveScene()">সংরক্ষণ করুন</button></div></div>
+</div>
+
+<!-- নতুন পেজ তৈরির মোডাল -->
+<div id="addPageModal" class="password-modal-container">
+  <div class="password-modal-box"><h3>নতুন কাস্টম পেজ তৈরি করুন</h3><p>আপনার নতুন ড্যাশবোর্ড পেজের জন্য একটি নাম এবং অপারেটিং পাসওয়ার্ড দিন।</p><div class="form-group" style="text-align: left; margin-bottom: 1.5rem;"><label for="new-page-name">পেজের নাম</label><input type="text" id="new-page-name" placeholder="যেমন: আমার কন্ট্রোল রুম" style="width: 100%;"></div><div class="password-input-group"><input type="password" id="addPagePasswordInput" placeholder="অপারেটিং পাসওয়ার্ড" autocomplete="off" style="width: 100%;"></div><div class="password-error-message" id="add-page-error"></div><div class="password-modal-buttons"><button class="pro-btn modal-btn cancel-btn" onclick="closeAddPageModal()">বাতিল</button><button class="pro-btn modal-btn confirm-btn" onclick="saveNewPage()">সংরক্ষণ করুন</button></div></div>
+</div>
+
+<!-- পেজ এডিটর মোডাল -->
+<div id="pageEditorModal" class="password-modal-container">
+  <div class="scene-modal-box" style="width: 80%; max-width: 900px; border-top-color: var(--info-color);"><h3 id="page-editor-title">পেজ কন্টেন্ট এডিট করুন</h3><div id="page-editor-content" style="max-height: 60vh; overflow-y: auto; text-align: left; padding: 15px;"></div><div class="password-modal-buttons" style="margin-top: 20px;"><button class="pro-btn modal-btn cancel-btn" onclick="closePageEditorModal()">বাতিল</button><button class="pro-btn modal-btn confirm-btn" onclick="savePageComponents()">পেজ সংরক্ষণ করুন</button></div></div>
+</div>
+
+<!-- পাথ সিলেকশন পপওভার -->
+<div id="path-selector-popover">
+  <h4>Path Configuration</h4>
+  <div id="path-segments-container">
+    <!-- Cascading dropdowns will be inserted here -->
+  </div>
+  <button class="pro-btn confirm-btn" onclick="savePathMapping()">সংরক্ষণ করুন</button>
+  <button class="pro-btn cancel-btn" onclick="closePathSelector()">বাতিল</button>
+</div>
+
+
+<!-- নোটিফিকেশন সাউন্ডের জন্য অডিও এলিমেন্ট -->
+<audio id="notification-sound" preload="auto">
+  <source src="notification.mp3" type="audio/mpeg">
+  আপনার ব্রাউজার অডিও সমর্থন করে না।
+</audio>
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-messaging-compat.js"></script>
+
+<!-- Main Script File -->
+<script src="script.js" defer></script>
+
+</body>
+</html>
