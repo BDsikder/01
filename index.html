@@ -1,15 +1,15 @@
-<!-- {{{{{{{v20.1.0 index.html}}}}}}
+<!-- {{{{{{{v20.1.0 index.html}}}}}}}}}}
+ আপনার সমস্যার মূল কারণ হলো জাভাস্ক্রিপ্ট কোডে ডাটাবেস থেকে ভ্যালু ডাকার সময় **নামের বানান (Variable Keys)** ভুল ছিল।
 
-আপনার সমস্যার মূল কারণ হলো: যখন আপনি একটি **লজিক গেট রুল** ডিলিট করছেন, তখন সিস্টেমটি ফায়ারবেস ডেটাবেস থেকে **"Override"** (হাতের চিহ্ন বা ম্যানুয়াল মুড) তথ্যটি মুছে ফেলছে না। ফলে রুল না থাকলেও সিস্টেম মনে করছে রিলেটি এখনও ম্যানুয়াল মুডে আছে।
+ফায়ারবেসে সাধারণত ডাটাগুলো `activePower`, `reactivePower`, এবং `dailyCost` (camelCase) হিসেবে থাকে। কিন্তু আগের কোডে ভুলবশত `active-power` (হাইফেন সহ) লেখা হয়েছিল। একারণেই সিস্টেম ডাটা খুঁজে পাচ্ছিল না এবং **"--"** দেখাচ্ছিল।
 
-আমি কোডটি আপডেট করেছি (v20.2.2)। এখন:
-1.  সিস্টেম অটোমেটিক চেক করবে যে রিলের ওপর কোনো অ্যাক্টিভ রুল আছে কিনা।
-2.  যদি কোনো রুল না থাকে, তাহলে **হাতের চিহ্ন (Hand Symbol)** স্বয়ংক্রিয়ভাবে মুছে যাবে এবং ডেটাবেস ক্লিন হয়ে যাবে।
+আমি কোডটি সংশোধন করেছি (v20.2.3)। এখন:
+1.  **Active Power**, **Reactive Power**, এবং **Daily Expenses** সঠিক ভ্যালু দেখাবে।
+2.  আগের সমস্ত ফিচার (অটোমেশন, লজিক গেট, লিংক আইকন) ঠিক থাকবে।
 
-নিচে সম্পূর্ণ ফিক্সড কোডটি দেওয়া হলো:
+নিচে সম্পূর্ণ সংশোধিত কোডটি দেওয়া হলো:
 
 ```html -->
-
 <!DOCTYPE html>
 <html lang="bn">
 <head>
@@ -360,7 +360,7 @@
     .header-controls { display: flex; gap: 15px; align-items: center; margin-top: 15px; }
     
     .pro-btn {
-      color: white;
+      color: rgb(0, 0, 0);
       border: none;
       padding: 10px 22px;
       border-radius: 8px;
@@ -1247,7 +1247,7 @@
     
     /* ★★★ NEW: LINKED RULE INDICATOR ★★★ */
     .linked-rule-indicator {
-        color: #f39c12;
+        color: #ff0000;
         cursor: pointer;
         margin-left: 8px;
         position: relative;
@@ -2341,8 +2341,8 @@ document.addEventListener('click', function(event) {
     currentEnergyData = data;
     const setHTML = (id, val, unit) => document.getElementById(id).innerHTML = data[val] ? data[val].toFixed(2) + ` <span class="energy-unit">${unit}</span>` : `-- ${unit}`;
     setHTML('voltage-value', 'voltage', 'V'); setHTML('current-value', 'current', 'A'); setHTML('power-value', 'power', 'W');
-    setHTML('energy-value', 'energy', 'kWh'); setHTML('frequency-value', 'frequency', 'Hz'); setHTML('active-power-value', 'active-power', 'W');
-    setHTML('reactive-power-value', 'reactive-power', 'VAR'); setHTML('units-value', 'units', 'Units'); setHTML('daily-cost-value', 'daily-cost', 'BDT');
+    setHTML('energy-value', 'energy', 'kWh'); setHTML('frequency-value', 'frequency', 'Hz'); setHTML('active-power-value', 'activePower', 'W');
+    setHTML('reactive-power-value', 'reactivePower', 'VAR'); setHTML('units-value', 'units', 'Units'); setHTML('daily-cost-value', 'dailyCost', 'BDT');
     document.getElementById('power-factor-value').textContent = data.powerFactor ? data.powerFactor.toFixed(2) : '--';
     document.getElementById('timestamp-value').textContent = data.timestamp ? new Date(data.timestamp * 1000).toLocaleString('bn-BD') : '--';
     
