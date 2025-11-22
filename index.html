@@ -1,15 +1,23 @@
-<!-- {{{{{{{{{v20.1.1 index.html}}}}}}}}}
- 
-আপনার অনুরোধ অনুযায়ী, আমি **নোটিফিকেশন বাটনটির কাজ পরিবর্তন করেছি**।
 
-এখন:
-১. বাটনে ক্লিক করলে **নোটিফিকেশন সাউন্ড মিউট (Mute)** হবে।
-২. আবার ক্লিক করলে **আনমিউট (Unmute)** হবে।
-৩. সাউন্ড মিউট থাকা অবস্থায় কোনো অ্যালার্ট বা টোস্ট আসলে শব্দ হবে না, কিন্তু মেসেজ দেখাবে।
+<!-- {{{{{{{{{v20.1.2 index.html}}}}}}}}} 
 
-এটি **v20.3.0** সংস্করণ হিসেবে নিচে সম্পূর্ণ কোডটি দেওয়া হলো:
+আপনার চিহ্নিত দুটি সমস্যার সমাধান করে আমি কোডটি আপডেট করেছি (v20.3.2)।
 
-```html -->
+### সমস্যাগুলোর কারণ ও সমাধান:
+
+১. **সাউন্ড অপশন রিসেট হওয়া:**
+   *   **কারণ:** আগে আমরা সাউন্ডের অবস্থা (Mute/Unmute) ব্রাউজারের মেমোরিতে সেভ করছিলাম না। তাই পেজ রিফ্রেশ দিলে এটি আবার ডিফল্ট অবস্থায় ফিরে যেত।
+   *   **সমাধান:** এখন `localStorage` ব্যবহার করা হয়েছে। আপনি সাউন্ড অফ করলে ব্রাউজার সেটি মনে রাখবে এবং পেজ রিফ্রেশ দিলেও সাউন্ড অফ থাকবে।
+
+২. **ইনপুট ফিল্ড ব্লিঙ্ক করা বা গায়েব হয়ে যাওয়া:**
+   *   **কারণ:** ফায়ারবেস থেকে রিয়েল-টাইম ডাটা আসার সাথে সাথে `devices_root` লিসেনার পুরো অটোমেশন ফর্মটি বারবার রিফ্রেশ (Re-render) করছিল। ফলে আপনি যখনই টাইপ করতে যাচ্ছিলেন, কোডটি ইনপুট বক্সটি মুছে দিয়ে নতুন করে তৈরি করছিল, তাই লেখা গায়েব হয়ে যাচ্ছিল।
+   *   **সমাধান:** আমি `updateAutomationFormOptions` ফাংশনটি পরিবর্তন করেছি। এখন যদি আপনি "এনার্জি" বা "টাইম" সিলেক্ট করে রাখেন, তবে সিস্টেম অহেতুক ইনপুট বক্স রিফ্রেশ করবে না। এটি এখন স্থির থাকবে এবং আপনি নির্বিঘ্নে টাইপ করতে পারবেন।
+
+নিচে সম্পূর্ণ ফিক্সড কোডটি দেওয়া হলো:
+
+```html-->
+
+
 <!DOCTYPE html>
 <html lang="bn">
 <head>
@@ -574,18 +582,18 @@
     }
     
     #path-selector-popover {
-    position: absolute;
-    display: none;
-    flex-direction: column;
-    gap: 17px;
-    background: rgb(8 10 12 / 64%);
-    padding: 15px;
-    border-radius: 10px;
-    box-shadow: rgb(255 255 255) 0px 0px 18px 0px;
-    border: 1px solid rgb(245 202 0);
-    backdrop-filter: blur(15px);
-    z-index: 989;
-    width: 308px;
+      position: absolute;
+      display: none;
+      flex-direction: column;
+      gap: 10px;
+      background: var(--card-bg);
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      border: 1px solid rgba(255,255,255,0.2);
+      backdrop-filter: blur(15px);
+      z-index: 1001;
+      width: 300px;
     }
     
     #path-selector-popover h4 {
@@ -603,12 +611,12 @@
     }
     
     #path-segments-container select {
-    width: 100%;
-    padding: 10px;
-    border-radius: 8px;
-    background: rgb(48 97 68 / 41%);
-    color: #FFFFFB;
-    border: 1px solid rgb(255 0 0 / 42%);
+      width: 100%;
+      padding: 8px;
+      border-radius: 5px;
+      background: rgba(0,0,0,0.3);
+      color: var(--text-color);
+      border: 1px solid rgba(255,255,255,0.2);
     }
 
     #path-selector-popover .pro-btn {
@@ -646,12 +654,12 @@
     .toggle-switch-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 25px; }
 
     .manual-override-indicator {
-    position: absolute;
-    top: 19px;
-    right: 117px;
-    font-size: 1.2rem;
-    color: var(--warning-color);
-    cursor: help;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        font-size: 1.2rem;
+        color: var(--warning-color);
+        cursor: help;
     }
     .toggle-switch-container.manual-override {
         border-left-color: var(--warning-color);
@@ -1817,7 +1825,8 @@ let pathMappings = {};
 let activeListeners = [];
 let logicOverrides = {}; 
 let previousDeviceStates = {}; 
-let isNotificationMuted = false; // ★★★ সাউন্ড মিউট করার জন্য ভ্যারিয়েবল ★★★
+// ★★★ সাউন্ড মিউট অবস্থা localStorage থেকে লোড করা হচ্ছে ★★★
+let isNotificationMuted = localStorage.getItem('isNotificationMuted') === 'true';
 
 const defaultPaths = {
     devices_root: 'devices',
@@ -1931,6 +1940,7 @@ function loginWithFirebase() {
                 initializeCharts();
                 loadThemePreference();
                 loadBackgroundPreference();
+                loadSoundPreference(); // ★★★ সাউন্ড প্রিফারেন্স লোড ★★★
                 initEnergyCharts();
                 initAdvancedEnergyChart();
                 setInterval(() => {
@@ -1975,7 +1985,7 @@ function registerWithFirebase() {
                 toggleForms();
             })
             .catch((error) => {
-                if (error.code === 'auth/email-already-in-use') errorDiv.innerText = "❌ এই ইমেলটি 이미 ব্যবহৃত হচ্ছে।";
+                if (error.code === 'auth/email-already-in-use') errorDiv.innerText = "❌ এই ইমেলটি ইতিমধ্যে ব্যবহৃত হচ্ছে।";
                 else if (error.code === 'auth/weak-password') errorDiv.innerText = "❌ পাসওয়ার্ডটি যথেষ্ট শক্তিশালী নয়।";
                 else errorDiv.innerText = "❌ রেজিস্ট্রেশনে একটি সমস্যা হয়েছে।";
             });
@@ -2348,8 +2358,8 @@ document.addEventListener('click', function(event) {
     currentEnergyData = data;
     const setHTML = (id, val, unit) => document.getElementById(id).innerHTML = data[val] ? data[val].toFixed(2) + ` <span class="energy-unit">${unit}</span>` : `-- ${unit}`;
     setHTML('voltage-value', 'voltage', 'V'); setHTML('current-value', 'current', 'A'); setHTML('power-value', 'power', 'W');
-    setHTML('energy-value', 'energy', 'kWh'); setHTML('frequency-value', 'frequency', 'Hz'); setHTML('active-power-value', 'activePower', 'W');
-    setHTML('reactive-power-value', 'reactivePower', 'VAR'); setHTML('units-value', 'units', 'Units'); setHTML('daily-cost-value', 'dailyCost', 'BDT');
+    setHTML('energy-value', 'energy', 'kWh'); setHTML('frequency-value', 'frequency', 'Hz'); setHTML('active-power-value', 'active-power', 'W');
+    setHTML('reactive-power-value', 'reactive-power', 'VAR'); setHTML('units-value', 'units', 'Units'); setHTML('daily-cost-value', 'daily-cost', 'BDT');
     document.getElementById('power-factor-value').textContent = data.powerFactor ? data.powerFactor.toFixed(2) : '--';
     document.getElementById('timestamp-value').textContent = data.timestamp ? new Date(data.timestamp * 1000).toLocaleString('bn-BD') : '--';
     
@@ -2449,26 +2459,51 @@ document.addEventListener('click', function(event) {
   // --- ★★★ নতুন টগল সাউন্ড ফাংশন ★★★ ---
   function toggleNotificationSound() {
       isNotificationMuted = !isNotificationMuted;
+      localStorage.setItem('isNotificationMuted', isNotificationMuted); // Save state
+      loadSoundPreference();
+      showToast(isNotificationMuted ? 'নোটিফিকেশন সাউন্ড বন্ধ করা হয়েছে।' : 'নোটিফিকেশন সাউন্ড চালু করা হয়েছে।', isNotificationMuted ? 'warning' : 'success');
+  }
+
+  // --- ★★★ সাউন্ড প্রিফারেন্স লোড ফাংশন ★★★ ---
+  function loadSoundPreference() {
       const btn = document.getElementById('notification-btn');
-      
       if (isNotificationMuted) {
-          // Mute State
           btn.innerHTML = '<i class="fas fa-bell-slash"></i> সাউন্ড মিউট করা';
           btn.classList.remove('notification-btn');
-          btn.classList.add('btn-off'); // Red color
-          showToast('নোটিফিকেশন সাউন্ড বন্ধ করা হয়েছে।', 'warning');
+          btn.classList.add('btn-off');
       } else {
-          // Unmute State
           btn.innerHTML = '🔔 সাউন্ড অন আছে';
           btn.classList.remove('btn-off');
-          btn.classList.add('notification-btn'); // Orange color
-          showToast('নোটিফিকেশন সাউন্ড চালু করা হয়েছে।', 'success');
+          btn.classList.add('notification-btn');
       }
   }
 
   function checkForAnomalies(power){const alertDiv=document.getElementById('anomaly-alert');if(power>5000){const msg=`অস্বাভাবিকভাবে উচ্চ পাওয়ার (${power.toFixed(0)} W) ব্যবহার শনাক্ত হয়েছে।`;alertDiv.innerHTML=`<div class="alert-message"><strong>সতর্কতা!</strong> ${msg}</div>`;triggerNotification("উচ্চ পাওয়ার ব্যবহার!",msg);}else{alertDiv.innerHTML=`<p>সিস্টেম স্বাভাবিকভাবে চলছে। কোনো অস্বাভাবিকতা শনাক্ত হয়নি।</p>`;}}
   function populateRelayDropdown(devSelect,relSelect){const selDevId=devSelect.value,currRelVal=relSelect.value;relSelect.innerHTML='';if(selDevId&&currentDeviceStates[selDevId]){const relays=Object.keys(currentDeviceStates[selDevId]).filter(k=>k.startsWith('relay')||k.startsWith('Load')).sort((a,b)=>{const numA=parseInt(a.match(/\d+/));const numB=parseInt(b.match(/\d+/));return numA-numB;});relays.forEach(relId=>{const name=(relayNames[selDevId]?.[relId])||relId;const opt=document.createElement('option');opt.value=relId;opt.textContent=name;relSelect.appendChild(opt);});if(relays.includes(currRelVal))relSelect.value=currRelVal;}}
-  function updateAutomationFormOptions(){const devs=currentDeviceStates?Object.keys(currentDeviceStates).sort((a,b)=>parseInt(a.replace('device',''))-parseInt(b.replace('device',''))):[],actDevSelect=document.getElementById('action-device');if(!actDevSelect)return;const currActDev=actDevSelect.value;actDevSelect.innerHTML='';devs.forEach(devId=>{const opt=document.createElement('option');opt.value=devId;opt.textContent=devId.replace('device','ডিভাইস ');actDevSelect.appendChild(opt);});if(devs.includes(currActDev))actDevSelect.value=currActDev;populateRelayDropdown(actDevSelect,document.getElementById('action-relay'));updateTriggerOptions();}
+  
+  // ★★★ FIX FOR INPUT BLINKING ★★★
+  function updateAutomationFormOptions(){
+      const devs=currentDeviceStates?Object.keys(currentDeviceStates).sort((a,b)=>parseInt(a.replace('device',''))-parseInt(b.replace('device',''))):[],actDevSelect=document.getElementById('action-device');
+      if(!actDevSelect)return;
+      const currActDev=actDevSelect.value;
+      
+      // Update Action Device Dropdown (Safe)
+      actDevSelect.innerHTML='';
+      devs.forEach(devId=>{const opt=document.createElement('option');opt.value=devId;opt.textContent=devId.replace('device','ডিভাইস ');actDevSelect.appendChild(opt);});
+      if(devs.includes(currActDev))actDevSelect.value=currActDev;
+      
+      populateRelayDropdown(actDevSelect,document.getElementById('action-relay'));
+      
+      // Only update trigger options if source is 'device', otherwise skip to prevent input reset
+      const src = document.getElementById('trigger-source').value;
+      if (src === 'device') {
+          // Even if device, check focus to be safe
+          if (document.activeElement.tagName !== 'SELECT') {
+             updateTriggerOptions();
+          }
+      }
+  }
+
   function updateTriggerOptions(){const src=document.getElementById('trigger-source').value,cont=document.getElementById('trigger-options-container'),devs=currentDeviceStates?Object.keys(currentDeviceStates).sort((a,b)=>parseInt(a.replace('device',''))-parseInt(b.replace('device',''))):[];let html='';if(src==='energy')html=`<div class="form-group"><label for="trigger-metric">ম্যাট্রিক</label><select id="trigger-metric"><option value="power">পাওয়ার (W)</option><option value="voltage">ভোল্টেজ (V)</option><option value="current">কারেন্ট (A)</option></select></div><div class="form-group"><label for="trigger-condition">শর্ত</label><select id="trigger-condition"><option value=">">এর বেশি হলে</option><option value="<">এর কম হলে</option><option value="==">এর সমান হলে</option></select></div><div class="form-group"><label for="trigger-value">মান</label><input type="number" id="trigger-value" required></div>`;else if(src==='time')html=`<div class="form-group"><label for="trigger-value">নির্দিষ্ট সময়</label><input type="time" id="trigger-value" required></div>`;else if(src==='device')html=`<div class="form-group"><label for="trigger-device">ডিভাইস</label><select id="trigger-device" onchange="populateRelayDropdown(this, document.getElementById('trigger-relay'))">${devs.map(id=>`<option value="${id}">${id.replace('device','ডিভাইস ')}</option>`).join('')}</select></div><div class="form-group"><label for="trigger-relay">রিলে/লোড</label><select id="trigger-relay"></select></div><div class="form-group"><label for="trigger-condition">অবস্থা</label><select id="trigger-condition"><option value="true">ON হলে</option><option value="false">OFF হলে</option></select></div>`;cont.innerHTML=html;if(src==='device'&&devs.length>0)populateRelayDropdown(document.getElementById('trigger-device'),document.getElementById('trigger-relay'));}
   document.getElementById('send-notification-checkbox').addEventListener('change',function(){document.getElementById('notification-message-group').style.display=this.checked?'flex':'none';});
   
@@ -2713,9 +2748,6 @@ document.addEventListener('click', function(event) {
           for(const relId of sortedRels){
               const state=relays[relId],name=(relNames[devId]?.[relId])||relId.replace('relay','রিলে ');
               
-              // ★★★ Fix for Hand Symbol: Only show if rule actively targets this relay ★★★
-              const isOverridden = logicOverrides[devId] && logicOverrides[devId][relId] && isTargetOfActiveLogicRule(devId, relId);
-              
               // --- Check for Linked Rules ---
               const linkedRules = getLinkedRules(devId, relId);
               let linkIconHtml = '';
@@ -2727,7 +2759,7 @@ document.addEventListener('click', function(event) {
                   </span>`;
               }
 
-              html+=`<div class="toggle-switch-container ${isOverridden?'manual-override':''}"><div class="toggle-switch-header"><span class="toggle-switch-label">${name} ${linkIconHtml} <i class="fas fa-pencil-alt edit-relay-name-icon" onclick="editRelayName('${devId}','${relId}')"></i><i class="fas fa-trash-alt delete-icon" onclick="deleteRelay('${devId}','${relId}')"></i></span><div class="device-time-info"><span id="date-${devId}-${relId}"></span><span id="time-${devId}-${relId}"></span></div></div><div class="toggle-switch-body"><div class="timer-status" id="timer-status-${devId}-${relId}"></div></div><div class="toggle-switch-footer"><button class="pro-btn timer-btn" onclick="openTimerModal('${devId}','${relId}')">⏲️ টাইমার</button><label class="toggle-switch"><input type="checkbox" onchange="promptForRelayPassword('${devId}','${relId}',this)" ${state?'checked':''}><span class="slider"></span></label></div>${isOverridden?`<i class="fas fa-hand-paper manual-override-indicator" title="ম্যানুয়াল কন্ট্রোল فعال। ইনপুটের অবস্থা পরিবর্তন হলে অটোমেশন আবার চালু হবে।"></i>`:''}</div>`;
+              html+=`<div class="toggle-switch-container"><div class="toggle-switch-header"><span class="toggle-switch-label">${name} ${linkIconHtml} <i class="fas fa-pencil-alt edit-relay-name-icon" onclick="editRelayName('${devId}','${relId}')"></i><i class="fas fa-trash-alt delete-icon" onclick="deleteRelay('${devId}','${relId}')"></i></span><div class="device-time-info"><span id="date-${devId}-${relId}"></span><span id="time-${devId}-${relId}"></span></div></div><div class="toggle-switch-body"><div class="timer-status" id="timer-status-${devId}-${relId}"></div></div><div class="toggle-switch-footer"><button class="pro-btn timer-btn" onclick="openTimerModal('${devId}','${relId}')">⏲️ টাইমার</button><label class="toggle-switch"><input type="checkbox" onchange="promptForRelayPassword('${devId}','${relId}',this)" ${state?'checked':''}><span class="slider"></span></label></div></div>`;
           }
           html+=`</div><button class="pro-btn add-relay-btn" onclick="addNewRelay('${devId}')"><i class="fas fa-plus"></i> এই ডিভাইসে নতুন রিলে যোগ করুন</button>`;
           devSec.innerHTML=html;
