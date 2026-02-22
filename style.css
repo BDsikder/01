@@ -646,13 +646,13 @@
     }
     .toggle-switch-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 25px; }
 
-    .manual-override-indicator {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        font-size: 1.2rem;
-        color: var(--warning-color);
-        cursor: help;
+    manual-override-indicator {
+    position: absolute;
+    top: 9px;
+    right: 117px;
+    font-size: 2.0rem;
+    color: #ff0000;
+    cursor: help;
     }
     .toggle-switch-container.manual-override {
         border-left-color: var(--warning-color);
@@ -1361,4 +1361,5 @@
         color: white; padding: 10px 20px; border-radius: 50px;
         border: none; cursor: pointer; font-weight: 600;
         box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+
     }
