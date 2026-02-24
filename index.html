@@ -3082,6 +3082,7 @@ function logout() {
     if (typeof graphModeFirebaseListener !== 'undefined' && graphModeFirebaseListener) { try { graphModeFirebaseListener.off(); } catch(e){} graphModeFirebaseListener = null; }
     if (typeof graphModeChart !== 'undefined' && graphModeChart) { try { graphModeChart.destroy(); } catch(e){} graphModeChart = null; }
     if (typeof graphModeSelectedPage !== 'undefined') { graphModeSelectedPage = null; graphModeSelectedFields = []; graphModeData = { labels: [], datasets: [] }; graphModeDynamicPages = {}; graphModeInitialized = false; }
+    try { localStorage.removeItem('graphModeState'); } catch(e) {} // ← Logout এ state মুছো
     auth.signOut().then(() => {
         document.getElementById("app").style.animation = "fadeOut 0.5s ease forwards";
         setTimeout(() => window.location.reload(), 500);
@@ -4648,6 +4649,74 @@ document.addEventListener('click', function(event) {
   let graphModeSelectedFields = [];
   let graphModeDynamicPages = {};
 
+  // ============================================================
+  // গ্রাফ মোড State সংরক্ষণ ও পুনরুদ্ধার (localStorage)
+  // ============================================================
+  function saveGraphModeState() {
+    try {
+      const state = {
+        page: graphModeSelectedPage,
+        fields: graphModeSelectedFields,
+        chartType: graphModeChartType,
+        startDate: document.getElementById('gm-start-date') ? document.getElementById('gm-start-date').value : '',
+        startTime: document.getElementById('gm-start-time') ? document.getElementById('gm-start-time').value : '',
+        endDate: document.getElementById('gm-end-date') ? document.getElementById('gm-end-date').value : '',
+        endTime: document.getElementById('gm-end-time') ? document.getElementById('gm-end-time').value : '',
+      };
+      localStorage.setItem('graphModeState', JSON.stringify(state));
+    } catch(e) {}
+  }
+
+  function restoreGraphModeState() {
+    try {
+      const raw = localStorage.getItem('graphModeState');
+      if (!raw) return;
+      const state = JSON.parse(raw);
+      if (!state) return;
+
+      // Chart type পুনরুদ্ধার
+      if (state.chartType && state.chartType !== graphModeChartType) {
+        graphModeChartType = state.chartType;
+        document.querySelectorAll('.gm-chart-option').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll(`.gm-chart-option[data-chart="${state.chartType}"]`).forEach(el => el.classList.add('active'));
+        document.querySelectorAll('.gm-type-btn').forEach(b => b.classList.remove('active'));
+        const tb = document.querySelector(`.gm-type-btn[data-type="${state.chartType}"]`);
+        if (tb) tb.classList.add('active');
+      }
+
+      // Page পুনরুদ্ধার
+      if (state.page && graphModeDynamicPages[state.page]) {
+        graphModeSelectedPage = state.page;
+        graphModeSelectedFields = state.fields || [];
+
+        // Date/time filter পুনরুদ্ধার
+        if (state.startDate && document.getElementById('gm-start-date')) {
+          document.getElementById('gm-start-date').value = state.startDate;
+          document.getElementById('gm-start-time').value = state.startTime || '';
+          document.getElementById('gm-end-date').value = state.endDate || '';
+          document.getElementById('gm-end-time').value = state.endTime || '';
+        }
+
+        buildGraphPageSelector();
+        buildGraphFieldSelector();
+
+        const histSection = document.getElementById('gm-relay-history-section');
+        const cfg = graphModeDynamicPages[state.page];
+        if (histSection) histSection.style.display = (cfg && cfg.type === 'device') ? 'block' : 'none';
+        updateRelayHistoryTable();
+
+        const nd = document.getElementById('gm-no-data');
+        if (graphModeSelectedFields.length > 0) {
+          if (nd) nd.style.display = 'none';
+          applyGraphModeFilters();
+        } else {
+          if (nd) nd.style.display = 'block';
+        }
+      }
+    } catch(e) {}
+  }
+  // ============================================================
+
   const GRAPH_COLORS = [
     { border: 'rgba(0,212,255,1)', bg: 'rgba(0,212,255,0.15)' },
     { border: 'rgba(255,45,91,1)', bg: 'rgba(255,45,91,0.15)' },
@@ -4693,6 +4762,7 @@ document.addEventListener('click', function(event) {
     closeGraphModePopup();
     showPage('page14');
     applyGraphModeFilters();
+    saveGraphModeState(); // ← State সংরক্ষণ
   }
 
   // Firebase থেকে সব ডিভাইস/পেজ dynamic load
@@ -4859,6 +4929,7 @@ document.addEventListener('click', function(event) {
     updateRelayHistoryTable();
     const nd = document.getElementById('gm-no-data');
     if (nd) nd.style.display = 'block';
+    saveGraphModeState(); // ← State সংরক্ষণ
   }
 
   function buildGraphFieldSelector() {
@@ -4893,7 +4964,7 @@ document.addEventListener('click', function(event) {
     allBtn.className = 'gm-select-all-btn';
     allBtn.style.flex = '1';
     allBtn.innerHTML = '<i class="fas fa-check-double"></i> সব';
-    allBtn.onclick = () => { graphModeSelectedFields = fields.map(f => f.key); renderFieldChips(fields); applyGraphModeFilters(); };
+    allBtn.onclick = () => { graphModeSelectedFields = fields.map(f => f.key); renderFieldChips(fields); applyGraphModeFilters(); saveGraphModeState(); };
     const clearBtn = document.createElement('button');
     clearBtn.className = 'gm-select-all-btn';
     clearBtn.style.cssText = 'flex:1;opacity:0.65;';
@@ -4904,6 +4975,7 @@ document.addEventListener('click', function(event) {
       if (graphModeChart) { graphModeChart.destroy(); graphModeChart = null; }
       const nd = document.getElementById('gm-no-data');
       if (nd) nd.style.display = 'block';
+      saveGraphModeState(); // ← State সংরক্ষণ
     };
     row.appendChild(allBtn);
     row.appendChild(clearBtn);
@@ -4931,6 +5003,7 @@ document.addEventListener('click', function(event) {
         else graphModeSelectedFields.push(f.key);
         renderFieldChips(fields);
         applyGraphModeFilters();
+        saveGraphModeState(); // ← State সংরক্ষণ
       };
       wrap.appendChild(chip);
     });
@@ -5269,6 +5342,8 @@ document.addEventListener('click', function(event) {
     if (!graphModeInitialized || Object.keys(graphModeDynamicPages).length === 0) {
       buildGraphModeDynamicPages();
       graphModeInitialized = true;
+      // localStorage থেকে আগের selection পুনরুদ্ধার
+      setTimeout(restoreGraphModeState, 300);
     } else {
       // শুধু sidebar UI refresh করো, ডেটা নষ্ট করো না
       buildGraphPageSelector();
