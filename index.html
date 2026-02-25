@@ -1,4 +1,4 @@
-<!-- {{{{{{{{{{ v21.0.9 index.html }}}}}}}}}} -->
+<!-- {{{{{{{{{{ v21.1.0 index.html }}}}}}}}}} -->
 
 <!DOCTYPE html>
 <html lang="bn" class="notranslate">
@@ -2806,11 +2806,35 @@
 </div>
 
 <div id="relayPasswordModal" class="password-modal-container">
-  <div class="password-modal-box"><h3>অপারেশন নিশ্চিত করুন</h3><p>এই রিলেটি অপারেট করতে দয়া করে পাসওয়ার্ড দিন।</p><div class="password-input-group"><input type="password" id="relayPasswordInput" placeholder="অপারেটিং পাসওয়ার্ড" autocomplete="off"></div><div class="password-error-message" id="relayPasswordError"></div><div class="password-modal-buttons"><button class="pro-btn modal-btn cancel-btn" onclick="cancelRelayOperation()">বাতিল</button><button class="pro-btn modal-btn confirm-btn" onclick="verifyAndOperateRelay()">নিশ্চিত করুন</button></div></div>
+  <div class="password-modal-box">
+    <h3>অপারেশন নিশ্চিত করুন</h3>
+    <p>এই রিলেটি অপারেট করতে দয়া করে পাসওয়ার্ড দিন।</p>
+    <div class="password-input-group"><input type="password" id="relayPasswordInput" placeholder="অপারেটিং পাসওয়ার্ড" autocomplete="off"></div>
+    <div class="password-error-message" id="relayPasswordError"></div>
+    <div style="text-align:center;margin-top:8px;">
+      <a onclick="openResetOperatingPasswordModal('relayPasswordModal')" style="color:var(--secondary-color);font-size:0.82rem;cursor:pointer;opacity:0.8;">🔑 পাসওয়ার্ড ভুলে গেছেন?</a>
+    </div>
+    <div class="password-modal-buttons">
+      <button class="pro-btn modal-btn cancel-btn" onclick="cancelRelayOperation()">বাতিল</button>
+      <button class="pro-btn modal-btn confirm-btn" onclick="verifyAndOperateRelay()">নিশ্চিত করুন</button>
+    </div>
+  </div>
 </div>
 
 <div id="actionPasswordModal" class="password-modal-container">
-  <div class="password-modal-box"><h3 id="action-modal-title">অ্যাকশন নিশ্চিত করুন</h3><p id="action-modal-description">এই কাজটি সম্পন্ন করতে আপনার অপারেটিং পাসওয়ার্ড দিন।</p><div class="password-input-group"><input type="password" id="actionPasswordInput" placeholder="অপারেটিং পাসওয়ার্ড" autocomplete="off"></div><div class="password-error-message" id="actionPasswordError"></div><div class="password-modal-buttons"><button class="pro-btn modal-btn cancel-btn" onclick="cancelAction()">বাতিল</button><button class="pro-btn modal-btn confirm-btn" onclick="verifyAndExecuteAction()">নিশ্চিত করুন</button></div></div>
+  <div class="password-modal-box">
+    <h3 id="action-modal-title">অ্যাকশন নিশ্চিত করুন</h3>
+    <p id="action-modal-description">এই কাজটি সম্পন্ন করতে আপনার অপারেটিং পাসওয়ার্ড দিন।</p>
+    <div class="password-input-group"><input type="password" id="actionPasswordInput" placeholder="অপারেটিং পাসওয়ার্ড" autocomplete="off"></div>
+    <div class="password-error-message" id="actionPasswordError"></div>
+    <div style="text-align:center;margin-top:8px;">
+      <a onclick="openResetOperatingPasswordModal('actionPasswordModal')" style="color:var(--secondary-color);font-size:0.82rem;cursor:pointer;opacity:0.8;">🔑 পাসওয়ার্ড ভুলে গেছেন?</a>
+    </div>
+    <div class="password-modal-buttons">
+      <button class="pro-btn modal-btn cancel-btn" onclick="cancelAction()">বাতিল</button>
+      <button class="pro-btn modal-btn confirm-btn" onclick="verifyAndExecuteAction()">নিশ্চিত করুন</button>
+    </div>
+  </div>
 </div>
 
 <div id="registrationSecurityModal" class="password-modal-container">
@@ -2872,8 +2896,46 @@
   </div>
 </div>
 
+<!-- Reset Operating Password Modal -->
+<div id="resetOperatingPasswordModal" class="password-modal-container">
+  <div class="password-modal-box">
+    <h3 style="color:var(--warning-color);">🔑 অপারেটিং পাসওয়ার্ড রিসেট</h3>
+    <p style="font-size:0.88rem;color:var(--text-dim);margin-bottom:12px;">
+      Firebase-এ লগইন করা জিমেইল দিয়ে যাচাই করুন। তারপর নতুন অপারেটিং পাসওয়ার্ড সেট করুন।
+    </p>
+    <!-- ধাপ ১: ইমেইল যাচাই -->
+    <div id="rop-step1">
+      <div class="password-input-group">
+        <input type="email" id="ropEmailInput" placeholder="আপনার লগইন জিমেইল" autocomplete="email" style="width:100%;">
+      </div>
+      <div class="password-error-message" id="ropEmailError"></div>
+      <div class="password-modal-buttons" style="margin-top:14px;">
+        <button class="pro-btn modal-btn cancel-btn" onclick="closeResetOperatingPasswordModal()">বাতিল</button>
+        <button class="pro-btn modal-btn confirm-btn" onclick="verifyEmailForReset()">যাচাই করুন</button>
+      </div>
+    </div>
+    <!-- ধাপ ২: নতুন পাসওয়ার্ড সেট -->
+    <div id="rop-step2" style="display:none;">
+      <div style="background:rgba(0,255,157,0.07);border:1px solid rgba(0,255,157,0.2);border-radius:8px;padding:10px 14px;margin-bottom:12px;font-size:0.83rem;color:var(--success-color);">
+        ✅ ইমেইল যাচাই সফল! এখন নতুন অপারেটিং পাসওয়ার্ড দিন।
+      </div>
+      <div class="password-input-group">
+        <input type="password" id="ropNewPassword" placeholder="নতুন অপারেটিং পাসওয়ার্ড" autocomplete="new-password" style="width:100%;">
+      </div>
+      <div class="password-input-group" style="margin-top:10px;">
+        <input type="password" id="ropConfirmPassword" placeholder="পাসওয়ার্ড আবার লিখুন" autocomplete="new-password" style="width:100%;">
+      </div>
+      <div class="password-error-message" id="ropNewError"></div>
+      <div class="password-modal-buttons" style="margin-top:14px;">
+        <button class="pro-btn modal-btn cancel-btn" onclick="closeResetOperatingPasswordModal()">বাতিল</button>
+        <button class="pro-btn modal-btn confirm-btn" style="background:linear-gradient(135deg,#f39c12,#d35400);" onclick="saveNewOperatingPassword()">✅ সেভ করুন</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div id="timerModal" class="password-modal-container">
-  <div class="timer-modal-box"><h3 id="timer-modal-title">টাইমার সেটিংস</h3><div class="timer-form"><div class="timer-row"><label>টাইমার স্ট্যাটাস</label><button id="timer-enabled-btn" class="modal-btn disabled" onclick="toggleTimerEnabled()">নিষ্ক্রিয়</button></div><div class="timer-row"><label for="timer-online-time">অনলাইন হওয়ার সময়</label><input type="time" id="timer-online-time" class="timer-time-input" step="1"></div><div class="timer-row"><label for="timer-offline-time">অফলাইন হওয়ার সময়</label><input type="time" id="timer-offline-time" class="timer-time-input" step="1"></div><div class="timer-row" style="display:none;"><label for="timer-relay-select">কোন রিলে কন্ট্রোল হবে?</label><select id="timer-relay-select" class="timer-select"></select></div></div><p class="timer-note">পরিবর্তনগুলো সংরক্ষণ করতে আপনার অপারেটিং পাসওয়ার্ড প্রয়োজন হবে।</p><div class="password-input-group"><input type="password" id="timerPasswordInput" placeholder="অপারেটিং পাসওয়ার্ড" autocomplete="off"></div><div class="password-error-message" id="timerPasswordError"></div><div class="password-modal-buttons"><button class="pro-btn modal-btn cancel-btn" onclick="closeTimerModal()">বাতিল</button><button class="pro-btn modal-btn confirm-btn" onclick="saveTimerSettings()">সংরক্ষণ করুন</button></div></div>
+  <div class="timer-modal-box"><h3 id="timer-modal-title">টাইমার সেটিংস</h3><div class="timer-form"><div class="timer-row"><label>টাইমার স্ট্যাটাস</label><button id="timer-enabled-btn" class="modal-btn disabled" onclick="toggleTimerEnabled()">নিষ্ক্রিয়</button></div><div class="timer-row"><label for="timer-online-time">অনলাইন হওয়ার সময়</label><input type="time" id="timer-online-time" class="timer-time-input" step="1"></div><div class="timer-row"><label for="timer-offline-time">অফলাইন হওয়ার সময়</label><input type="time" id="timer-offline-time" class="timer-time-input" step="1"></div><div class="timer-row" style="display:none;"><label for="timer-relay-select">কোন রিলে কন্ট্রোল হবে?</label><select id="timer-relay-select" class="timer-select"></select></div></div><p class="timer-note">পরিবর্তনগুলো সংরক্ষণ করতে আপনার অপারেটিং পাসওয়ার্ড প্রয়োজন হবে।</p><div class="password-input-group"><input type="password" id="timerPasswordInput" placeholder="অপারেটিং পাসওয়ার্ড" autocomplete="off"></div><div class="password-error-message" id="timerPasswordError"></div><div style="text-align:center;margin-top:8px;"><a onclick="openResetOperatingPasswordModal('timerModal')" style="color:var(--secondary-color);font-size:0.82rem;cursor:pointer;opacity:0.8;">🔑 পাসওয়ার্ড ভুলে গেছেন?</a></div><div class="password-modal-buttons"><button class="pro-btn modal-btn cancel-btn" onclick="closeTimerModal()">বাতিল</button><button class="pro-btn modal-btn confirm-btn" onclick="saveTimerSettings()">সংরক্ষণ করুন</button></div></div>
 </div>
 
 <div id="sceneModal" class="password-modal-container">
@@ -2881,7 +2943,7 @@
 </div>
 
 <div id="addPageModal" class="password-modal-container">
-  <div class="password-modal-box"><h3>নতুন কাস্টম পেজ তৈরি করুন</h3><p>আপনার নতুন ড্যাশবোর্ড পেজের জন্য একটি নাম এবং অপারেটিং পাসওয়ার্ড দিন।</p><div class="form-group" style="text-align: left; margin-bottom: 1.5rem;"><label for="new-page-name">পেজের নাম</label><input type="text" id="new-page-name" placeholder="যেমন: আমার কন্ট্রোল রুম" style="width: 100%;"></div><div class="password-input-group"><input type="password" id="addPagePasswordInput" placeholder="অপারেটিং পাসওয়ার্ড" autocomplete="off" style="width: 100%;"></div><div class="password-error-message" id="add-page-error"></div><div class="password-modal-buttons"><button class="pro-btn modal-btn cancel-btn" onclick="closeAddPageModal()">বাতিল</button><button class="pro-btn modal-btn confirm-btn" onclick="saveNewPage()">সংরক্ষণ করুন</button></div></div>
+  <div class="password-modal-box"><h3>নতুন কাস্টম পেজ তৈরি করুন</h3><p>আপনার নতুন ড্যাশবোর্ড পেজের জন্য একটি নাম এবং অপারেটিং পাসওয়ার্ড দিন।</p><div class="form-group" style="text-align: left; margin-bottom: 1.5rem;"><label for="new-page-name">পেজের নাম</label><input type="text" id="new-page-name" placeholder="যেমন: আমার কন্ট্রোল রুম" style="width: 100%;"></div><div class="password-input-group"><input type="password" id="addPagePasswordInput" placeholder="অপারেটিং পাসওয়ার্ড" autocomplete="off" style="width: 100%;"></div><div class="password-error-message" id="add-page-error"></div><div style="text-align:center;margin-top:8px;"><a onclick="openResetOperatingPasswordModal('addPageModal')" style="color:var(--secondary-color);font-size:0.82rem;cursor:pointer;opacity:0.8;">🔑 পাসওয়ার্ড ভুলে গেছেন?</a></div><div class="password-modal-buttons"><button class="pro-btn modal-btn cancel-btn" onclick="closeAddPageModal()">বাতিল</button><button class="pro-btn modal-btn confirm-btn" onclick="saveNewPage()">সংরক্ষণ করুন</button></div></div>
 </div>
 
 <div id="pageEditorModal" class="password-modal-container">
@@ -2997,7 +3059,19 @@ const database = firebase.database();
 const auth = firebase.auth();
 const messaging = firebase.messaging();
 
-const correctOperatingPassword = "000";
+// অপারেটিং পাসওয়ার্ড — Firebase থেকে লোড হবে, না পেলে ডিফল্ট
+var correctOperatingPassword = "000";
+
+// Firebase Auth state change হলে user-এর saved password লোড করো
+auth.onAuthStateChanged(function(user) {
+    if (user) {
+        database.ref('users/' + user.uid + '/operatingPassword').once('value', snap => {
+            if (snap.exists() && snap.val()) {
+                correctOperatingPassword = snap.val();
+            }
+        });
+    }
+});
 
 // --- গ্লোবাল ভ্যারিয়েবল এবং ডিফল্ট পাথ ---
 let databaseStructure = {};
@@ -3078,6 +3152,108 @@ function checkRegistrationSecurity() {
         const box = document.querySelector('#registrationSecurityModal .password-modal-box');
         box.classList.add('shake-animation');
         setTimeout(() => box.classList.remove('shake-animation'), 500);
+    }
+}
+
+// ============================================================
+// Reset Operating Password Functions
+// ============================================================
+let _ropReturnModal = null; // কোন মোডাল থেকে এসেছে
+
+function openResetOperatingPasswordModal(returnModalId) {
+    _ropReturnModal = returnModalId || null;
+    // returnModal লুকাও
+    if (_ropReturnModal) document.getElementById(_ropReturnModal).style.display = 'none';
+
+    // রিসেট করো
+    document.getElementById('ropEmailInput').value = '';
+    document.getElementById('ropEmailError').innerText = '';
+    document.getElementById('ropNewPassword').value = '';
+    document.getElementById('ropConfirmPassword').value = '';
+    document.getElementById('ropNewError').innerText = '';
+    document.getElementById('rop-step1').style.display = 'block';
+    document.getElementById('rop-step2').style.display = 'none';
+
+    document.getElementById('resetOperatingPasswordModal').style.display = 'flex';
+    setTimeout(() => document.getElementById('ropEmailInput').focus(), 100);
+}
+
+function closeResetOperatingPasswordModal() {
+    document.getElementById('resetOperatingPasswordModal').style.display = 'none';
+    // ফিরে যাওয়ার মোডাল খোলো
+    if (_ropReturnModal) {
+        document.getElementById(_ropReturnModal).style.display = 'flex';
+        _ropReturnModal = null;
+    }
+}
+
+function verifyEmailForReset() {
+    const email = document.getElementById('ropEmailInput').value.trim();
+    const errorDiv = document.getElementById('ropEmailError');
+    errorDiv.innerText = '';
+
+    if (!email) {
+        errorDiv.innerText = '❌ দয়া করে জিমেইল লিখুন।';
+        return;
+    }
+
+    // Firebase Auth থেকে বর্তমান লগইন ইউজারের ইমেইল যাচাই করো
+    const currentUser = auth.currentUser;
+    if (!currentUser) {
+        errorDiv.innerText = '❌ আপনি লগইন অবস্থায় নেই।';
+        return;
+    }
+
+    if (currentUser.email.toLowerCase() !== email.toLowerCase()) {
+        errorDiv.innerText = '❌ ইমেইলটি আপনার লগইন একাউন্টের সাথে মিলছে না।';
+        const box = document.querySelector('#resetOperatingPasswordModal .password-modal-box');
+        box.classList.add('shake-animation');
+        setTimeout(() => box.classList.remove('shake-animation'), 500);
+        return;
+    }
+
+    // যাচাই সফল — ধাপ ২ দেখাও
+    document.getElementById('rop-step1').style.display = 'none';
+    document.getElementById('rop-step2').style.display = 'block';
+    setTimeout(() => document.getElementById('ropNewPassword').focus(), 100);
+}
+
+function saveNewOperatingPassword() {
+    const newPass = document.getElementById('ropNewPassword').value;
+    const confirmPass = document.getElementById('ropConfirmPassword').value;
+    const errorDiv = document.getElementById('ropNewError');
+    errorDiv.innerText = '';
+
+    if (!newPass) {
+        errorDiv.innerText = '❌ নতুন পাসওয়ার্ড লিখুন।';
+        return;
+    }
+    if (newPass.length < 3) {
+        errorDiv.innerText = '❌ পাসওয়ার্ড কমপক্ষে ৩ অক্ষরের হতে হবে।';
+        return;
+    }
+    if (newPass !== confirmPass) {
+        errorDiv.innerText = '❌ পাসওয়ার্ড দুটি মিলছে না।';
+        return;
+    }
+
+    // correctOperatingPassword আপডেট করো (runtime এ)
+    // Firebase-এ সেভ করো যাতে পেজ রিলোডেও থাকে
+    const uid = auth.currentUser ? auth.currentUser.uid : null;
+    if (uid) {
+        database.ref('users/' + uid + '/operatingPassword').set(newPass)
+            .then(() => {
+                // runtime variable আপডেট — এখন থেকে নতুন পাসওয়ার্ড কাজ করবে
+                correctOperatingPassword = newPass;
+                showToast('✅ অপারেটিং পাসওয়ার্ড সফলভাবে পরিবর্তন হয়েছে!', 'success');
+                closeResetOperatingPasswordModal();
+                logAuditEvent('অপারেটিং পাসওয়ার্ড পরিবর্তন করেছেন।');
+            })
+            .catch(err => {
+                errorDiv.innerText = '❌ সেভ করতে সমস্যা: ' + err.message;
+            });
+    } else {
+        errorDiv.innerText = '❌ ইউজার সেশন পাওয়া যাচ্ছে না।';
     }
 }
 
