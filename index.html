@@ -1,4 +1,4 @@
-<!-- {{{{{{{{{{ v21.1.0 index.html }}}}}}}}}} -->
+<!-- {{{{{{{{{{ v21.1.1 index.html }}}}}}}}}} -->
 
 <!DOCTYPE html>
 <html lang="bn" class="notranslate">
@@ -2843,9 +2843,60 @@
     <p>নতুন একাউন্ট তৈরি করতে অ্যাডমিন পাসওয়ার্ড দিন।</p>
     <div class="password-input-group"><input type="password" id="regSecurityInput" placeholder="পাসওয়ার্ড লিখুন" autocomplete="off"></div>
     <div class="password-error-message" id="regSecurityError"></div>
+    <div style="text-align:center;margin-top:8px;">
+      <a onclick="openResetAdminPasswordModal()" style="color:var(--secondary-color);font-size:0.82rem;cursor:pointer;opacity:0.8;">🔑 অ্যাডমিন পাসওয়ার্ড ভুলে গেছেন?</a>
+    </div>
     <div class="password-modal-buttons">
       <button class="pro-btn modal-btn cancel-btn" onclick="closeRegistrationSecurityModal()">বাতিল</button>
       <button class="pro-btn modal-btn confirm-btn" onclick="checkRegistrationSecurity()">নিশ্চিত করুন</button>
+    </div>
+  </div>
+</div>
+
+<!-- Reset Admin Password Modal -->
+<div id="resetAdminPasswordModal" class="password-modal-container">
+  <div class="password-modal-box">
+    <h3 style="color:var(--warning-color);">🛡️ অ্যাডমিন পাসওয়ার্ড রিসেট</h3>
+    <p style="font-size:0.88rem;color:var(--text-dim);margin-bottom:12px;">
+      শুধুমাত্র অ্যাডমিন Firebase একাউন্টের জিমেইল দিয়ে পাসওয়ার্ড রিসেট করা যাবে।
+    </p>
+    <!-- ধাপ ১: ইমেইল ও Firebase পাসওয়ার্ড যাচাই -->
+    <div id="rap-step1">
+      <div class="password-input-group">
+        <input type="email" id="rapEmailInput" placeholder="অ্যাডমিন জিমেইল লিখুন" autocomplete="email" style="width:100%;">
+      </div>
+      <div class="password-input-group" style="margin-top:10px;">
+        <input type="password" id="rapFirebasePassword" placeholder="Firebase একাউন্টের পাসওয়ার্ড" autocomplete="current-password" style="width:100%;">
+      </div>
+      <div style="background:rgba(255,183,0,0.07);border:1px solid rgba(255,183,0,0.2);border-radius:8px;padding:9px 13px;margin-top:10px;font-size:0.8rem;color:var(--warning-color);">
+        ⚠️ এটি আপনার Firebase লগইন পাসওয়ার্ড — অ্যাডমিন যাচাইয়ের জন্য প্রয়োজন।
+      </div>
+      <div class="password-error-message" id="rapEmailError"></div>
+      <div class="password-modal-buttons" style="margin-top:14px;">
+        <button class="pro-btn modal-btn cancel-btn" onclick="closeResetAdminPasswordModal()">বাতিল</button>
+        <button class="pro-btn modal-btn confirm-btn" onclick="verifyAdminForReset()">
+          <i class="fas fa-shield-alt" style="margin-right:5px;"></i>যাচাই করুন
+        </button>
+      </div>
+    </div>
+    <!-- ধাপ ২: নতুন অ্যাডমিন পাসওয়ার্ড সেট -->
+    <div id="rap-step2" style="display:none;">
+      <div style="background:rgba(0,255,157,0.07);border:1px solid rgba(0,255,157,0.2);border-radius:8px;padding:10px 14px;margin-bottom:12px;font-size:0.83rem;color:var(--success-color);">
+        ✅ অ্যাডমিন যাচাই সফল! নতুন অ্যাডমিন পাসওয়ার্ড দিন।
+      </div>
+      <div class="password-input-group">
+        <input type="password" id="rapNewPassword" placeholder="নতুন অ্যাডমিন পাসওয়ার্ড" autocomplete="new-password" style="width:100%;">
+      </div>
+      <div class="password-input-group" style="margin-top:10px;">
+        <input type="password" id="rapConfirmPassword" placeholder="পাসওয়ার্ড আবার লিখুন" autocomplete="new-password" style="width:100%;">
+      </div>
+      <div class="password-error-message" id="rapNewError"></div>
+      <div class="password-modal-buttons" style="margin-top:14px;">
+        <button class="pro-btn modal-btn cancel-btn" onclick="closeResetAdminPasswordModal()">বাতিল</button>
+        <button class="pro-btn modal-btn confirm-btn" style="background:linear-gradient(135deg,#f39c12,#d35400);" onclick="saveNewAdminPassword()">
+          <i class="fas fa-save" style="margin-right:5px;"></i>সেভ করুন
+        </button>
+      </div>
     </div>
   </div>
 </div>
@@ -3071,6 +3122,10 @@ auth.onAuthStateChanged(function(user) {
             }
         });
     }
+    // লগইন/লগআউট উভয় অবস্থায় adminPassword লোড করো
+    database.ref('system/adminPassword').once('value', snap => {
+        if (snap.exists() && snap.val()) correctAdminPassword = snap.val();
+    }).catch(() => {});
 });
 
 // --- গ্লোবাল ভ্যারিয়েবল এবং ডিফল্ট পাথ ---
@@ -3142,9 +3197,19 @@ function closeRegistrationSecurityModal() {
     document.getElementById('registrationSecurityModal').style.display = 'none';
 }
 
+// অ্যাডমিন রেজিস্ট্রেশন পাসওয়ার্ড — Firebase থেকে লোড, না পেলে ডিফল্ট
+var correctAdminPassword = '00$';
+
+// Firebase থেকে adminPassword লোড করো
+function loadAdminPassword() {
+    database.ref('system/adminPassword').once('value', snap => {
+        if (snap.exists() && snap.val()) correctAdminPassword = snap.val();
+    }).catch(() => {});
+}
+
 function checkRegistrationSecurity() {
     const input = document.getElementById('regSecurityInput').value;
-    if (input === '00$') {
+    if (input === correctAdminPassword) {
         closeRegistrationSecurityModal();
         toggleForms();
     } else {
@@ -3153,6 +3218,104 @@ function checkRegistrationSecurity() {
         box.classList.add('shake-animation');
         setTimeout(() => box.classList.remove('shake-animation'), 500);
     }
+}
+
+// ============================================================
+// Reset Admin Password Functions
+// ============================================================
+function openResetAdminPasswordModal() {
+    // registration modal বন্ধ করো
+    document.getElementById('registrationSecurityModal').style.display = 'none';
+    // রিসেট
+    document.getElementById('rapEmailInput').value = '';
+    document.getElementById('rapFirebasePassword').value = '';
+    document.getElementById('rapEmailError').innerText = '';
+    document.getElementById('rapNewPassword').value = '';
+    document.getElementById('rapConfirmPassword').value = '';
+    document.getElementById('rapNewError').innerText = '';
+    document.getElementById('rap-step1').style.display = 'block';
+    document.getElementById('rap-step2').style.display = 'none';
+    document.getElementById('resetAdminPasswordModal').style.display = 'flex';
+    setTimeout(() => document.getElementById('rapEmailInput').focus(), 100);
+}
+
+function closeResetAdminPasswordModal() {
+    document.getElementById('resetAdminPasswordModal').style.display = 'none';
+    // registration modal ফিরিয়ে দাও
+    document.getElementById('registrationSecurityModal').style.display = 'flex';
+}
+
+function verifyAdminForReset() {
+    const email = document.getElementById('rapEmailInput').value.trim();
+    const fbPassword = document.getElementById('rapFirebasePassword').value;
+    const errorDiv = document.getElementById('rapEmailError');
+    errorDiv.innerText = '';
+
+    if (!email || !fbPassword) {
+        errorDiv.innerText = '❌ জিমেইল এবং Firebase পাসওয়ার্ড উভয়ই দিন।';
+        return;
+    }
+
+    // Firebase re-authentication দিয়ে যাচাই করো
+    const credential = firebase.auth.EmailAuthProvider.credential(email, fbPassword);
+    const currentUser = auth.currentUser;
+
+    if (currentUser) {
+        // লগইন অবস্থায় — re-authenticate
+        currentUser.reauthenticateWithCredential(credential)
+            .then(() => {
+                document.getElementById('rap-step1').style.display = 'none';
+                document.getElementById('rap-step2').style.display = 'block';
+                setTimeout(() => document.getElementById('rapNewPassword').focus(), 100);
+            })
+            .catch(() => {
+                errorDiv.innerText = '❌ জিমেইল বা পাসওয়ার্ড সঠিক নয়।';
+                shakeBox('#resetAdminPasswordModal .password-modal-box');
+            });
+    } else {
+        // লগআউট অবস্থায় — signInWithEmailAndPassword দিয়ে যাচাই
+        auth.signInWithEmailAndPassword(email, fbPassword)
+            .then(() => {
+                document.getElementById('rap-step1').style.display = 'none';
+                document.getElementById('rap-step2').style.display = 'block';
+                setTimeout(() => document.getElementById('rapNewPassword').focus(), 100);
+            })
+            .catch(() => {
+                errorDiv.innerText = '❌ জিমেইল বা Firebase পাসওয়ার্ড সঠিক নয়।';
+                shakeBox('#resetAdminPasswordModal .password-modal-box');
+            });
+    }
+}
+
+function saveNewAdminPassword() {
+    const newPass = document.getElementById('rapNewPassword').value;
+    const confirmPass = document.getElementById('rapConfirmPassword').value;
+    const errorDiv = document.getElementById('rapNewError');
+    errorDiv.innerText = '';
+
+    if (!newPass) { errorDiv.innerText = '❌ নতুন পাসওয়ার্ড লিখুন।'; return; }
+    if (newPass.length < 3) { errorDiv.innerText = '❌ পাসওয়ার্ড কমপক্ষে ৩ অক্ষরের হতে হবে।'; return; }
+    if (newPass !== confirmPass) { errorDiv.innerText = '❌ পাসওয়ার্ড দুটি মিলছে না।'; return; }
+
+    // Firebase-এ system/adminPassword তে সেভ করো
+    database.ref('system/adminPassword').set(newPass)
+        .then(() => {
+            correctAdminPassword = newPass;
+            showToast('✅ অ্যাডমিন পাসওয়ার্ড সফলভাবে পরিবর্তন হয়েছে!', 'success');
+            document.getElementById('resetAdminPasswordModal').style.display = 'none';
+            document.getElementById('registrationSecurityModal').style.display = 'none';
+            logAuditEvent('অ্যাডমিন রেজিস্ট্রেশন পাসওয়ার্ড পরিবর্তন করা হয়েছে।');
+        })
+        .catch(err => {
+            errorDiv.innerText = '❌ সেভ করতে সমস্যা: ' + err.message;
+        });
+}
+
+function shakeBox(selector) {
+    const box = document.querySelector(selector);
+    if (!box) return;
+    box.classList.add('shake-animation');
+    setTimeout(() => box.classList.remove('shake-animation'), 500);
 }
 
 // ============================================================
@@ -3438,6 +3601,7 @@ function loginWithFirebase() {
                 loadThemePreference();
                 loadBackgroundPreference();
                 loadSoundPreference();
+                loadAdminPassword();
                 initEnergyCharts();
                 initAdvancedEnergyChart();
                 setInterval(() => {
