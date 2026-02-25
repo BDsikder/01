@@ -1,3 +1,5 @@
+{{{{{{{{{{ v21.0.9 index.html }}}}}}}}}}
+
 <!DOCTYPE html>
 <html lang="bn" class="notranslate">
 <head>
@@ -2260,6 +2262,7 @@
       <div class="input-group"> <input type="password" id="password" placeholder="পাসওয়ার্ড লিখুন" autocomplete="current-password"> </div>
       <button class="action-btn" onclick="loginWithFirebase()">লগইন করুন</button>
       <div class="error-message" id="login-error"></div>
+      <div class="form-switcher" style="margin-top:8px;"> <a onclick="openForgotPasswordModal()" style="color:var(--secondary-color);cursor:pointer;font-size:0.9rem;">🔑 পাসওয়ার্ড ভুলে গেছেন?</a> </div>
       <div class="form-switcher"> আপনার কোনো একাউন্ট নেই? <a onclick="openRegistrationSecurityModal()">রেজিস্টার করুন</a> </div>
     </div>
   </div>
@@ -2780,6 +2783,21 @@
   </div>
 </div>
 
+<!-- Forgot Password Modal -->
+<div id="forgotPasswordModal" class="password-modal-container">
+  <div class="password-modal-box">
+    <h3 style="color:var(--secondary-color);">🔑 পাসওয়ার্ড রিসেট</h3>
+    <p style="font-size:0.9rem;color:var(--text-dim);margin-bottom:1rem;">আপনার Firebase-এ নিবন্ধিত জিমেইল দিন। পাসওয়ার্ড রিসেটের লিঙ্ক পাঠানো হবে।</p>
+    <div class="password-input-group"><input type="email" id="forgotEmailInput" placeholder="জিমেইল লিখুন" autocomplete="email" style="width:100%;"></div>
+    <div class="password-error-message" id="forgotPasswordError"></div>
+    <div id="forgotPasswordSuccess" style="color:var(--success-color);font-size:0.88rem;margin-top:8px;display:none;"></div>
+    <div class="password-modal-buttons">
+      <button class="pro-btn modal-btn cancel-btn" onclick="closeForgotPasswordModal()">বাতিল</button>
+      <button class="pro-btn modal-btn confirm-btn" onclick="sendPasswordReset()">রিসেট লিঙ্ক পাঠান</button>
+    </div>
+  </div>
+</div>
+
 <div id="timerModal" class="password-modal-container">
   <div class="timer-modal-box"><h3 id="timer-modal-title">টাইমার সেটিংস</h3><div class="timer-form"><div class="timer-row"><label>টাইমার স্ট্যাটাস</label><button id="timer-enabled-btn" class="modal-btn disabled" onclick="toggleTimerEnabled()">নিষ্ক্রিয়</button></div><div class="timer-row"><label for="timer-online-time">অনলাইন হওয়ার সময়</label><input type="time" id="timer-online-time" class="timer-time-input" step="1"></div><div class="timer-row"><label for="timer-offline-time">অফলাইন হওয়ার সময়</label><input type="time" id="timer-offline-time" class="timer-time-input" step="1"></div><div class="timer-row" style="display:none;"><label for="timer-relay-select">কোন রিলে কন্ট্রোল হবে?</label><select id="timer-relay-select" class="timer-select"></select></div></div><p class="timer-note">পরিবর্তনগুলো সংরক্ষণ করতে আপনার অপারেটিং পাসওয়ার্ড প্রয়োজন হবে।</p><div class="password-input-group"><input type="password" id="timerPasswordInput" placeholder="অপারেটিং পাসওয়ার্ড" autocomplete="off"></div><div class="password-error-message" id="timerPasswordError"></div><div class="password-modal-buttons"><button class="pro-btn modal-btn cancel-btn" onclick="closeTimerModal()">বাতিল</button><button class="pro-btn modal-btn confirm-btn" onclick="saveTimerSettings()">সংরক্ষণ করুন</button></div></div>
 </div>
@@ -2973,6 +2991,54 @@ function checkRegistrationSecurity() {
     }
 }
 
+function openForgotPasswordModal() {
+    document.getElementById('forgotPasswordModal').style.display = 'flex';
+    document.getElementById('forgotEmailInput').value = '';
+    document.getElementById('forgotPasswordError').innerText = '';
+    document.getElementById('forgotPasswordSuccess').style.display = 'none';
+    document.getElementById('forgotPasswordSuccess').innerText = '';
+    setTimeout(() => document.getElementById('forgotEmailInput').focus(), 100);
+}
+
+function closeForgotPasswordModal() {
+    document.getElementById('forgotPasswordModal').style.display = 'none';
+}
+
+function sendPasswordReset() {
+    const email = document.getElementById('forgotEmailInput').value.trim();
+    const errorDiv = document.getElementById('forgotPasswordError');
+    const successDiv = document.getElementById('forgotPasswordSuccess');
+    errorDiv.innerText = '';
+    successDiv.style.display = 'none';
+
+    if (!email) {
+        errorDiv.innerText = '❌ দয়া করে আপনার জিমেইল লিখুন।';
+        return;
+    }
+
+    auth.sendPasswordResetEmail(email)
+        .then(() => {
+            successDiv.innerText = '✅ পাসওয়ার্ড রিসেটের লিঙ্ক আপনার ' + email + ' এ পাঠানো হয়েছে। আপনার ইনবক্স বা স্প্যাম ফোল্ডার চেক করুন।';
+            successDiv.style.display = 'block';
+            errorDiv.innerText = '';
+            setTimeout(() => closeForgotPasswordModal(), 5000);
+        })
+        .catch((error) => {
+            if (error.code === 'auth/user-not-found') {
+                errorDiv.innerText = '❌ এই জিমেইলে কোনো একাউন্ট নেই।';
+            } else if (error.code === 'auth/invalid-email') {
+                errorDiv.innerText = '❌ ইমেল ফরম্যাট সঠিক নয়।';
+            } else if (error.code === 'auth/too-many-requests') {
+                errorDiv.innerText = '❌ অনেকবার চেষ্টা করা হয়েছে। কিছুক্ষণ পরে আবার চেষ্টা করুন।';
+            } else {
+                errorDiv.innerText = '❌ একটি সমস্যা হয়েছে। পরে আবার চেষ্টা করুন।';
+            }
+            const box = document.querySelector('#forgotPasswordModal .password-modal-box');
+            box.classList.add('shake-animation');
+            setTimeout(() => box.classList.remove('shake-animation'), 500);
+        });
+}
+
 function loginWithFirebase() {
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
@@ -3077,12 +3143,14 @@ function registerWithFirebase() {
 
 function logout() {
     logAuditEvent("সিস্টেম থেকে লগআউট করেছেন।");
-    // গ্রাফ মোড স্টেট সম্পূর্ণ রিসেট
+    // গ্রাফ মোড স্টেট সম্পূর্ণ রিসেট (memory + localStorage)
     if (typeof graphModeLiveInterval !== 'undefined' && graphModeLiveInterval && graphModeLiveInterval !== 'firebase') { clearInterval(graphModeLiveInterval); graphModeLiveInterval = null; }
-    if (typeof graphModeFirebaseListener !== 'undefined' && graphModeFirebaseListener) { try { graphModeFirebaseListener.off(); } catch(e){} graphModeFirebaseListener = null; }
+    if (typeof graphModeFirebaseListener !== 'undefined' && graphModeFirebaseListener) { try { graphModeFirebaseListener.off('value', graphModeFirebaseCallback); } catch(e){} graphModeFirebaseListener = null; graphModeFirebaseCallback = null; }
+    if (typeof graphModeFirebaseListener2 !== 'undefined' && graphModeFirebaseListener2) { try { graphModeFirebaseListener2.off(); } catch(e){} graphModeFirebaseListener2 = null; }
     if (typeof graphModeChart !== 'undefined' && graphModeChart) { try { graphModeChart.destroy(); } catch(e){} graphModeChart = null; }
     if (typeof graphModeSelectedPage !== 'undefined') { graphModeSelectedPage = null; graphModeSelectedFields = []; graphModeData = { labels: [], datasets: [] }; graphModeDynamicPages = {}; graphModeInitialized = false; }
-    try { localStorage.removeItem('graphModeState'); } catch(e) {} // ← Logout এ state মুছো
+    // localStorage থেকে গ্রাফ state মুছো (লগআউটে পুনরুদ্ধার হবে না)
+    ['gm_chartType','gm_selectedPage','gm_selectedFields','gm_chartData','gm_gm-start-date','gm_gm-start-time','gm_gm-end-date','gm_gm-end-time'].forEach(k => localStorage.removeItem(k));
     auth.signOut().then(() => {
         document.getElementById("app").style.animation = "fadeOut 0.5s ease forwards";
         setTimeout(() => window.location.reload(), 500);
@@ -4639,83 +4707,73 @@ document.addEventListener('click', function(event) {
   }
 
   // ================================================================
-  // GRAPH MODE - PAGE 14 - সম্পূর্ণ নতুন সংস্করণ
+  // GRAPH MODE - PAGE 14 - localStorage Persistence সহ
+  // সব সিলেকশন রিফ্রেশ/ব্রাউজার বন্ধেও টিকে থাকবে
   // ================================================================
   let graphModeChart = null;
-  let graphModeChartType = 'line';
-  let graphModeData = { labels: [], datasets: [] };
+  // graphModeData - localStorage থেকে পুনরুদ্ধার (পেজ switch বা রিফ্রেশেও টিকে থাকে)
+  let graphModeData = (() => {
+    try {
+      const saved = localStorage.getItem('gm_chartData');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed && parsed.labels && parsed.datasets) return parsed;
+      }
+    } catch(e) {}
+    return { labels: [], datasets: [] };
+  })();
+
+  // graphModeData localStorage-এ সংরক্ষণ (debounce দিয়ে performance ভালো রাখো)
+  let _gmDataSaveTimer = null;
+  function saveGraphData() {
+    if (_gmDataSaveTimer) clearTimeout(_gmDataSaveTimer);
+    _gmDataSaveTimer = setTimeout(() => {
+      try {
+        // সর্বোচ্চ ২০০ পয়েন্ট রাখো যাতে localStorage limit পার না হয়
+        const toSave = {
+          labels: graphModeData.labels.slice(-200),
+          datasets: graphModeData.datasets.map(ds => ({
+            ...ds,
+            data: ds.data.slice(-200)
+          }))
+        };
+        localStorage.setItem('gm_chartData', JSON.stringify(toSave));
+      } catch(e) {
+        // localStorage full হলে পুরানো data মুছো
+        try { localStorage.removeItem('gm_chartData'); } catch(e2) {}
+      }
+    }, 300);
+  }
   let graphModeLiveInterval = null;
-  let graphModeSelectedPage = null;
-  let graphModeSelectedFields = [];
+  let graphModeFirebaseListener2 = null;
   let graphModeDynamicPages = {};
 
-  // ============================================================
-  // গ্রাফ মোড State সংরক্ষণ ও পুনরুদ্ধার (localStorage)
-  // ============================================================
-  function saveGraphModeState() {
+  // localStorage থেকে পূর্ববর্তী state পুনরুদ্ধার
+  let graphModeChartType = localStorage.getItem('gm_chartType') || 'line';
+  let graphModeSelectedPage = localStorage.getItem('gm_selectedPage') || null;
+  let graphModeSelectedFields = (() => { try { return JSON.parse(localStorage.getItem('gm_selectedFields') || '[]'); } catch(e) { return []; } })();
+
+  // সব গ্রাফ state একসাথে localStorage-এ সংরক্ষণ
+  function saveGraphState() {
     try {
-      const state = {
-        page: graphModeSelectedPage,
-        fields: graphModeSelectedFields,
-        chartType: graphModeChartType,
-        startDate: document.getElementById('gm-start-date') ? document.getElementById('gm-start-date').value : '',
-        startTime: document.getElementById('gm-start-time') ? document.getElementById('gm-start-time').value : '',
-        endDate: document.getElementById('gm-end-date') ? document.getElementById('gm-end-date').value : '',
-        endTime: document.getElementById('gm-end-time') ? document.getElementById('gm-end-time').value : '',
-      };
-      localStorage.setItem('graphModeState', JSON.stringify(state));
+      localStorage.setItem('gm_chartType', graphModeChartType);
+      localStorage.setItem('gm_selectedPage', graphModeSelectedPage || '');
+      localStorage.setItem('gm_selectedFields', JSON.stringify(graphModeSelectedFields));
+      // তারিখ ও সময়ও সংরক্ষণ
+      ['gm-start-date','gm-start-time','gm-end-date','gm-end-time'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) localStorage.setItem('gm_' + id, el.value);
+      });
     } catch(e) {}
   }
 
-  function restoreGraphModeState() {
-    try {
-      const raw = localStorage.getItem('graphModeState');
-      if (!raw) return;
-      const state = JSON.parse(raw);
-      if (!state) return;
-
-      // Chart type পুনরুদ্ধার
-      if (state.chartType && state.chartType !== graphModeChartType) {
-        graphModeChartType = state.chartType;
-        document.querySelectorAll('.gm-chart-option').forEach(el => el.classList.remove('active'));
-        document.querySelectorAll(`.gm-chart-option[data-chart="${state.chartType}"]`).forEach(el => el.classList.add('active'));
-        document.querySelectorAll('.gm-type-btn').forEach(b => b.classList.remove('active'));
-        const tb = document.querySelector(`.gm-type-btn[data-type="${state.chartType}"]`);
-        if (tb) tb.classList.add('active');
-      }
-
-      // Page পুনরুদ্ধার
-      if (state.page && graphModeDynamicPages[state.page]) {
-        graphModeSelectedPage = state.page;
-        graphModeSelectedFields = state.fields || [];
-
-        // Date/time filter পুনরুদ্ধার
-        if (state.startDate && document.getElementById('gm-start-date')) {
-          document.getElementById('gm-start-date').value = state.startDate;
-          document.getElementById('gm-start-time').value = state.startTime || '';
-          document.getElementById('gm-end-date').value = state.endDate || '';
-          document.getElementById('gm-end-time').value = state.endTime || '';
-        }
-
-        buildGraphPageSelector();
-        buildGraphFieldSelector();
-
-        const histSection = document.getElementById('gm-relay-history-section');
-        const cfg = graphModeDynamicPages[state.page];
-        if (histSection) histSection.style.display = (cfg && cfg.type === 'device') ? 'block' : 'none';
-        updateRelayHistoryTable();
-
-        const nd = document.getElementById('gm-no-data');
-        if (graphModeSelectedFields.length > 0) {
-          if (nd) nd.style.display = 'none';
-          applyGraphModeFilters();
-        } else {
-          if (nd) nd.style.display = 'block';
-        }
-      }
-    } catch(e) {}
+  // পেজ লোড হলে তারিখ/সময় পুনরুদ্ধার
+  function restoreDateTimeInputs() {
+    ['gm-start-date','gm-start-time','gm-end-date','gm-end-time'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.value = localStorage.getItem('gm_' + id) || '';
+    });
   }
-  // ============================================================
 
   const GRAPH_COLORS = [
     { border: 'rgba(0,212,255,1)', bg: 'rgba(0,212,255,0.15)' },
@@ -4753,6 +4811,7 @@ document.addEventListener('click', function(event) {
 
   function selectGraphType(chartType) {
     graphModeChartType = chartType;
+    localStorage.setItem('gm_chartType', chartType);
     document.querySelectorAll('.gm-chart-option').forEach(el => el.classList.remove('active'));
     document.querySelectorAll(`.gm-chart-option[data-chart="${chartType}"]`).forEach(el => el.classList.add('active'));
     document.querySelectorAll('.gm-type-btn').forEach(b => b.classList.remove('active'));
@@ -4762,7 +4821,6 @@ document.addEventListener('click', function(event) {
     closeGraphModePopup();
     showPage('page14');
     applyGraphModeFilters();
-    saveGraphModeState(); // ← State সংরক্ষণ
   }
 
   // Firebase থেকে সব ডিভাইস/পেজ dynamic load
@@ -4825,9 +4883,51 @@ document.addEventListener('click', function(event) {
         };
       });
       buildGraphPageSelector();
+      // Firebase লোড শেষে - সংরক্ষিত পেজ সিলেকশন পুনরুদ্ধার করো
+      restoreSavedGraphSelection();
     });
 
     buildGraphPageSelector();
+  }
+
+  // রিফ্রেশের পরে localStorage থেকে সব সিলেকশন পুনরুদ্ধার ও গ্রাফ পুনরায় শুরু
+  function restoreSavedGraphSelection() {
+    if (!graphModeSelectedPage) return;
+    const savedPage = graphModeSelectedPage;
+    const savedFields = graphModeSelectedFields;
+
+    // পেজ আছে কিনা চেক
+    if (!graphModeDynamicPages[savedPage]) {
+      console.warn('Saved page not found in dynamic pages:', savedPage);
+      return;
+    }
+
+    // UI আপডেট
+    buildGraphPageSelector();
+    buildGraphFieldSelector();
+
+    // relay history section দেখাও
+    const cfg = graphModeDynamicPages[savedPage];
+    const histSection = document.getElementById('gm-relay-history-section');
+    if (histSection) histSection.style.display = (cfg && cfg.type === 'device') ? 'block' : 'none';
+
+    // ফিল্ড সিলেকশন থাকলে গ্রাফ শুরু করো
+    if (savedFields && savedFields.length > 0) {
+      const nd = document.getElementById('gm-no-data');
+      if (nd) nd.style.display = 'none';
+      // তারিখ ফিল্টার পুনরুদ্ধার করো
+      restoreDateTimeInputs();
+      const sDate = document.getElementById('gm-start-date')?.value || '';
+      const eDate = document.getElementById('gm-end-date')?.value || '';
+      if (!sDate && !eDate) {
+        startGraphModeLive();
+      } else {
+        const sTime = document.getElementById('gm-start-time')?.value || '00:00:00';
+        const eTime = document.getElementById('gm-end-time')?.value || '23:59:59';
+        loadGraphModeHistorical(sDate ? `${sDate}T${sTime}` : null, eDate ? `${eDate}T${eTime}` : null);
+      }
+      showToast(`"${cfg?.label}" - পূর্ববর্তী সিলেকশন পুনরুদ্ধার হয়েছে`, 'success');
+    }
   }
 
   function buildGraphPageSelector() {
@@ -4917,10 +5017,21 @@ document.addEventListener('click', function(event) {
   }
 
   function selectGraphPage(pageKey) {
+    // পেজ পরিবর্তন হলেই ফিল্ড রিসেট করো
+    if (graphModeSelectedPage !== pageKey) {
+      // নতুন পেজ সিলেক্ট করলে পুরানো data মুছো
+      graphModeSelectedFields = [];
+      localStorage.setItem('gm_selectedFields', '[]');
+      localStorage.removeItem('gm_chartData');
+      if (graphModeChart) { try { graphModeChart.destroy(); } catch(e){} graphModeChart = null; }
+      graphModeData = { labels: [], datasets: [] };
+    }
     graphModeSelectedPage = pageKey;
-    graphModeSelectedFields = [];
-    if (graphModeChart) { graphModeChart.destroy(); graphModeChart = null; }
-    graphModeData = { labels: [], datasets: [] };
+    localStorage.setItem('gm_selectedPage', pageKey);
+    // Firebase listener বন্ধ করো
+    if (graphModeLiveInterval && graphModeLiveInterval !== 'firebase') { clearInterval(graphModeLiveInterval); graphModeLiveInterval = null; }
+    if (graphModeFirebaseListener) { try { graphModeFirebaseListener.off('value', graphModeFirebaseCallback); } catch(e){} graphModeFirebaseListener = null; graphModeFirebaseCallback = null; graphModeLiveInterval = null; }
+    if (graphModeFirebaseListener2) { try { graphModeFirebaseListener2.off(); } catch(e){} graphModeFirebaseListener2 = null; }
     buildGraphPageSelector();
     buildGraphFieldSelector();
     const cfg = graphModeDynamicPages[pageKey];
@@ -4928,8 +5039,9 @@ document.addEventListener('click', function(event) {
     if (histSection) histSection.style.display = (cfg && cfg.type === 'device') ? 'block' : 'none';
     updateRelayHistoryTable();
     const nd = document.getElementById('gm-no-data');
-    if (nd) nd.style.display = 'block';
-    saveGraphModeState(); // ← State সংরক্ষণ
+    if (nd) nd.style.display = graphModeSelectedFields.length === 0 ? 'block' : 'none';
+    // আগের ফিল্ড সিলেকশন থাকলে গ্রাফ শুরু করো
+    if (graphModeSelectedFields.length > 0) applyGraphModeFilters();
   }
 
   function buildGraphFieldSelector() {
@@ -4964,7 +5076,7 @@ document.addEventListener('click', function(event) {
     allBtn.className = 'gm-select-all-btn';
     allBtn.style.flex = '1';
     allBtn.innerHTML = '<i class="fas fa-check-double"></i> সব';
-    allBtn.onclick = () => { graphModeSelectedFields = fields.map(f => f.key); renderFieldChips(fields); applyGraphModeFilters(); saveGraphModeState(); };
+    allBtn.onclick = () => { graphModeSelectedFields = fields.map(f => f.key); localStorage.setItem('gm_selectedFields', JSON.stringify(graphModeSelectedFields)); renderFieldChips(fields); applyGraphModeFilters(); };
     const clearBtn = document.createElement('button');
     clearBtn.className = 'gm-select-all-btn';
     clearBtn.style.cssText = 'flex:1;opacity:0.65;';
@@ -4975,7 +5087,6 @@ document.addEventListener('click', function(event) {
       if (graphModeChart) { graphModeChart.destroy(); graphModeChart = null; }
       const nd = document.getElementById('gm-no-data');
       if (nd) nd.style.display = 'block';
-      saveGraphModeState(); // ← State সংরক্ষণ
     };
     row.appendChild(allBtn);
     row.appendChild(clearBtn);
@@ -5001,26 +5112,26 @@ document.addEventListener('click', function(event) {
       chip.onclick = () => {
         if (graphModeSelectedFields.includes(f.key)) graphModeSelectedFields = graphModeSelectedFields.filter(k => k !== f.key);
         else graphModeSelectedFields.push(f.key);
+        localStorage.setItem('gm_selectedFields', JSON.stringify(graphModeSelectedFields));
         renderFieldChips(fields);
         applyGraphModeFilters();
-        saveGraphModeState(); // ← State সংরক্ষণ
       };
       wrap.appendChild(chip);
     });
   }
 
   function resetToLiveMode() {
-    document.getElementById('gm-start-date').value = '';
-    document.getElementById('gm-start-time').value = '';
-    document.getElementById('gm-end-date').value = '';
-    document.getElementById('gm-end-time').value = '';
+    ['gm-start-date','gm-start-time','gm-end-date','gm-end-time'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) { el.value = ''; localStorage.setItem('gm_' + id, ''); }
+    });
     graphModeData = { labels: [], datasets: [] };
     applyGraphModeFilters();
   }
 
   function setQuickTimeRange(minutes) {
     if (graphModeLiveInterval && graphModeLiveInterval !== 'firebase') { clearInterval(graphModeLiveInterval); graphModeLiveInterval = null; }
-    if (graphModeFirebaseListener) { graphModeFirebaseListener.off(); graphModeFirebaseListener = null; graphModeLiveInterval = null; }
+    if (graphModeFirebaseListener) { try { graphModeFirebaseListener.off('value', graphModeFirebaseCallback); } catch(e){} graphModeFirebaseListener = null; graphModeFirebaseCallback = null; graphModeLiveInterval = null; }
 
     const now = new Date();
     const start = new Date(now.getTime() - minutes * 60 * 1000);
@@ -5045,15 +5156,18 @@ document.addEventListener('click', function(event) {
     }
     const nd = document.getElementById('gm-no-data');
     if (nd) nd.style.display = 'none';
-    const sDate = document.getElementById('gm-start-date').value;
-    const sTime = document.getElementById('gm-start-time').value || '00:00:00';
-    const eDate = document.getElementById('gm-end-date').value;
-    const eTime = document.getElementById('gm-end-time').value || '23:59:59';
-
+    const sDate = document.getElementById('gm-start-date')?.value || '';
+    const sTime = document.getElementById('gm-start-time')?.value || '00:00:00';
+    const eDate = document.getElementById('gm-end-date')?.value || '';
+    const eTime = document.getElementById('gm-end-time')?.value || '23:59:59';
+    // তারিখ/সময় সংরক্ষণ করো
+    ['gm-start-date','gm-start-time','gm-end-date','gm-end-time'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) localStorage.setItem('gm_' + id, el.value);
+    });
     if (!sDate && !eDate) {
       startGraphModeLive();
     } else {
-      // তারিখ + সময় একসাথে পাঠাও
       const startDT = sDate ? `${sDate}T${sTime}` : null;
       const endDT = eDate ? `${eDate}T${eTime}` : null;
       loadGraphModeHistorical(startDT, endDT);
@@ -5063,33 +5177,48 @@ document.addEventListener('click', function(event) {
   let graphModeFirebaseListener = null; // Firebase .on() listener ref
 
   function startGraphModeLive() {
-    // পুরানো interval এবং listener বন্ধ করো
-    if (graphModeLiveInterval) { clearInterval(graphModeLiveInterval); graphModeLiveInterval = null; }
-    if (graphModeFirebaseListener) { graphModeFirebaseListener.off(); graphModeFirebaseListener = null; }
-    graphModeData = { labels: [], datasets: [] };
+    // পুরানো listener/interval বন্ধ করো
+    if (graphModeLiveInterval && graphModeLiveInterval !== 'firebase') { clearInterval(graphModeLiveInterval); graphModeLiveInterval = null; }
+    if (graphModeFirebaseListener) {
+      try { graphModeFirebaseListener.off('value', graphModeFirebaseCallback); } catch(e) {}
+      graphModeFirebaseListener = null; graphModeLiveInterval = null;
+    }
+    // graphModeData রিসেট করো না - পুরানো ডেটা রাখো
 
     const cfg = graphModeDynamicPages[graphModeSelectedPage];
     if (!cfg) return;
 
-    // Firebase Realtime Listener দিয়ে millisecond-এ আপডেট
+    // ===== গুরুত্বপূর্ণ =====
+    // energy ও device পেজের জন্য নতুন Firebase listener বসানো বন্ধ -
+    // কারণ setupFirebaseListeners() ইতিমধ্যে এগুলো শুনছে।
+    // নতুন listener বসালে .off() করার সময় আসল listener-ও বন্ধ হয়ে যায়।
+    // পরিবর্তে currentEnergyData / currentDeviceStates থেকে polling করো।
+    if (cfg.type === 'energy' || cfg.type === 'device' || cfg.type === 'temperature') {
+      // ২ সেকেন্ড পর পর আসল global state থেকে পড়ো
+      updateGraphModeLiveData(); // সাথে সাথে একবার
+      graphModeLiveInterval = setInterval(updateGraphModeLiveData, 2000);
+      return;
+    }
+
+    // অজানা/custom path-এর জন্য আলাদা Firebase listener
     const fbPath = cfg.fbPath;
     if (!fbPath || !database) {
-      // Fallback: interval
       updateGraphModeLiveData();
       graphModeLiveInterval = setInterval(updateGraphModeLiveData, 2000);
       return;
     }
 
-    graphModeFirebaseListener = database.ref(fbPath);
-    graphModeFirebaseListener.on('value', snap => {
+    graphModeFirebaseCallback = (snap) => {
       const data = snap.val();
       if (!data || typeof data !== 'object') return;
       processLiveDataPoint(data, cfg);
-    });
-
-    // Store ref for cleanup
-    graphModeLiveInterval = 'firebase'; // marker যে firebase listener সক্রিয়
+    };
+    graphModeFirebaseListener = database.ref(fbPath);
+    graphModeFirebaseListener.on('value', graphModeFirebaseCallback);
+    graphModeLiveInterval = 'firebase';
   }
+
+  let graphModeFirebaseCallback = null;
 
   function processLiveDataPoint(sourceData, cfg) {
     // millisecond precision timestamp
@@ -5146,22 +5275,31 @@ document.addEventListener('click', function(event) {
       }
     });
     graphModeData.datasets = graphModeData.datasets.filter(d => graphModeSelectedFields.includes(d.fieldKey));
+    saveGraphData(); // localStorage-এ সংরক্ষণ করো
     rebuildGraphModeChart();
   }
 
   function updateGraphModeLiveData() {
-    // Fallback interval method (Firebase listener না থাকলে)
+    // Global state থেকে সরাসরি পড়ো - নতুন Firebase listener বসানো নয়
     const cfg = graphModeDynamicPages[graphModeSelectedPage];
     if (!cfg) return;
     let sourceData = {};
-    if (cfg.type === 'energy') sourceData = currentEnergyData || {};
-    else sourceData = currentDeviceStates[cfg.fbKey] || cfg.rawData || {};
+    if (cfg.type === 'energy') {
+      sourceData = currentEnergyData || {};
+    } else if (cfg.type === 'device') {
+      sourceData = currentDeviceStates[cfg.fbKey] || {};
+    } else if (cfg.type === 'temperature') {
+      // temperature device-ও currentDeviceStates-এ থাকে
+      sourceData = currentDeviceStates[cfg.fbKey] || currentTempData?.[cfg.fbKey] || {};
+    } else {
+      sourceData = cfg.rawData || {};
+    }
     processLiveDataPoint(sourceData, cfg);
   }
 
   function loadGraphModeHistorical(startDate, endDate) {
     if (graphModeLiveInterval && graphModeLiveInterval !== 'firebase') { clearInterval(graphModeLiveInterval); graphModeLiveInterval = null; }
-    if (graphModeFirebaseListener) { graphModeFirebaseListener.off(); graphModeFirebaseListener = null; graphModeLiveInterval = null; }
+    if (graphModeFirebaseListener) { try { graphModeFirebaseListener.off('value', graphModeFirebaseCallback); } catch(e){} graphModeFirebaseListener = null; graphModeFirebaseCallback = null; graphModeLiveInterval = null; }
     const cfg = graphModeDynamicPages[graphModeSelectedPage];
     if (!cfg) return;
     let histPath = cfg.type === 'energy' ? (getPathFor('energymonitoring_history') || 'energy_history') : cfg.fbPath;
@@ -5204,6 +5342,7 @@ document.addEventListener('click', function(event) {
       };
     });
     graphModeData = { labels, datasets };
+    saveGraphData(); // localStorage-এ সংরক্ষণ করো
     rebuildGraphModeChart();
     showToast(`${entries.length} টি ডেটা লোড হয়েছে।`, 'success');
   }
@@ -5211,6 +5350,10 @@ document.addEventListener('click', function(event) {
   function rebuildGraphModeChart() {
     const canvas = document.getElementById('gm-main-chart');
     if (!canvas) return;
+    // পেজ active না হলে build করো না
+    const page14 = document.getElementById('page14');
+    if (page14 && !page14.classList.contains('active')) return;
+
     const nd = document.getElementById('gm-no-data');
     if (nd) nd.style.display = 'none';
     const isArea = graphModeChartType === 'area';
@@ -5233,7 +5376,7 @@ document.addEventListener('click', function(event) {
       });
     }
     const options = {
-      responsive: true, maintainAspectRatio: false, animation: { duration: 300 },
+      responsive: true, maintainAspectRatio: false, animation: { duration: 200 },
       interaction: { mode: isPie ? 'point' : 'index', intersect: false },
       plugins: {
         legend: { position: 'top', labels: { color: '#c8e6f5', padding: 15, font: { size: 12 }, usePointStyle: true } },
@@ -5248,15 +5391,34 @@ document.addEventListener('click', function(event) {
       }
     };
     const chartLabels = isPie ? graphModeData.datasets.map(d => d.label) : graphModeData.labels;
+
+    // বিদ্যমান chart আছে কিনা চেক করো - আপডেট করো নাহলে নতুন বানাও
     if (graphModeChart) {
-      graphModeChart.data.labels = chartLabels;
-      graphModeChart.data.datasets = datasets;
-      try { graphModeChart.update('none'); return; } catch(e) { graphModeChart.destroy(); graphModeChart = null; }
+      try {
+        graphModeChart.data.labels = chartLabels;
+        graphModeChart.data.datasets = datasets;
+        graphModeChart.update('none');
+        return;
+      } catch(e) {
+        try { graphModeChart.destroy(); } catch(e2) {}
+        graphModeChart = null;
+      }
     }
-    graphModeChart = new Chart(canvas, {
-      type: isPie ? 'pie' : (isCombo ? 'bar' : (isArea ? 'line' : graphModeChartType)),
-      data: { labels: chartLabels, datasets }, options,
-    });
+
+    // Chart.js এ canvas re-use সমস্যা এড়াতে existing instance destroy করো
+    try {
+      const existingChart = Chart.getChart(canvas);
+      if (existingChart) existingChart.destroy();
+    } catch(e) {}
+
+    try {
+      graphModeChart = new Chart(canvas, {
+        type: isPie ? 'pie' : (isCombo ? 'bar' : (isArea ? 'line' : graphModeChartType)),
+        data: { labels: chartLabels, datasets }, options,
+      });
+    } catch(e) {
+      console.warn('Chart creation error:', e);
+    }
   }
 
   function downloadGraphAsPNG() {
@@ -5301,10 +5463,14 @@ document.addEventListener('click', function(event) {
 
   function clearGraphHistory() {
     if (!confirm('গ্রাফের সব ডেটা মুছে ফেলবেন?')) return;
-    if (graphModeChart) { graphModeChart.destroy(); graphModeChart = null; }
+    if (graphModeChart) { try { graphModeChart.destroy(); } catch(e){} graphModeChart = null; }
     graphModeData = { labels: [], datasets: [] };
     graphModeSelectedFields = [];
-    if (graphModeLiveInterval) { clearInterval(graphModeLiveInterval); graphModeLiveInterval = null; }
+    // localStorage থেকেও মুছো
+    localStorage.removeItem('gm_chartData');
+    localStorage.setItem('gm_selectedFields', '[]');
+    if (graphModeLiveInterval && graphModeLiveInterval !== 'firebase') { clearInterval(graphModeLiveInterval); graphModeLiveInterval = null; }
+    if (graphModeFirebaseListener) { try { graphModeFirebaseListener.off('value', graphModeFirebaseCallback); } catch(e){} graphModeFirebaseListener = null; graphModeFirebaseCallback = null; graphModeLiveInterval = null; }
     const cfg = graphModeDynamicPages[graphModeSelectedPage];
     if (cfg) buildGraphFieldSelector();
     const nd = document.getElementById('gm-no-data');
@@ -5320,46 +5486,81 @@ document.addEventListener('click', function(event) {
     const ap = document.getElementById(pageId);
     if (ap) ap.classList.add('active');
     if (pageId === 'page6' && typeof advancedEnergyChart !== 'undefined' && advancedEnergyChart) updateAdvancedChart();
+
     if (pageId === 'page14') {
       initGraphModePage();
-      // পেজে ফিরে এলে লাইভ আপডেট রিস্টার্ট করো (যদি সিলেকশন থাকে)
-      if (graphModeSelectedPage && graphModeSelectedFields.length > 0) {
-        const s = document.getElementById('gm-start-date').value;
-        const e2 = document.getElementById('gm-end-date').value;
-        if (!s && !e2 && graphModeLiveInterval !== 'firebase' && !graphModeLiveInterval) startGraphModeLive();
-      }
     } else {
-      // অন্য পেজে গেলে Firebase listener pause করো, ডেটা রাখো
+      // অন্য পেজে গেলে: listener বন্ধ করো কিন্তু graphModeData/chart ধরে রাখো
       if (graphModeLiveInterval && graphModeLiveInterval !== 'firebase') { clearInterval(graphModeLiveInterval); graphModeLiveInterval = null; }
-      if (graphModeFirebaseListener) { graphModeFirebaseListener.off(); graphModeFirebaseListener = null; graphModeLiveInterval = null; }
+      if (graphModeFirebaseListener) {
+        try { graphModeFirebaseListener.off('value', graphModeFirebaseCallback); } catch(e) {}
+        graphModeFirebaseListener = null; graphModeFirebaseCallback = null;
+        graphModeLiveInterval = null;
+      }
+      // ডেটা localStorage-এ save করো যাতে রিফ্রেশেও থাকে
+      if (graphModeData.labels && graphModeData.labels.length > 0) saveGraphData();
     }
   }
 
   let graphModeInitialized = false;
 
   function initGraphModePage() {
-    // শুধু প্রথমবার বা লগআউটের পরে rebuild করো
+    // তারিখ/সময় ইনপুট পুনরুদ্ধার করো
+    restoreDateTimeInputs();
+    // চার্ট টাইপ বাটন সক্রিয় করো
+    document.querySelectorAll('.gm-type-btn').forEach(b => b.classList.remove('active'));
+    const activeTypeBtn = document.querySelector(`.gm-type-btn[data-type="${graphModeChartType}"]`);
+    if (activeTypeBtn) activeTypeBtn.classList.add('active');
+
     if (!graphModeInitialized || Object.keys(graphModeDynamicPages).length === 0) {
+      // প্রথমবার বা রিফ্রেশের পরে - Firebase থেকে সব ডিভাইস লোড করো
       buildGraphModeDynamicPages();
       graphModeInitialized = true;
-      // localStorage থেকে আগের selection পুনরুদ্ধার
-      setTimeout(restoreGraphModeState, 300);
+      // localStorage থেকে পুরানো chart data আছে কিনা চেক করো
+      if (graphModeSelectedPage && graphModeSelectedFields.length > 0 && graphModeData.datasets.length > 0) {
+        // পুরানো ডেটা দিয়ে সাথে সাথে chart দেখাও
+        const nd = document.getElementById('gm-no-data');
+        if (nd) nd.style.display = 'none';
+        setTimeout(() => { try { rebuildGraphModeChart(); } catch(e) {} }, 200);
+      }
     } else {
-      // শুধু sidebar UI refresh করো, ডেটা নষ্ট করো না
+      // অন্য পেজ থেকে ফিরে আসলে
       buildGraphPageSelector();
-      if (graphModeSelectedPage) buildGraphFieldSelector();
+      if (graphModeSelectedPage) {
+        buildGraphFieldSelector();
+        // পুরানো chart data থাকলে সাথে সাথে দেখাও
+        if (graphModeData.labels && graphModeData.labels.length > 0 && graphModeData.datasets.length > 0) {
+          const nd = document.getElementById('gm-no-data');
+          if (nd) nd.style.display = 'none';
+          // chart destroy হয়ে গেলে rebuild করো
+          if (!graphModeChart) {
+            try { rebuildGraphModeChart(); } catch(e) {}
+          }
+        }
+        // লাইভ listener restart করো
+        if (graphModeSelectedFields.length > 0 && !graphModeLiveInterval && !graphModeFirebaseListener) {
+          const sDate = document.getElementById('gm-start-date')?.value || '';
+          const eDate = document.getElementById('gm-end-date')?.value || '';
+          if (!sDate && !eDate) {
+            // ছোট delay দাও যাতে chart canvas ready থাকে
+            setTimeout(() => startGraphModeLive(), 100);
+          }
+        }
+      }
     }
     const nd = document.getElementById('gm-no-data');
     if (!graphModeSelectedPage && nd) nd.style.display = 'block';
-    else if (graphModeSelectedPage && graphModeData.datasets.length > 0 && nd) nd.style.display = 'none';
+    else if (graphModeSelectedPage && (graphModeData.datasets.length > 0 || graphModeChart) && nd) nd.style.display = 'none';
     const histSection = document.getElementById('gm-relay-history-section');
     const cfg = graphModeDynamicPages[graphModeSelectedPage];
     if (histSection) histSection.style.display = (cfg && cfg.type === 'device') ? 'block' : 'none';
+    updateRelayHistoryTable();
   }
 
   // Event Listeners
   function handleLoginKeyPress(e){if(e.key==="Enter"){if(document.getElementById('login-box').style.display!=='none')loginWithFirebase();else registerWithFirebase();}}
   ['email','password','register-username','register-email','register-password','confirm-password'].forEach(id=>document.getElementById(id).addEventListener("keypress",handleLoginKeyPress));
+  document.getElementById("forgotEmailInput").addEventListener("keypress", e=>{ if(e.key==="Enter") sendPasswordReset(); });
   document.getElementById("relayPasswordInput").addEventListener("keypress",e=>{if(e.key==="Enter")verifyAndOperateRelay();});
   document.getElementById("timerPasswordInput").addEventListener("keypress",e=>{if(e.key==="Enter")saveTimerSettings();});
   document.getElementById("actionPasswordInput").addEventListener("keypress",e=>{if(e.key==="Enter")verifyAndExecuteAction();});
