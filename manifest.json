@@ -1,0 +1,27 @@
+{
+  "name": "BISNU IoT কন্ট্রোল প্যানেল",
+  "short_name": "BISNU IoT",
+  "description": "BISNU IoT ডিভাইস মনিটরিং ও কন্ট্রোল সিস্টেম",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#020609",
+  "theme_color": "#00d4ff",
+  "orientation": "any",
+  "lang": "bn",
+  "icons": [
+    {
+      "src": "Bisnu.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "Bisnu.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["utilities", "productivity"],
+  "screenshots": []
+}
